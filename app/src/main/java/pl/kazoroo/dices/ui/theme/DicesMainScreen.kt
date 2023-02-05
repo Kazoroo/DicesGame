@@ -39,12 +39,7 @@ fun MainScreen() {
 @Composable
 fun Dices(@DrawableRes dice: List<Int>) {
 
-    var isSelected1 by remember{ mutableStateOf(false)}
-    var isSelected2 by remember{ mutableStateOf(false)}
-    var isSelected3 by remember{ mutableStateOf(false)}
-    var isSelected4 by remember{ mutableStateOf(false)}
-    var isSelected5 by remember{ mutableStateOf(false)}
-    var isSelected6 by remember{ mutableStateOf(false)}
+
 
     Column(Modifier.padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
         Row() {
