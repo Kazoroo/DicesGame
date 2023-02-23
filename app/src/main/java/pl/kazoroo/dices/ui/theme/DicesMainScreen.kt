@@ -1,13 +1,11 @@
 package pl.kazoroo.dices.ui.theme
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.Size
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -16,70 +14,74 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import pl.kazoroo.dices.R
 
 @Composable
-fun MainScreen() {
-    val viewModel = viewModel<DicesViewModel>()
+fun MainScreen(viewModel: DicesViewModel = viewModel()) {
+    val dice by viewModel.uiState.collectAsState()
 
     Column {
-        SimpleTable(columnHeaders = listOf("Wzium", "Wziummm"), rows = listOf(listOf("112", "2958"), listOf("8", "15"), listOf("2424", "8745")))
-        Dices(dice = viewModel.UiState)
+        SimpleTable(columnHeaders = listOf("Points", "You", "Opponent"), rows =
+        listOf(
+                listOf("Sum:            ", "", ""),
+                listOf("In this turn:   ", "", ""),
+                listOf("Selected:       ", "", "")))
+
+        Dices(dice = dice.dices, isSelected =  dice.isSelected, onClick = viewModel)
         Buttons(onTurnClick = { viewModel.drawDice()  }, onQueueClick = { viewModel.drawDice() })
     }
 }
 
 @Composable
-fun Dices(@DrawableRes dice: List<Int>) {
+fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: DicesViewModel) {
+    Column(
+            Modifier.padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally) {
 
-
-
-    Column(Modifier.padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp), verticalArrangement = Arrangement.Bottom, horizontalAlignment = Alignment.CenterHorizontally) {
         Row() {
             Image(painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(110.dp)
-                .border(if (isSelected1) 2.dp else (-1).dp, Color.Black)
-                .clickable { isSelected1 = !isSelected1 })
+                .border(if (isSelected[0]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
+                .clickable { onClick.isSelectedBehavior(0) })
 
             Image(painter = painterResource(id = dice[1]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(110.dp)
-                .border(if (isSelected2) 2.dp else (-1).dp, Color.Black)
-                .clickable { isSelected2 = !isSelected2 })
+                .border(if (isSelected[1]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
+                .clickable { onClick.isSelectedBehavior(1) })
 
             Image(painter = painterResource(id = dice[2]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(110.dp)
-                .border(if (isSelected3) 2.dp else (-1).dp, Color.Black)
-                .clickable { isSelected3 = !isSelected3 })
+                .border(if (isSelected[2]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
+                .clickable { onClick.isSelectedBehavior(2) })
+
         }
 
         Row() {
-            Image(painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
+            Image(painter = painterResource(id = dice[3]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(120.dp)
-                .border(if (isSelected4) 2.dp else (-1).dp, Color.Black)
-                .clickable { isSelected4 = !isSelected4 })
+                .border(if (isSelected[3]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
+                .clickable { onClick.isSelectedBehavior(3) })
 
-            Image(painter = painterResource(id = dice[1]), contentDescription = "Dice", modifier = Modifier
+            Image(painter = painterResource(id = dice[4]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(120.dp)
-                .border(if (isSelected5) 2.dp else (-1).dp, Color.Black)
-                .clickable { isSelected5 = !isSelected5 })
+                .border(if (isSelected[4]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
+                .clickable { onClick.isSelectedBehavior(4) })
 
-            Image(painter = painterResource(id = dice[2]), contentDescription = "Dice", modifier = Modifier
+            Image(painter = painterResource(id = dice[5]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(120.dp)
-                .border(if (isSelected6) 2.dp else (-1).dp, Color.Black)
-                .clickable { isSelected6 = !isSelected6 })
+                .border(if (isSelected[5]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
+                .clickable { onClick.isSelectedBehavior(5) })
         }
     }
 }
@@ -176,7 +178,7 @@ private fun SimpleCell(
             modifier = Modifier
                 .border(0.dp, textColor.copy(alpha = 0.5f))
                 .fillMaxWidth()
-                .width(width.dp + 160.dp)
+                .width(width.dp + 65.dp)
                 .padding(horizontal = 8.dp, vertical = 8.dp)
     )
 }
