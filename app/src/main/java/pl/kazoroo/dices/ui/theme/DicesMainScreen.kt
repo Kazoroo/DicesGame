@@ -1,5 +1,6 @@
 package pl.kazoroo.dices.ui.theme
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.map
+import pl.kazoroo.dices.R
 
 @Composable
 fun MainScreen(viewModel: DicesViewModel = viewModel()) {
@@ -27,10 +30,9 @@ fun MainScreen(viewModel: DicesViewModel = viewModel()) {
     Column {
         SimpleTable(columnHeaders = listOf("Points", "You", "Opponent"), rows =
         listOf(
-                listOf("Sum:            ", "", ""),
-                listOf("In this turn:   ", "", ""),
-                listOf("Selected:       ", "", "")))
-
+                listOf("Sum:         ", "", ""),
+                listOf("In this turn:", "", ""),
+                listOf("Selected:    ", "${dice.points}", "")))
         Dices(dice = dice.dices, isSelected =  dice.isSelected, onClick = viewModel)
         Buttons(onTurnClick = { viewModel.drawDice()  }, onQueueClick = { viewModel.drawDice() })
     }
