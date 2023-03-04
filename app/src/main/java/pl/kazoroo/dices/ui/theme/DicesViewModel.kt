@@ -67,8 +67,8 @@ class DicesViewModel: ViewModel() {
         _uiState.value = DicesModel(isSelected = isSelected, dices = dicesModel.dices, points = dicesModel.points, shouldntExist = dicesModel.shouldntExist)
     }
 
-    private fun pointsCounter(dice: Int, isSelected: Boolean) {
-
+    private fun pointsCounter(dice: Int, isSelected: Boolean)
+    {
         var _points = points
 
         if(isSelected)
@@ -172,37 +172,12 @@ class DicesViewModel: ViewModel() {
             }
         }
 
-
         dicesModel.points = _points
         val points = dicesModel.points
         _uiState.value = DicesModel(isSelected = dicesModel.isSelected, dices = dicesModel.dices, points = points, shouldntExist = dicesModel.shouldntExist)
     }
 
-    fun firstDrawDice()
-    {
-        val listOfDices = mutableListOf<Int>()
-
-        for(i in 0..5)
-        {
-            when(Random.nextInt(1,6))
-            {
-                1 -> listOfDices.add(i, R.drawable.dice_1)
-                2 -> listOfDices.add(i, R.drawable.dice_2)
-                3 -> listOfDices.add(i, R.drawable.dice_3)
-                4 -> listOfDices.add(i, R.drawable.dice_4)
-                5 -> listOfDices.add(i, R.drawable.dice_5)
-                6 -> listOfDices.add(i, R.drawable.dice_6)
-            }
-        }
-
-        dicesModel.dices = listOfDices
-        val dices = dicesModel.dices
-        dicesList.clear()
-        points = 0
-        _uiState.value = DicesModel(dices = dices)
-    }
-
     init {
-        firstDrawDice()
+        drawDice()
     }
 }

@@ -42,7 +42,6 @@ fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: Dice
             horizontalAlignment = Alignment.CenterHorizontally) {
 
         Row() {
-
             Image(painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[0]) 110.dp else (-1).dp)
@@ -60,7 +59,6 @@ fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: Dice
                 .size(if (!shouldntExist[2]) 110.dp else (-1).dp)
                 .border(if (isSelected[2]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
                 .clickable { onClick.isSelectedBehavior(2) })
-
         }
 
         Row() {
@@ -98,7 +96,6 @@ fun Buttons(modifier: Modifier = Modifier, onQueueClick: () -> Unit, onTurnClick
                     .padding(5.dp))  {
             Text(text = "Confirm and end the queue", modifier = modifier)
         }
-
         Button(
                 onClick = onTurnClick,
                 modifier = modifier
@@ -106,8 +103,7 @@ fun Buttons(modifier: Modifier = Modifier, onQueueClick: () -> Unit, onTurnClick
                     .width(40.dp)
                     .weight(1f)
                     .padding(5.dp)) {
-            Text(text = "Confirm and end the turn", modifier = modifier
-)
+            Text(text = "Confirm and complete the throw", modifier = modifier)
         }
     }
 }
