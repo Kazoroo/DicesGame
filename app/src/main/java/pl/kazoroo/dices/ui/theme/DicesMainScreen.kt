@@ -1,6 +1,5 @@
 package pl.kazoroo.dices.ui.theme
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -16,12 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.flow.map
-import pl.kazoroo.dices.R
 
 @Composable
 fun MainScreen(viewModel: DicesViewModel = viewModel()) {
@@ -33,34 +29,35 @@ fun MainScreen(viewModel: DicesViewModel = viewModel()) {
                 listOf("Sum:         ", "", ""),
                 listOf("In this turn:", "", ""),
                 listOf("Selected:    ", "${dice.points}", "")))
-        Dices(dice = dice.dices, isSelected =  dice.isSelected, onClick = viewModel)
+        Dices(dice = dice.dices, isSelected =  dice.isSelected, onClick = viewModel, dice.shouldntExist)
         Buttons(onTurnClick = { viewModel.drawDice()  }, onQueueClick = { viewModel.drawDice() })
     }
 }
 
 @Composable
-fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: DicesViewModel) {
+fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: DicesViewModel, shouldntExist: List<Boolean>) {
     Column(
             Modifier.padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally) {
 
         Row() {
+
             Image(painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
-                .size(110.dp)
+                .size(if (!shouldntExist[0]) 110.dp else (-1).dp)
                 .border(if (isSelected[0]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
                 .clickable { onClick.isSelectedBehavior(0) })
 
             Image(painter = painterResource(id = dice[1]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
-                .size(110.dp)
+                .size(if (!shouldntExist[1]) 110.dp else (-1).dp)
                 .border(if (isSelected[1]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
                 .clickable { onClick.isSelectedBehavior(1) })
 
             Image(painter = painterResource(id = dice[2]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
-                .size(110.dp)
+                .size(if (!shouldntExist[2]) 110.dp else (-1).dp)
                 .border(if (isSelected[2]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
                 .clickable { onClick.isSelectedBehavior(2) })
 
@@ -69,19 +66,19 @@ fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: Dice
         Row() {
             Image(painter = painterResource(id = dice[3]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
-                .size(120.dp)
+                .size(if (!shouldntExist[3]) 120.dp else (-1).dp)
                 .border(if (isSelected[3]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
                 .clickable { onClick.isSelectedBehavior(3) })
 
             Image(painter = painterResource(id = dice[4]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
-                .size(120.dp)
+                .size(if (!shouldntExist[4]) 120.dp else (-1).dp)
                 .border(if (isSelected[4]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
                 .clickable { onClick.isSelectedBehavior(4) })
 
             Image(painter = painterResource(id = dice[5]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
-                .size(120.dp)
+                .size(if (!shouldntExist[5]) 120.dp else (-1).dp)
                 .border(if (isSelected[5]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
                 .clickable { onClick.isSelectedBehavior(5) })
         }
