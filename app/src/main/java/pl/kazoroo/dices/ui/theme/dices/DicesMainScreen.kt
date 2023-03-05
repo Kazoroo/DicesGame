@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme
+package pl.kazoroo.dices.ui.theme.dices
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
@@ -41,7 +41,7 @@ fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: Dice
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Row() {
+        Row {
             Image(painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[0]) 110.dp else (-1).dp)
@@ -61,7 +61,7 @@ fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: Dice
                 .clickable { onClick.isSelectedBehavior(2) })
         }
 
-        Row() {
+        Row {
             Image(painter = painterResource(id = dice[3]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[3]) 120.dp else (-1).dp)
@@ -86,7 +86,7 @@ fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: Dice
 
 @Composable
 fun Buttons(modifier: Modifier = Modifier, onQueueClick: () -> Unit, onTurnClick: () -> Unit) {
-    Row() {
+    Row {
         OutlinedButton(
                 onClick =  onQueueClick ,
                 modifier = modifier
@@ -140,7 +140,7 @@ fun SimpleTable(columnHeaders: List<String>, rows: List<List<String>>) {
         }
         /* ROWS  */
         LazyColumn(modifier = Modifier) {
-            itemsIndexed(rows) { rowIndex, row ->
+            itemsIndexed(rows) { _, row ->
                 Row(
                         modifier = Modifier
                             .fillMaxWidth()

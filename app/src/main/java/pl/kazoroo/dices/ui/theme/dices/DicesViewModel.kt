@@ -1,6 +1,5 @@
-package pl.kazoroo.dices.ui.theme
+package pl.kazoroo.dices.ui.theme.dices
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +20,7 @@ class DicesViewModel: ViewModel() {
 
         for(i in 0..5)
         {
-            when(Random.nextInt(1,6))
+            when(Random.nextInt(1,7))
             {
                 1 -> listOfDices.add(i, R.drawable.dice_1)
                 2 -> listOfDices.add(i, R.drawable.dice_2)
@@ -175,9 +174,5 @@ class DicesViewModel: ViewModel() {
         dicesModel.points = _points
         val points = dicesModel.points
         _uiState.value = DicesModel(isSelected = dicesModel.isSelected, dices = dicesModel.dices, points = points, shouldntExist = dicesModel.shouldntExist)
-    }
-
-    init {
-        drawDice()
     }
 }
