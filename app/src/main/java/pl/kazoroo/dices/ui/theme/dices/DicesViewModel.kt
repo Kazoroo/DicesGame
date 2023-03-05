@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import pl.kazoroo.dices.R
 import kotlin.random.Random
 
@@ -59,7 +61,7 @@ class DicesViewModel: ViewModel() {
         updatedList[index] = !list[index]
         updatedList.toList()
 
-        pointsCounter(dicesModel.dices[index], updatedList[index])
+        runBlocking { launch { pointsCounter(dicesModel.dices[index], updatedList[index]) } }
 
         dicesModel.isSelected = updatedList
         val isSelected = dicesModel.isSelected

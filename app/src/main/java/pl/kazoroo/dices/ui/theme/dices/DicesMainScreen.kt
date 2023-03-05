@@ -22,7 +22,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun MainScreen(viewModel: DicesViewModel = viewModel()) {
     val dice by viewModel.uiState.collectAsState()
-
     Column {
         SimpleTable(columnHeaders = listOf("Points", "You", "Opponent"), rows =
         listOf(

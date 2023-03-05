@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kazoroo.dices.ui.theme.*
+import pl.kazoroo.dices.ui.theme.dices.DicesViewModel
 import pl.kazoroo.dices.ui.theme.dices.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -19,6 +21,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                 ) {
+                    val viewModel: DicesViewModel = viewModel()
+                    viewModel.drawDice()
                     MainScreen()
                 }
             }
