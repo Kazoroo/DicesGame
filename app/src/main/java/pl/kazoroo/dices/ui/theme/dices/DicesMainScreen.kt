@@ -25,9 +25,9 @@ fun MainScreen(viewModel: DicesViewModel = viewModel()) {
     Column {
         SimpleTable(columnHeaders = listOf("Points", "You", "Opponent"), rows =
         listOf(
-                listOf("Sum:         ", "", ""),
-                listOf("In this turn:", "", ""),
-                listOf("Selected:    ", "${dice.points}", "")))
+                listOf("Sum:          ", "", ""),
+                listOf("In this round:", "${dice.roundPoints}", ""),
+                listOf("Selected:     ", "${dice.points}", "")))
         Dices(dice = dice.dices, isSelected =  dice.isSelected, onClick = viewModel, dice.shouldntExist)
         Buttons(onTurnClick = { viewModel.drawDice()  }, onQueueClick = { viewModel.drawDice() })
     }
