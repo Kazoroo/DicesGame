@@ -58,7 +58,7 @@ fun AnimateContent(skucha: Boolean) {
             .background(
                     if (skucha) Color(0x96000000) else Color.Transparent, RoundedCornerShape(8.dp)
             )
-            .padding(7.dp), color = Color.Red, fontSize = if (skucha) 85.sp else (-1).sp
+            .padding(7.dp), color = if (skucha) Color.Red else Color.Transparent, fontSize = 85.sp
         )
     }
 }
