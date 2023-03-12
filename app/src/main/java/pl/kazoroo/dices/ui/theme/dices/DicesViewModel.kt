@@ -39,27 +39,58 @@ class DicesViewModel: ViewModel() {
         roundPoints += dicesModel.points
         dicesModel.roundPoints = roundPoints
 
-        dicesModel.points = 0
-
         val shouldntExist: MutableList<Boolean> = dicesModel.shouldntExist.toMutableList()
 
-        for (i in 0..5)
-        {
-            if (dicesModel.isSelected[i] || dicesModel.shouldntExist[i])
-            {
+        for (i in 0..5) {
+            if (dicesModel.isSelected[i] || dicesModel.shouldntExist[i]) {
                 shouldntExist[i] = true
             }
         }
-        _uiState.value = DicesModel(dices = dices, shouldntExist = shouldntExist, roundPoints = roundPoints)
         dicesModel.shouldntExist = shouldntExist
+
+        fun <T> List<T>.findAllIndicesOf(value: T): List<Int> {
+            return this.indices.filter { this[it] == value }
+        }
+
+        val shouldBeSkucha = mutableListOf<Boolean>()
+        val indices =
+            shouldntExist.findAllIndicesOf(false) // return list of indexes where occurs 'false'
+
+        for (i in indices) {
+            if (dices[i] == R.drawable.dice_1 || dices[i] == R.drawable.dice_5 || dices.count { it == i } == 3) {
+                shouldBeSkucha.add(false)
+            }
+            else {
+                shouldBeSkucha.add(true)
+            }
+        }
+
+        //if all indexes in shouldBeSkucha are true, game end
+        if (shouldBeSkucha.count { it } == shouldBeSkucha.size) {
+            dicesModel.points = 0
+            roundPoints = 0
+            _uiState.value = DicesModel(
+                    dices = dices,
+                    shouldntExist = shouldntExist,
+                    roundPoints = roundPoints,
+                    skucha = true
+            )
+        }
+        else {
+            _uiState.value = DicesModel(
+                    dices = dices,
+                    shouldntExist = shouldntExist,
+                    roundPoints = roundPoints,
+                    skucha = false
+            )
+        }
     }
 
     fun isSelectedBehavior(index: Int)
     {
-        val list = _uiState.value.isSelected
-        val updatedList = list.toMutableList()
+        val updatedList = _uiState.value.isSelected.toMutableList()
 
-        updatedList[index] = !list[index]
+        updatedList[index] = !updatedList[index]
         updatedList.toList()
 
         runBlocking { launch { pointsCounter(dicesModel.dices[index], updatedList[index]) } }
@@ -69,14 +100,11 @@ class DicesViewModel: ViewModel() {
         _uiState.value = DicesModel(isSelected = isSelected, dices = dicesModel.dices, points = dicesModel.points, shouldntExist = dicesModel.shouldntExist, roundPoints = dicesModel.roundPoints)
     }
 
-    private fun pointsCounter(dice: Int, isSelected: Boolean)
-    {
+    private fun pointsCounter(dice: Int, isSelected: Boolean): Int {
         var _points = 0
 
-        if(isSelected)
-        {
-            when(dice)
-            {
+        if (isSelected) {
+            when (dice) {
                 R.drawable.dice_1 -> dicesList.add("1")
                 R.drawable.dice_2 -> dicesList.add("2")
                 R.drawable.dice_3 -> dicesList.add("3")
@@ -176,6 +204,14 @@ class DicesViewModel: ViewModel() {
 
         dicesModel.points = _points
         val points = dicesModel.points
-        _uiState.value = DicesModel(isSelected = dicesModel.isSelected, dices = dicesModel.dices, points = points, shouldntExist = dicesModel.shouldntExist, roundPoints = dicesModel.roundPoints)
+        _uiState.value = DicesModel(
+                isSelected = dicesModel.isSelected,
+                dices = dicesModel.dices,
+                points = points,
+                shouldntExist = dicesModel.shouldntExist,
+                roundPoints = dicesModel.roundPoints
+        )
+
+        return points
     }
 }

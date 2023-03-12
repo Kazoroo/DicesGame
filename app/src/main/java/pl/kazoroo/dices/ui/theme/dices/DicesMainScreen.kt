@@ -1,5 +1,6 @@
 package pl.kazoroo.dices.ui.theme.dices
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -15,37 +16,77 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun MainScreen(viewModel: DicesViewModel = viewModel()) {
     val dice by viewModel.uiState.collectAsState()
+
     Column {
-        SimpleTable(columnHeaders = listOf("Points", "You", "Opponent"), rows =
-        listOf(
+        SimpleTable(
+                columnHeaders = listOf("Points", "You", "Opponent"), rows = listOf(
                 listOf("Sum:          ", "", ""),
                 listOf("In this round:", "${dice.roundPoints}", ""),
-                listOf("Selected:     ", "${dice.points}", "")))
-        Dices(dice = dice.dices, isSelected =  dice.isSelected, onClick = viewModel, dice.shouldntExist)
-        Buttons(onTurnClick = { viewModel.drawDice()  }, onQueueClick = { viewModel.drawDice() })
+                listOf("Selected:     ", "${dice.points}", "")
+        )
+        )
+        Dices(
+                dice = dice.dices,
+                isSelected = dice.isSelected,
+                onClick = viewModel,
+                shouldntExist = dice.shouldntExist
+        )
+        Buttons(onTurnClick = { viewModel.drawDice() }, onQueueClick = { viewModel.drawDice() })
+
+        Log.d("MainScreen", "dice.skucha - ${dice.skucha}")
+    }
+
+    Box(modifier = Modifier.wrapContentSize(), contentAlignment = Alignment.Center) {
+        AnimateContent(dice.skucha)
     }
 }
 
 @Composable
-fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: DicesViewModel, shouldntExist: List<Boolean>) {
+fun AnimateContent(skucha: Boolean) {
+    Box(modifier = Modifier.padding(bottom = 180.dp)) {
+        Text(
+                text = "SKUCHA!", fontFamily = FontFamily.Monospace, modifier = Modifier
+            .background(
+                    if (skucha) Color(0x96000000) else Color.Transparent, RoundedCornerShape(8.dp)
+            )
+            .padding(7.dp), color = Color.Red, fontSize = if (skucha) 85.sp else (-1).sp
+        )
+    }
+}
+
+@Composable
+fun Dices(@DrawableRes dice: List<Int>,
+          isSelected: List<Boolean>,
+          onClick: DicesViewModel,
+          shouldntExist: List<Boolean>) {
     Column(
             Modifier.padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp),
             verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         Row {
-            Image(painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
-                .padding(2.dp)
-                .size(if (!shouldntExist[0]) 110.dp else (-1).dp)
-                .border(if (isSelected[0]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable { onClick.isSelectedBehavior(0) })
+            Image(
+                    painter = painterResource(id = dice[0]),
+                    contentDescription = "Dice",
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .size(if (!shouldntExist[0]) 110.dp else (-1).dp)
+                        .border(
+                                if (isSelected[0]) 2.dp else (-1).dp,
+                                Color.Black,
+                                RoundedCornerShape(4)
+                        )
+                        .clickable { onClick.isSelectedBehavior(0) })
 
             Image(painter = painterResource(id = dice[1]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
@@ -81,7 +122,6 @@ fun Dices(@DrawableRes dice: List<Int>, isSelected: List<Boolean>, onClick: Dice
         }
     }
 }
-
 
 @Composable
 fun Buttons(modifier: Modifier = Modifier, onQueueClick: () -> Unit, onTurnClick: () -> Unit) {
@@ -120,10 +160,8 @@ private fun calcWeights(columns: List<String>, rows: List<List<String>>): List<F
         .map { it.toFloat() }
 }
 
-
 @Composable
 fun SimpleTable(columnHeaders: List<String>, rows: List<List<String>>) {
-
     val weights = remember { mutableStateOf(calcWeights(columnHeaders, rows)) }
 
     Column(
