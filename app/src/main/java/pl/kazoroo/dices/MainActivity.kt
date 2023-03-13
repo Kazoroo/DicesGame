@@ -8,7 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import pl.kazoroo.dices.ui.theme.*
+import pl.kazoroo.dices.ui.theme.DicesTheme
 import pl.kazoroo.dices.ui.theme.dices.DicesViewModel
 import pl.kazoroo.dices.ui.theme.dices.MainScreen
 
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colors.background
                 ) {
                     val viewModel: DicesViewModel = viewModel()
-                    viewModel.drawDice()
+                    viewModel.queueEndBehavior()
                     MainScreen()
                 }
             }

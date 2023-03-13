@@ -14,14 +14,30 @@ class DicesViewModel: ViewModel() {
     val uiState: StateFlow<DicesModel> = _uiState.asStateFlow()
     private val dicesList = mutableListOf<String>()
 
-    fun drawDice()
-    {
+    fun turnEndBehavior() {
+        var sumOfPoints = dicesModel.sumOfPoints
+
+        sumOfPoints += dicesModel.points + dicesModel.roundPoints
+
+        dicesModel.shouldntExist = DicesModel().shouldntExist
+        dicesModel.roundPoints = DicesModel().roundPoints
+        dicesModel.points = DicesModel().points
+        dicesModel.sumOfPoints = sumOfPoints
+
+        _uiState.value = DicesModel(
+                dices = drawDice(),
+                sumOfPoints = sumOfPoints,
+                shouldntExist = DicesModel().shouldntExist,
+                points = DicesModel().points,
+                roundPoints = DicesModel().roundPoints
+        )
+    }
+
+    private fun drawDice(): List<Int> {
         val listOfDices = mutableListOf<Int>()
 
-        for(i in 0..5)
-        {
-            when(Random.nextInt(1,7))
-            {
+        for (i in 0..5) {
+            when (Random.nextInt(1, 7)) {
                 1 -> listOfDices.add(i, R.drawable.dice_1)
                 2 -> listOfDices.add(i, R.drawable.dice_2)
                 3 -> listOfDices.add(i, R.drawable.dice_3)
@@ -34,6 +50,13 @@ class DicesViewModel: ViewModel() {
         dicesModel.dices = listOfDices
         val dices = dicesModel.dices
         dicesList.clear()
+        _uiState.value = DicesModel(dices = dices)
+
+        return dices
+    }
+
+    fun queueEndBehavior() {
+        val dices = drawDice() //draw new dices
 
         var roundPoints = dicesModel.roundPoints
         roundPoints += dicesModel.points
@@ -73,7 +96,8 @@ class DicesViewModel: ViewModel() {
                     dices = dices,
                     shouldntExist = shouldntExist,
                     roundPoints = roundPoints,
-                    skucha = true
+                    skucha = true,
+                    sumOfPoints = dicesModel.sumOfPoints
             )
         }
         else {
@@ -86,8 +110,7 @@ class DicesViewModel: ViewModel() {
         }
     }
 
-    fun isSelectedBehavior(index: Int)
-    {
+    fun isSelectedBehavior(index: Int) {
         val updatedList = _uiState.value.isSelected.toMutableList()
 
         updatedList[index] = !updatedList[index]
@@ -97,7 +120,14 @@ class DicesViewModel: ViewModel() {
 
         dicesModel.isSelected = updatedList
         val isSelected = dicesModel.isSelected
-        _uiState.value = DicesModel(isSelected = isSelected, dices = dicesModel.dices, points = dicesModel.points, shouldntExist = dicesModel.shouldntExist, roundPoints = dicesModel.roundPoints)
+        _uiState.value = DicesModel(
+                isSelected = isSelected,
+                dices = dicesModel.dices,
+                points = dicesModel.points,
+                shouldntExist = dicesModel.shouldntExist,
+                roundPoints = dicesModel.roundPoints,
+                sumOfPoints = dicesModel.sumOfPoints
+        )
     }
 
     private fun pointsCounter(dice: Int, isSelected: Boolean): Int {

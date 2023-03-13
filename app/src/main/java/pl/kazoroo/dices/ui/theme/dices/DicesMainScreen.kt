@@ -29,7 +29,7 @@ fun MainScreen(viewModel: DicesViewModel = viewModel()) {
     Column {
         SimpleTable(
                 columnHeaders = listOf("Points", "You", "Opponent"), rows = listOf(
-                listOf("Sum:          ", "", ""),
+                listOf("Sum:          ", "${dice.sumOfPoints}/2000", ""),
                 listOf("In this round:", "${dice.roundPoints}", ""),
                 listOf("Selected:     ", "${dice.points}", "")
         )
@@ -40,7 +40,9 @@ fun MainScreen(viewModel: DicesViewModel = viewModel()) {
                 onClick = viewModel,
                 shouldntExist = dice.shouldntExist
         )
-        Buttons(onTurnClick = { viewModel.drawDice() }, onQueueClick = { viewModel.drawDice() })
+        Buttons(
+                onTurnClick = { viewModel.turnEndBehavior() },
+                onQueueClick = { viewModel.queueEndBehavior() })
 
         Log.d("MainScreen", "dice.skucha - ${dice.skucha}")
     }
@@ -127,21 +129,23 @@ fun Dices(@DrawableRes dice: List<Int>,
 fun Buttons(modifier: Modifier = Modifier, onQueueClick: () -> Unit, onTurnClick: () -> Unit) {
     Row {
         OutlinedButton(
-                onClick =  onQueueClick ,
-                modifier = modifier
-                    .height(80.dp)
-                    .width(40.dp)
-                    .weight(1f)
-                    .padding(5.dp))  {
-            Text(text = "Confirm and end the queue", modifier = modifier)
-        }
-        Button(
                 onClick = onTurnClick,
                 modifier = modifier
                     .height(80.dp)
                     .width(40.dp)
                     .weight(1f)
-                    .padding(5.dp)) {
+                    .padding(5.dp)
+        )  {
+            Text(text = "Confirm and end the queue", modifier = modifier)
+        }
+        Button(
+                onClick = onQueueClick,
+                modifier = modifier
+                    .height(80.dp)
+                    .width(40.dp)
+                    .weight(1f)
+                    .padding(5.dp)
+        ) {
             Text(text = "Confirm and complete the throw", modifier = modifier)
         }
     }
