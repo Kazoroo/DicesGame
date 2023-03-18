@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colors.background
                 ) {
                     val viewModel: DicesViewModel = viewModel()
-                    viewModel.queueEndBehavior()
+                    viewModel.throwEndBehavior()
                     MainScreen()
                 }
             }

@@ -1,11 +1,10 @@
 package pl.kazoroo.dices.ui.theme.dices
 
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import pl.kazoroo.dices.R
 import kotlin.random.Random
 
@@ -14,10 +13,12 @@ class DicesViewModel: ViewModel() {
     val uiState: StateFlow<DicesModel> = _uiState.asStateFlow()
     private val dicesList = mutableListOf<String>()
 
-    fun turnEndBehavior() {
+    fun turnEndBehavior(skucha: Boolean = false) {
         var sumOfPoints = dicesModel.sumOfPoints
 
-        sumOfPoints += dicesModel.points + dicesModel.roundPoints
+        if (!skucha) {
+            sumOfPoints += dicesModel.points + dicesModel.roundPoints
+        }
 
         dicesModel.shouldntExist = DicesModel().shouldntExist
         dicesModel.roundPoints = DicesModel().roundPoints
@@ -31,6 +32,20 @@ class DicesViewModel: ViewModel() {
                 points = DicesModel().points,
                 roundPoints = DicesModel().roundPoints
         )
+    }
+
+    fun showSkuchaTextBehavior() {
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(800)
+            withContext(Dispatchers.Main) {
+                val x = _uiState.value.copy(showSkucha = true)
+                _uiState.value = x
+            }
+            delay(2000)
+            withContext(Dispatchers.Main) { //viewModel.showSkucha(false)
+                turnEndBehavior(true)
+            }
+        }
     }
 
     private fun drawDice(): List<Int> {
@@ -55,11 +70,11 @@ class DicesViewModel: ViewModel() {
         return dices
     }
 
-    fun queueEndBehavior() {
+    fun throwEndBehavior() {
         val dices = drawDice() //draw new dices
 
         var roundPoints = dicesModel.roundPoints
-        roundPoints += dicesModel.points
+        roundPoints += dicesModel.points //calculate round points
         dicesModel.roundPoints = roundPoints
 
         val shouldntExist: MutableList<Boolean> = dicesModel.shouldntExist.toMutableList()
@@ -105,7 +120,8 @@ class DicesViewModel: ViewModel() {
                     dices = dices,
                     shouldntExist = shouldntExist,
                     roundPoints = roundPoints,
-                    skucha = false
+                    skucha = false,
+                    sumOfPoints = dicesModel.sumOfPoints
             )
         }
     }

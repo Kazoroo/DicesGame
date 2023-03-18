@@ -1,6 +1,5 @@
 package pl.kazoroo.dices.ui.theme.dices
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -40,28 +39,32 @@ fun MainScreen(viewModel: DicesViewModel = viewModel()) {
                 onClick = viewModel,
                 shouldntExist = dice.shouldntExist
         )
-        Buttons(
-                onTurnClick = { viewModel.turnEndBehavior() },
-                onQueueClick = { viewModel.queueEndBehavior() })
-
-        Log.d("MainScreen", "dice.skucha - ${dice.skucha}")
+        Buttons(onTurnClick = { viewModel.turnEndBehavior() },
+                onThrowClick = { viewModel.throwEndBehavior() })
     }
 
-    Box(modifier = Modifier.wrapContentSize(), contentAlignment = Alignment.Center) {
-        AnimateContent(dice.skucha)
+    if (dice.skucha) {
+        SkuchaScreen(showSkucha = dice.showSkucha)
+        viewModel.showSkuchaTextBehavior()
     }
 }
 
 @Composable
-fun AnimateContent(skucha: Boolean) {
-    Box(modifier = Modifier.padding(bottom = 180.dp)) {
-        Text(
-                text = "SKUCHA!", fontFamily = FontFamily.Monospace, modifier = Modifier
-            .background(
-                    if (skucha) Color(0x96000000) else Color.Transparent, RoundedCornerShape(8.dp)
+fun SkuchaScreen(showSkucha: Boolean) {
+    if (showSkucha) {
+        Box(modifier = Modifier.padding(bottom = 180.dp), contentAlignment = Alignment.Center) {
+            Text(
+                    text = "SKUCHA!",
+                    fontFamily = FontFamily.Monospace,
+                    modifier = Modifier
+                        .background(
+                                Color(0x96000000), RoundedCornerShape(8.dp)
+                        )
+                        .padding(7.dp),
+                    color = Color.Red,
+                    fontSize = 85.sp
             )
-            .padding(7.dp), color = if (skucha) Color.Red else Color.Transparent, fontSize = 85.sp
-        )
+        }
     }
 }
 
@@ -126,7 +129,7 @@ fun Dices(@DrawableRes dice: List<Int>,
 }
 
 @Composable
-fun Buttons(modifier: Modifier = Modifier, onQueueClick: () -> Unit, onTurnClick: () -> Unit) {
+fun Buttons(modifier: Modifier = Modifier, onThrowClick: () -> Unit, onTurnClick: () -> Unit) {
     Row {
         OutlinedButton(
                 onClick = onTurnClick,
@@ -135,11 +138,11 @@ fun Buttons(modifier: Modifier = Modifier, onQueueClick: () -> Unit, onTurnClick
                     .width(40.dp)
                     .weight(1f)
                     .padding(5.dp)
-        )  {
+        ) {
             Text(text = "Confirm and end the queue", modifier = modifier)
         }
         Button(
-                onClick = onQueueClick,
+                onClick = onThrowClick,
                 modifier = modifier
                     .height(80.dp)
                     .width(40.dp)
