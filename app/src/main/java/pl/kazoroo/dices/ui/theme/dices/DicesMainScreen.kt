@@ -1,5 +1,6 @@
 package pl.kazoroo.dices.ui.theme.dices
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -14,15 +15,32 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun MainScreen(viewModel: DicesViewModel = viewModel()) {
+fun calculateButtonsSize(): List<Int> {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp
+    Log.d("calculateButtonsSize", "screenWidth - $screenWidth")
+
+    val buttonWidth = screenWidth / 2
+    Log.d("calculateButtonsSize", "buttonWidth - $buttonWidth")
+
+    val buttonHeight = buttonWidth / 1.61803398875
+    Log.d("calculateButtonsSize", "buttonHeight - $buttonHeight")
+
+    return listOf(buttonWidth, buttonHeight.toInt())
+}
+
+@Composable
+fun MainScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) {
     val dice by viewModel.uiState.collectAsState()
 
     Column {
@@ -39,8 +57,12 @@ fun MainScreen(viewModel: DicesViewModel = viewModel()) {
                 onClick = viewModel,
                 shouldntExist = dice.shouldntExist
         )
-        Buttons(onTurnClick = { viewModel.turnEndBehavior() },
-                onThrowClick = { viewModel.throwEndBehavior() })
+        Buttons(
+                onTurnClick = { viewModel.turnEndBehavior() },
+                onThrowClick = { viewModel.throwEndBehavior() },
+                weight = buttonsSize[0],
+                height = buttonsSize[1]
+        )
     }
 
     if (dice.skucha) {
@@ -129,27 +151,39 @@ fun Dices(@DrawableRes dice: List<Int>,
 }
 
 @Composable
-fun Buttons(modifier: Modifier = Modifier, onThrowClick: () -> Unit, onTurnClick: () -> Unit) {
+fun Buttons(modifier: Modifier = Modifier,
+            onThrowClick: () -> Unit,
+            onTurnClick: () -> Unit,
+            weight: Int,
+            height: Int) {
     Row {
         OutlinedButton(
                 onClick = onTurnClick,
                 modifier = modifier
-                    .height(80.dp)
-                    .width(40.dp)
-                    .weight(1f)
-                    .padding(5.dp)
+                    .height(height.dp)
+                    .width(weight.dp) //.weight(1f)
+                    .padding(start = 5.dp, end = 5.dp)
         ) {
-            Text(text = "Confirm and end the queue", modifier = modifier)
+            Text(
+                    text = "Confirm and end the queue",
+                    modifier = modifier,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center
+            )
         }
         Button(
                 onClick = onThrowClick,
                 modifier = modifier
-                    .height(80.dp)
-                    .width(40.dp)
-                    .weight(1f)
-                    .padding(5.dp)
+                    .height(height.dp)
+                    .width(weight.dp) //.weight(1f)
+                    .padding(start = 5.dp, end = 5.dp)
         ) {
-            Text(text = "Confirm and complete the throw", modifier = modifier)
+            Text(
+                    text = "Confirm and complete the throw",
+                    modifier = modifier,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center
+            )
         }
     }
 }

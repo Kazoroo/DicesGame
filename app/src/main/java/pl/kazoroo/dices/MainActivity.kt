@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kazoroo.dices.ui.theme.DicesTheme
 import pl.kazoroo.dices.ui.theme.dices.DicesViewModel
 import pl.kazoroo.dices.ui.theme.dices.MainScreen
+import pl.kazoroo.dices.ui.theme.dices.calculateButtonsSize
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,9 +22,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                 ) {
+                    val buttonsSize = calculateButtonsSize()
                     val viewModel: DicesViewModel = viewModel()
                     viewModel.throwEndBehavior()
-                    MainScreen()
+                    MainScreen(buttonsSize = buttonsSize)
                 }
             }
         }

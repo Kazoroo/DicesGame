@@ -1,5 +1,6 @@
 package pl.kazoroo.dices.ui.theme.dices
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -7,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import pl.kazoroo.dices.R
 import kotlin.random.Random
+import kotlin.system.measureTimeMillis
 
 class DicesViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(DicesModel())
@@ -36,7 +38,7 @@ class DicesViewModel: ViewModel() {
 
     fun showSkuchaTextBehavior() {
         CoroutineScope(Dispatchers.IO).launch {
-            delay(800)
+            delay(600)
             withContext(Dispatchers.Main) {
                 val x = _uiState.value.copy(showSkucha = true)
                 _uiState.value = x
@@ -127,23 +129,26 @@ class DicesViewModel: ViewModel() {
     }
 
     fun isSelectedBehavior(index: Int) {
-        val updatedList = _uiState.value.isSelected.toMutableList()
+        val time = measureTimeMillis {
+            val updatedList = _uiState.value.isSelected.toMutableList()
 
-        updatedList[index] = !updatedList[index]
-        updatedList.toList()
+            updatedList[index] = !updatedList[index]
+            updatedList.toList()
 
-        runBlocking { launch { pointsCounter(dicesModel.dices[index], updatedList[index]) } }
+            runBlocking { launch { pointsCounter(dicesModel.dices[index], updatedList[index]) } }
 
-        dicesModel.isSelected = updatedList
-        val isSelected = dicesModel.isSelected
-        _uiState.value = DicesModel(
-                isSelected = isSelected,
-                dices = dicesModel.dices,
-                points = dicesModel.points,
-                shouldntExist = dicesModel.shouldntExist,
-                roundPoints = dicesModel.roundPoints,
-                sumOfPoints = dicesModel.sumOfPoints
-        )
+            dicesModel.isSelected = updatedList
+            val isSelected = dicesModel.isSelected
+            _uiState.value = DicesModel(
+                    isSelected = isSelected,
+                    dices = dicesModel.dices,
+                    points = dicesModel.points,
+                    shouldntExist = dicesModel.shouldntExist,
+                    roundPoints = dicesModel.roundPoints,
+                    sumOfPoints = dicesModel.sumOfPoints
+            )
+        }
+        Log.d("Time", "time in ViewModel - $time ms")
     }
 
     private fun pointsCounter(dice: Int, isSelected: Boolean): Int {
