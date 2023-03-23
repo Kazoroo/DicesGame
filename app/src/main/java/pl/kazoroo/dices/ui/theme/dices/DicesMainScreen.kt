@@ -4,14 +4,13 @@ import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +18,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,7 +42,7 @@ fun MainScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) 
     val dice by viewModel.uiState.collectAsState()
 
     Column {
-        SimpleTable(
+        Table(
                 columnHeaders = listOf("Points", "You", "Opponent"), rows = listOf(
                 listOf("Sum:          ", "${dice.sumOfPoints}/2000", ""),
                 listOf("In this round:", "${dice.roundPoints}", ""),
@@ -64,6 +62,7 @@ fun MainScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) 
                 height = buttonsSize[1]
         )
     }
+
 
     if (dice.skucha) {
         SkuchaScreen(showSkucha = dice.showSkucha)
@@ -188,70 +187,44 @@ fun Buttons(modifier: Modifier = Modifier,
     }
 }
 
-private fun calcWeights(columns: List<String>, rows: List<List<String>>): List<Float> {
-    val weights = MutableList(columns.size) { 0 }
-    val fullList = rows.toMutableList()
-    fullList.add(columns)
-    fullList.forEach { list ->
-        list.forEachIndexed { columnIndex, value ->
-            weights[columnIndex] = weights[columnIndex].coerceAtLeast(value.length)
-        }
-    }
-    return weights
-        .map { it.toFloat() }
-}
-
 @Composable
-fun SimpleTable(columnHeaders: List<String>, rows: List<List<String>>) {
-    val weights = remember { mutableStateOf(calcWeights(columnHeaders, rows)) }
+fun Table(columnHeaders: List<String>, rows: List<List<String>>) {
+    val numColumns = columnHeaders.size
+    val numRows = rows.size
 
-    Column(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-    ) {
-        /* HEADER */
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .height(140.dp)) { // Header row
         Row(modifier = Modifier.fillMaxWidth()) {
-            columnHeaders.forEachIndexed { rowIndex, cell ->
-                val weight = weights.value[rowIndex]
-                SimpleCell(text = cell, weight = weight)
+            repeat(numColumns) { columnIndex ->
+                Text(
+                        text = columnHeaders[columnIndex], modifier = Modifier
+                    .weight(1f)
+                    .border(
+                            BorderStroke(0.5f.dp, Color.Black)
+                    )
+                    .padding(6.dp), textAlign = TextAlign.Center
+                )
             }
-        }
-        /* ROWS  */
-        LazyColumn(modifier = Modifier) {
-            itemsIndexed(rows) { _, row ->
-                Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                ) {
-                    row.forEachIndexed { columnIndex, cell ->
-                        val weight = weights.value[columnIndex]
-                        SimpleCell(text = cell, weight = weight)
-                    }
+        } // Data rows
+        repeat(numRows) { rowIndex ->
+            Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+            ) {
+                repeat(numColumns) { columnIndex ->
+                    Text(
+                            text = rows[rowIndex][columnIndex],
+                            modifier = Modifier
+                                .weight(1f)
+                                .border(
+                                        BorderStroke(0.5f.dp, Color.Black)
+                                )
+                                .padding(6.dp),
+                            textAlign = TextAlign.Center
+                    )
                 }
             }
         }
     }
-}
-
-@Composable
-private fun SimpleCell(
-    text: String,
-    weight: Float = 1f
-) {
-    val textStyle = MaterialTheme.typography.body1
-    val fontWidth = textStyle.fontSize.value / 2.2f // depends of font used(
-    val width = (fontWidth * weight).coerceAtMost(500f)
-    val textColor = MaterialTheme.colors.onBackground
-    Text(
-            text = text,
-            maxLines = 1,
-            softWrap = false,
-            overflow = TextOverflow.Ellipsis,
-            color = textColor,
-            modifier = Modifier
-                .border(0.dp, textColor.copy(alpha = 0.5f))
-                .fillMaxWidth()
-                .width(width.dp + 65.dp)
-                .padding(horizontal = 8.dp, vertical = 8.dp)
-    )
 }
