@@ -15,25 +15,34 @@ class DicesViewModel: ViewModel() {
     val uiState: StateFlow<DicesModel> = _uiState.asStateFlow()
     private val dicesList = mutableListOf<String>()
 
-    fun turnEndBehavior(skucha: Boolean = false) {
+    fun queueEndBehavior(skucha: Boolean = false) {
         var sumOfPoints = dicesModel.sumOfPoints
 
         if (!skucha) {
             sumOfPoints += dicesModel.points + dicesModel.roundPoints
         }
 
+        if (sumOfPoints >= 2000) {
+            val x = true
+            dicesModel.skucha = x
+        }
+
         dicesModel.shouldntExist = DicesModel().shouldntExist
         dicesModel.roundPoints = DicesModel().roundPoints
         dicesModel.points = DicesModel().points
         dicesModel.sumOfPoints = sumOfPoints
+        dicesModel.showSkucha = true
 
         _uiState.value = DicesModel(
                 dices = drawDice(),
                 sumOfPoints = sumOfPoints,
                 shouldntExist = DicesModel().shouldntExist,
                 points = DicesModel().points,
-                roundPoints = DicesModel().roundPoints
+                roundPoints = DicesModel().roundPoints,
+                skucha = dicesModel.skucha
         )
+
+        dicesModel.skucha = false
     }
 
     fun showSkuchaTextBehavior() {
@@ -44,8 +53,9 @@ class DicesViewModel: ViewModel() {
                 _uiState.value = x
             }
             delay(2000)
-            withContext(Dispatchers.Main) { //viewModel.showSkucha(false)
-                turnEndBehavior(true)
+            withContext(Dispatchers.Main) {
+                dicesModel.sumOfPoints = 0
+                queueEndBehavior(true)
             }
         }
     }
@@ -106,26 +116,12 @@ class DicesViewModel: ViewModel() {
         }
 
         //if all indexes in shouldBeSkucha are true, game end
-        if (shouldBeSkucha.count { it } == shouldBeSkucha.size) {
-            dicesModel.points = 0
-            roundPoints = 0
-            _uiState.value = DicesModel(
-                    dices = dices,
-                    shouldntExist = shouldntExist,
-                    roundPoints = roundPoints,
-                    skucha = true,
-                    sumOfPoints = dicesModel.sumOfPoints
-            )
-        }
-        else {
-            _uiState.value = DicesModel(
-                    dices = dices,
-                    shouldntExist = shouldntExist,
-                    roundPoints = roundPoints,
-                    skucha = false,
-                    sumOfPoints = dicesModel.sumOfPoints
-            )
-        }
+        _uiState.value = DicesModel(dices = dices,
+                shouldntExist = shouldntExist,
+                roundPoints = roundPoints,
+                skucha = shouldBeSkucha.count { it } == shouldBeSkucha.size,
+                sumOfPoints = dicesModel.sumOfPoints)
+        dicesModel.points = 0
     }
 
     fun isSelectedBehavior(index: Int) {

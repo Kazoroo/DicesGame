@@ -45,8 +45,8 @@ fun MainScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) 
         Table(
                 columnHeaders = listOf("Points", "You", "Opponent"), rows = listOf(
                 listOf("Sum:          ", "${dice.sumOfPoints}/2000", ""),
-                listOf("In this round:", "${dice.roundPoints}", ""),
-                listOf("Selected:     ", "${dice.points}", "")
+                listOf("    In this round:", "${dice.roundPoints}", ""),
+                listOf("  Selected:     ", "${dice.points}", "")
         )
         )
         Dices(
@@ -56,7 +56,7 @@ fun MainScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) 
                 shouldntExist = dice.shouldntExist
         )
         Buttons(
-                onTurnClick = { viewModel.turnEndBehavior() },
+                onQueueClick = { viewModel.queueEndBehavior() },
                 onThrowClick = { viewModel.throwEndBehavior() },
                 weight = buttonsSize[0],
                 height = buttonsSize[1]
@@ -65,26 +65,32 @@ fun MainScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) 
 
 
     if (dice.skucha) {
-        SkuchaScreen(showSkucha = dice.showSkucha)
+        SkuchaScreen(showSkucha = dice.showSkucha, sumOfPoints = dice.sumOfPoints)
         viewModel.showSkuchaTextBehavior()
     }
 }
 
 @Composable
-fun SkuchaScreen(showSkucha: Boolean) {
-    if (showSkucha) {
+fun SkuchaScreen(showSkucha: Boolean, sumOfPoints: Int) {
+    @Composable
+    fun GameResultScreen(text: String, backgroundColor: Color, fontColor: Color) {
         Box(modifier = Modifier.padding(bottom = 180.dp), contentAlignment = Alignment.Center) {
             Text(
-                    text = "SKUCHA!",
-                    fontFamily = FontFamily.Monospace,
-                    modifier = Modifier
-                        .background(
-                                Color(0x96000000), RoundedCornerShape(8.dp)
-                        )
-                        .padding(7.dp),
-                    color = Color.Red,
-                    fontSize = 85.sp
+                    text = text, fontFamily = FontFamily.Monospace, modifier = Modifier
+                .background(
+                        backgroundColor, RoundedCornerShape(8.dp)
+                )
+                .padding(7.dp), color = fontColor, fontSize = 85.sp
             )
+        }
+    }
+
+    if (showSkucha) {
+        if (sumOfPoints >= 2000) {
+            GameResultScreen("Win!", Color(0x96000000), Color(0xff6fd633))
+        }
+        else {
+            GameResultScreen("SKUCHA!", Color(0x96000000), Color.Red)
         }
     }
 }
@@ -152,12 +158,12 @@ fun Dices(@DrawableRes dice: List<Int>,
 @Composable
 fun Buttons(modifier: Modifier = Modifier,
             onThrowClick: () -> Unit,
-            onTurnClick: () -> Unit,
+            onQueueClick: () -> Unit,
             weight: Int,
             height: Int) {
     Row {
         OutlinedButton(
-                onClick = onTurnClick,
+                onClick = onQueueClick,
                 modifier = modifier
                     .height(height.dp)
                     .width(weight.dp) //.weight(1f)
