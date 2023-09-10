@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import pl.kazoroo.dices.ui.theme.dices.data.DicesViewModel
 
 @Composable
 fun calculateButtonsSize(): List<Int> {
@@ -38,7 +39,7 @@ fun calculateButtonsSize(): List<Int> {
 }
 
 @Composable
-fun MainScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) {
+fun GameScreen(viewModel: DicesViewModel = viewModel(), buttonsSize: List<Int>) {
     val dice by viewModel.uiState.collectAsState()
 
     Column {

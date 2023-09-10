@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme.dices
+package pl.kazoroo.dices.ui.theme.dices.data
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

@@ -9,8 +9,9 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kazoroo.dices.ui.theme.DicesTheme
-import pl.kazoroo.dices.ui.theme.dices.DicesViewModel
-import pl.kazoroo.dices.ui.theme.dices.MainScreen
+import pl.kazoroo.dices.ui.theme.dices.data.DicesViewModel
+import pl.kazoroo.dices.ui.theme.dices.MainMenu
+import pl.kazoroo.dices.ui.theme.dices.Settings
 import pl.kazoroo.dices.ui.theme.dices.calculateButtonsSize
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +26,8 @@ class MainActivity : ComponentActivity() {
                     val buttonsSize = calculateButtonsSize()
                     val viewModel: DicesViewModel = viewModel()
                     viewModel.throwEndBehavior()
-                    MainScreen(buttonsSize = buttonsSize)
+                    //GameScreen(buttonsSize = buttonsSize)
+                    Settings()
                 }
             }
         }
