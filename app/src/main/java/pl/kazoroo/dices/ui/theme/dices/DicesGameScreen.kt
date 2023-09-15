@@ -1,16 +1,21 @@
 package pl.kazoroo.dices.ui.theme.dices
 
 import android.util.Log
+import android.widget.ImageButton
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import pl.kazoroo.dices.ui.theme.Shapes
 import pl.kazoroo.dices.ui.theme.dices.data.DicesViewModel
 
 @Composable
@@ -106,52 +112,68 @@ fun Dices(@DrawableRes dice: List<Int>,
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Row {
             Image(
-                    painter = painterResource(id = dice[0]),
-                    contentDescription = "Dice",
-                    modifier = Modifier
+                    painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
                         .padding(2.dp)
                         .size(if (!shouldntExist[0]) 110.dp else (-1).dp)
-                        .border(
-                                if (isSelected[0]) 2.dp else (-1).dp,
-                                Color.Black,
-                                RoundedCornerShape(4)
-                        )
-                        .clickable { onClick.isSelectedBehavior(0) })
+                        .border(if (isSelected[0]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
+                        .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                            onClick.isSelectedBehavior(0)
+                        }
+            )
 
-            Image(painter = painterResource(id = dice[1]), contentDescription = "Dice", modifier = Modifier
+            Image(
+                    painter = painterResource(id = dice[1]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[1]) 110.dp else (-1).dp)
                 .border(if (isSelected[1]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable { onClick.isSelectedBehavior(1) })
+                .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                    onClick.isSelectedBehavior(1)
+                }
+            )
 
-            Image(painter = painterResource(id = dice[2]), contentDescription = "Dice", modifier = Modifier
+            Image(
+                    painter = painterResource(id = dice[2]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[2]) 110.dp else (-1).dp)
                 .border(if (isSelected[2]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable { onClick.isSelectedBehavior(2) })
+                .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                    onClick.isSelectedBehavior(2)
+                }
+            )
         }
 
         Row {
-            Image(painter = painterResource(id = dice[3]), contentDescription = "Dice", modifier = Modifier
+            Image(
+                    painter = painterResource(id = dice[3]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[3]) 120.dp else (-1).dp)
                 .border(if (isSelected[3]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable { onClick.isSelectedBehavior(3) })
+                .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                    onClick.isSelectedBehavior(3)
+                }
+            )
 
-            Image(painter = painterResource(id = dice[4]), contentDescription = "Dice", modifier = Modifier
+            Image(
+                    painter = painterResource(id = dice[4]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[4]) 120.dp else (-1).dp)
                 .border(if (isSelected[4]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable { onClick.isSelectedBehavior(4) })
+                .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                    onClick.isSelectedBehavior(4)
+                }
+            )
 
-            Image(painter = painterResource(id = dice[5]), contentDescription = "Dice", modifier = Modifier
+            Image(
+                    painter = painterResource(id = dice[5]), contentDescription = "Dice", modifier = Modifier
                 .padding(2.dp)
                 .size(if (!shouldntExist[5]) 120.dp else (-1).dp)
                 .border(if (isSelected[5]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable { onClick.isSelectedBehavior(5) })
+                .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
+                    onClick.isSelectedBehavior(5)
+                }
+            )
         }
     }
 }
