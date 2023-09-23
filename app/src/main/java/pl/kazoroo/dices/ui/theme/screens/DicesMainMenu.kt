@@ -2,6 +2,8 @@ package pl.kazoroo.dices.ui.theme.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -10,48 +12,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.navigation.Screen
 
+data class ButtonInfo(val text: String, val onClick: () -> Unit)
+
 @Composable
 fun MainMenu(navController: NavController) {
+    val buttons =
+        listOf(ButtonInfo(text = "Play with AI") { navController.navigate(Screen.GameScreen.withArgs()) },
+                ButtonInfo(text = "Play with player") { /* TODO */ },
+                ButtonInfo(text = "Skins") { /* TODO */ },
+                ButtonInfo(text = "Settings") { navController.navigate(Screen.SettingsScreen.withArgs()) },
+                ButtonInfo(text = "Exit") { /* TODO */ })
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(painter = painterResource(id = R.drawable.dice_1), contentDescription = "Dice")
+        Spacer(modifier = Modifier.height(40.dp))
 
-        Button(
-                onClick = { navController.navigate(Screen.GameScreen.withArgs()) },
-                modifier = Modifier.width(200.dp)
-        ) {
-            Text(text = "Play with AI")
-        }
-
-        Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.width(200.dp)
-        ) {
-            Text(text = "Play with player")
-        }
-
-        Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.width(200.dp)
-        ) {
-            Text(text = "Skins")
-        }
-
-        Button(
-                onClick = { navController.navigate(Screen.SettingsScreen.withArgs()) },
-                modifier = Modifier.width(200.dp)
-        ) {
-            Text(text = "Settings")
-        }
-
-        Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.width(200.dp)
-        ) {
-            Text(text = "Exit")
+        buttons.forEach { buttonInfo ->
+            Button(
+                    onClick = buttonInfo.onClick, modifier = Modifier.width(200.dp)
+            ) {
+                Text(
+                        text = buttonInfo.text, fontSize = 16.sp
+                )
+            }
         }
     }
 }

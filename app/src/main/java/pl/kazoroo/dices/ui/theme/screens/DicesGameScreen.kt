@@ -133,96 +133,98 @@ fun SkuchaScreen(showSkucha: Boolean, sumOfPoints: Int) {
     }
 }
 
+data class DicesInfo(val dice: Int,
+                     val isSelected: Boolean,
+                     val onClick: () -> Unit,
+                     val shouldntExist: Boolean)
+
 @Composable
 fun Dices(@DrawableRes dice: List<Int>,
           isSelected: List<Boolean>,
           onClick: DicesViewModel,
           shouldntExist: List<Boolean>) {
+    val dicesFirstRow = listOf(
+            DicesInfo(
+                    dice = dice[0],
+                    isSelected = isSelected[0],
+                    onClick = { onClick.isSelectedBehavior(0) },
+                    shouldntExist = shouldntExist[0]
+            ),
+            DicesInfo(
+                    dice = dice[1],
+                    isSelected = isSelected[1],
+                    onClick = { onClick.isSelectedBehavior(1) },
+                    shouldntExist = shouldntExist[1]
+            ),
+            DicesInfo(
+                    dice = dice[2],
+                    isSelected = isSelected[2],
+                    onClick = { onClick.isSelectedBehavior(2) },
+                    shouldntExist = shouldntExist[2]
+            )
+    )
+    val dicesSecondRow = listOf(
+            DicesInfo(
+                    dice = dice[3],
+                    isSelected = isSelected[3],
+                    onClick = { onClick.isSelectedBehavior(3) },
+                    shouldntExist = shouldntExist[3]
+            ),
+            DicesInfo(
+                    dice = dice[4],
+                    isSelected = isSelected[4],
+                    onClick = { onClick.isSelectedBehavior(4) },
+                    shouldntExist = shouldntExist[4]
+            ),
+            DicesInfo(
+                    dice = dice[5],
+                    isSelected = isSelected[5],
+                    onClick = { onClick.isSelectedBehavior(5) },
+                    shouldntExist = shouldntExist[5]
+            )
+    )
+
     Column(
             Modifier.padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row {
-            Image(
-                    painter = painterResource(id = dice[0]), contentDescription = "Dice", modifier = Modifier
-                .padding(
-                        2.dp
-                )
-                .size(if (!shouldntExist[0]) 110.dp else (-1).dp)
-                .border(if (isSelected[0]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable(indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                    onClick.isSelectedBehavior(0)
-                }
-            )
-
-            Image(
-                    painter = painterResource(id = dice[1]), contentDescription = "Dice", modifier = Modifier
-                .padding(
-                        2.dp
-                )
-                .size(if (!shouldntExist[1]) 110.dp else (-1).dp)
-                .border(if (isSelected[1]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable(indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                    onClick.isSelectedBehavior(1)
-                }
-            )
-
-            Image(
-                    painter = painterResource(id = dice[2]), contentDescription = "Dice", modifier = Modifier
-                .padding(
-                        2.dp
-                )
-                .size(if (!shouldntExist[2]) 110.dp else (-1).dp)
-                .border(if (isSelected[2]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable(indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                    onClick.isSelectedBehavior(2)
-                }
-            )
+            dicesFirstRow.forEachIndexed { index, _ ->
+                Image(painter = painterResource(id = dice[index]),
+                        contentDescription = "Dice",
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .size(if (!shouldntExist[index]) 110.dp else (-1).dp)
+                            .border(
+                                    if (isSelected[index]) 2.dp else (-1).dp,
+                                    Color.Black,
+                                    RoundedCornerShape(4)
+                            )
+                            .clickable(indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }) {
+                                onClick.isSelectedBehavior(index)
+                            })
+            }
         }
 
         Row {
-            Image(
-                    painter = painterResource(id = dice[3]), contentDescription = "Dice", modifier = Modifier
-                .padding(
-                        2.dp
-                )
-                .size(if (!shouldntExist[3]) 120.dp else (-1).dp)
-                .border(if (isSelected[3]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable(indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                    onClick.isSelectedBehavior(3)
-                }
-            )
-
-            Image(
-                    painter = painterResource(id = dice[4]), contentDescription = "Dice", modifier = Modifier
-                .padding(
-                        2.dp
-                )
-                .size(if (!shouldntExist[4]) 120.dp else (-1).dp)
-                .border(if (isSelected[4]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable(indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                    onClick.isSelectedBehavior(4)
-                }
-            )
-
-            Image(
-                    painter = painterResource(id = dice[5]), contentDescription = "Dice", modifier = Modifier
-                .padding(
-                        2.dp
-                )
-                .size(if (!shouldntExist[5]) 120.dp else (-1).dp)
-                .border(if (isSelected[5]) 2.dp else (-1).dp, Color.Black, RoundedCornerShape(4))
-                .clickable(indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                    onClick.isSelectedBehavior(5)
-                }
-            )
+            dicesSecondRow.forEachIndexed { index, _ ->
+                Image(painter = painterResource(id = dice[index]),
+                        contentDescription = "Dice",
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .size(if (!shouldntExist[index]) 110.dp else (-1).dp)
+                            .border(
+                                    if (isSelected[index]) 2.dp else (-1).dp,
+                                    Color.Black,
+                                    RoundedCornerShape(4)
+                            )
+                            .clickable(indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }) {
+                                onClick.isSelectedBehavior(index)
+                            })
+            }
         }
     }
 }
