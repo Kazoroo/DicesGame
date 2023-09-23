@@ -1,11 +1,16 @@
-package pl.kazoroo.dices.ui.theme.dices.data
+package pl.kazoroo.dices.data
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import pl.kazoroo.dices.R
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
@@ -82,6 +87,9 @@ class DicesViewModel: ViewModel() {
         return dices
     }
 
+    /**
+     * Function that
+     */
     fun throwEndBehavior() {
         val dices = drawDice() //draw new dices
 

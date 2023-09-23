@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme.dices.data
+package pl.kazoroo.dices.data
 
 import pl.kazoroo.dices.R
 
