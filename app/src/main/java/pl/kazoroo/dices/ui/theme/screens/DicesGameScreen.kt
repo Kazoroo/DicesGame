@@ -53,7 +53,6 @@ fun calculateButtonsSize(): Array<Int> {
  * Creates a game screen
  * @param viewModel viewmodel for calculations
  * @param navController needed to navigate between screens
- *
  * @return nothing
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -143,87 +142,46 @@ fun Dices(@DrawableRes dice: List<Int>,
           isSelected: List<Boolean>,
           onClick: DicesViewModel,
           shouldntExist: List<Boolean>) {
-    val dicesFirstRow = listOf(
+
+    val dicesRows = List(2) { rowIndex ->
+        List(3) { columnIndex ->
+            val index = rowIndex * 3 + columnIndex
             DicesInfo(
-                    dice = dice[0],
-                    isSelected = isSelected[0],
-                    onClick = { onClick.isSelectedBehavior(0) },
-                    shouldntExist = shouldntExist[0]
-            ),
-            DicesInfo(
-                    dice = dice[1],
-                    isSelected = isSelected[1],
-                    onClick = { onClick.isSelectedBehavior(1) },
-                    shouldntExist = shouldntExist[1]
-            ),
-            DicesInfo(
-                    dice = dice[2],
-                    isSelected = isSelected[2],
-                    onClick = { onClick.isSelectedBehavior(2) },
-                    shouldntExist = shouldntExist[2]
+                    dice = dice[index],
+                    isSelected = isSelected[index],
+                    onClick = { onClick.isSelectedBehavior(index) },
+                    shouldntExist = shouldntExist[index]
             )
-    )
-    val dicesSecondRow = listOf(
-            DicesInfo(
-                    dice = dice[3],
-                    isSelected = isSelected[3],
-                    onClick = { onClick.isSelectedBehavior(3) },
-                    shouldntExist = shouldntExist[3]
-            ),
-            DicesInfo(
-                    dice = dice[4],
-                    isSelected = isSelected[4],
-                    onClick = { onClick.isSelectedBehavior(4) },
-                    shouldntExist = shouldntExist[4]
-            ),
-            DicesInfo(
-                    dice = dice[5],
-                    isSelected = isSelected[5],
-                    onClick = { onClick.isSelectedBehavior(5) },
-                    shouldntExist = shouldntExist[5]
-            )
-    )
+        }
+    }
 
     Column(
-            Modifier.padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp),
+            Modifier
+                .padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row {
-            dicesFirstRow.forEachIndexed { index, _ ->
-                Image(painter = painterResource(id = dice[index]),
-                        contentDescription = "Dice",
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .size(if (!shouldntExist[index]) 110.dp else (-1).dp)
-                            .border(
-                                    if (isSelected[index]) 2.dp else (-1).dp,
-                                    Color.Black,
-                                    RoundedCornerShape(4)
-                            )
-                            .clickable(indication = null,
-                                    interactionSource = remember { MutableInteractionSource() }) {
-                                onClick.isSelectedBehavior(index)
-                            })
-            }
-        }
-
-        Row {
-            dicesSecondRow.forEachIndexed { index, _ ->
-                Image(painter = painterResource(id = dice[index]),
-                        contentDescription = "Dice",
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .size(if (!shouldntExist[index]) 110.dp else (-1).dp)
-                            .border(
-                                    if (isSelected[index]) 2.dp else (-1).dp,
-                                    Color.Black,
-                                    RoundedCornerShape(4)
-                            )
-                            .clickable(indication = null,
-                                    interactionSource = remember { MutableInteractionSource() }) {
-                                onClick.isSelectedBehavior(index)
-                            })
+        dicesRows.forEach { row ->
+            Row(
+                    horizontalArrangement = Arrangement.Center
+            ) {
+                row.forEachIndexed { index, info ->
+                    Image(painter = painterResource(id = info.dice),
+                            contentDescription = "Dice",
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .size(if (!info.shouldntExist) 110.dp else (-1).dp)
+                                .border(
+                                        if (info.isSelected) 2.dp else (-1).dp,
+                                        Color.Black,
+                                        RoundedCornerShape(4)
+                                )
+                                .clickable(indication = null,
+                                        interactionSource = remember { MutableInteractionSource() }) {
+                                    info.onClick()
+                                })
+                }
             }
         }
     }
@@ -241,7 +199,7 @@ fun Buttons(modifier: Modifier = Modifier,
                 shape = RoundedCornerShape(15.dp),
                 modifier = modifier
                     .height(height.dp)
-                    .width(weight.dp) //.weight(1f)
+                    .width(weight.dp)
                     .padding(start = 5.dp, end = 5.dp)
         ) {
             Text(
