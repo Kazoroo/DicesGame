@@ -231,6 +231,7 @@ fun Buttons(modifier: Modifier = Modifier,
 fun Table(columnHeaders: List<String>, rows: List<List<String>>) {
     val numColumns = columnHeaders.size
     val numRows = rows.size
+    val borderColor = if(isSystemInDarkTheme()) Color.White else Color.Black
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -241,7 +242,7 @@ fun Table(columnHeaders: List<String>, rows: List<List<String>>) {
                         text = columnHeaders[columnIndex], modifier = Modifier
                     .weight(1f)
                     .border(
-                            BorderStroke(0.5f.dp, Color.Black)
+                            BorderStroke(0.5f.dp, borderColor)
                     )
                     .padding(6.dp), textAlign = TextAlign.Center
                 )
@@ -258,7 +259,7 @@ fun Table(columnHeaders: List<String>, rows: List<List<String>>) {
                             modifier = Modifier
                                 .weight(1f)
                                 .border(
-                                        BorderStroke(0.5f.dp, Color.Black)
+                                        BorderStroke(0.5f.dp, borderColor)
                                 )
                                 .padding(6.dp),
                             textAlign = TextAlign.Center

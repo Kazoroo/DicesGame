@@ -1,5 +1,6 @@
 package pl.kazoroo.dices.ui.theme.screens
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,23 +11,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
+import pl.kazoroo.dices.data.DicesViewModel
 import pl.kazoroo.dices.navigation.Screen
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 data class ButtonInfo(val text: String, val onClick: () -> Unit)
 
 @Composable
-fun MainMenu(navController: NavController) {
+fun MainMenu(navController: NavController, viewModel: DicesViewModel = viewModel()) {
+    val activity = (LocalContext.current as? Activity)
     val buttons =
         listOf(ButtonInfo(text = "Play with AI") { navController.navigate(Screen.GameScreen.withArgs()) },
                 ButtonInfo(text = "Play with player") { /* TODO */ },
                 ButtonInfo(text = "Skins") { /* TODO */ },
                 ButtonInfo(text = "Settings") { navController.navigate(Screen.SettingsScreen.withArgs()) },
-                ButtonInfo(text = "Exit") { /* TODO */ })
+                ButtonInfo(text = "Exit") { activity?.finish() })
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(painter = painterResource(id = R.drawable.dice_1), contentDescription = "Dice")
