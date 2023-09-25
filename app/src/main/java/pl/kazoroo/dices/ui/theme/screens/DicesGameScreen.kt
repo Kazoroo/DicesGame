@@ -7,6 +7,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -15,9 +16,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,19 +64,51 @@ fun calculateButtonsSize(): Array<Int> {
 fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavController) {
     val dice by viewModel.uiState.collectAsState()
     val buttonSize = calculateButtonsSize()
+    val showingDialog = remember { mutableStateOf(false) }
+
+    if(showingDialog.value) {
+        AlertDialog(
+                onDismissRequest = { showingDialog.value = false},
+                confirmButton = {
+                    TextButton(
+                            onClick = { showingDialog.value = false; navController.navigate(Screen.MainScreen.withArgs()) },
+                            modifier = Modifier.padding(16.dp)) {
+                        Text(text = "Yes")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                            onClick = { showingDialog.value = false },
+                            modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(text = "No")
+                    }
+                },
+                text = {
+                    Text(text = "Do you really want to leave a match? It will take 30 points.")
+                },
+                title = {
+                    Text(text = "Leaving a match")
+                }
+        )
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
         NavigationBar {
             items.forEachIndexed { _, item ->
-                NavigationBarItem(selected = false, onClick = {
-                    navController.navigate(Screen.MainScreen.withArgs())
-                }, label = {
+                NavigationBarItem(
+                        selected = false,
+                        onClick = {
+                            showingDialog.value = true
+                },
+                label = {
                     Text(text = item.title)
-                }, icon = {
+                },
+                icon = {
                     Icon(
-                            imageVector = item.icon, contentDescription = item.title
-                    )
-                })
+                        imageVector = item.icon, contentDescription = item.title)
+                }
+                )
             }
         }
     }) {
