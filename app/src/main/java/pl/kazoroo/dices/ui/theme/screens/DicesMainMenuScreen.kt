@@ -15,21 +15,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.data.DicesViewModel
 import pl.kazoroo.dices.navigation.Screen
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 data class ButtonInfo(val text: String, val onClick: () -> Unit)
 
 @Composable
-fun MainMenu(navController: NavController, viewModel: DicesViewModel = viewModel()) {
+fun MainMenuScreen(navController: NavController, viewModel: DicesViewModel = viewModel()) {
     val activity = (LocalContext.current as? Activity)
     val buttons =
         listOf(ButtonInfo(text = "Play with AI") { navController.navigate(Screen.GameScreen.withArgs()) },
-                ButtonInfo(text = "Play with player") { /* TODO */ },
-                ButtonInfo(text = "Skins") { /* TODO */ },
+                ButtonInfo(text = "Play with player") { navController.navigate(Screen.GameScreen.withArgs()) },
+                ButtonInfo(text = "Shop") { navController.navigate(Screen.ShopScreen.withArgs()) },
                 ButtonInfo(text = "Settings") { navController.navigate(Screen.SettingsScreen.withArgs()) },
                 ButtonInfo(text = "Exit") { activity?.finish() })
 

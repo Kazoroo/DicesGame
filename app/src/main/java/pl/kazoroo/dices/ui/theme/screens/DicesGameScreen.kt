@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import pl.kazoroo.dices.data.DicesViewModel
-import pl.kazoroo.dices.navigation.Screen
+import pl.kazoroo.dices.navigation.items
 
 @Composable
 fun calculateButtonsSize(): Array<Int> {
@@ -71,8 +71,9 @@ fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavContro
                 onDismissRequest = { showingDialog.value = false},
                 confirmButton = {
                     TextButton(
-                            onClick = { showingDialog.value = false; navController.navigate(Screen.MainScreen.withArgs()) },
-                            modifier = Modifier.padding(16.dp)) {
+                            onClick = { showingDialog.value = false; navController.navigateUp() },
+                            modifier = Modifier.padding(16.dp)
+                    ) {
                         Text(text = "Yes")
                     }
                 },
@@ -85,7 +86,7 @@ fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavContro
                     }
                 },
                 text = {
-                    Text(text = "Do you really want to leave a match? It will take 30 points.")
+                    Text(text = "Do you really want to leave a match? It will take 30 coins.")
                 },
                 title = {
                     Text(text = "Leaving a match")
@@ -201,8 +202,9 @@ fun Dices(@DrawableRes dice: List<Int>,
             Row(
                     horizontalArrangement = Arrangement.Center
             ) {
-                row.forEachIndexed { index, info ->
-                    Image(painter = painterResource(id = info.dice),
+                row.forEachIndexed { _, info ->
+                    Image(
+                            painter = painterResource(id = info.dice),
                             contentDescription = "Dice",
                             modifier = Modifier
                                 .padding(2.dp)

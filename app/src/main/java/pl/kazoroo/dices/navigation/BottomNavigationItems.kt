@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme.screens
+package pl.kazoroo.dices.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack

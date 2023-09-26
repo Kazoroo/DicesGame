@@ -22,12 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import pl.kazoroo.dices.navigation.Screen
+import pl.kazoroo.dices.navigation.items
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingsList(navController: NavController) {
+fun SettingsScreen(navController: NavController) {
     var switchState by remember { mutableStateOf(false) }
     var switchState1 by remember { mutableStateOf(false) }
     var switchState2 by remember { mutableStateOf(false) }
@@ -36,7 +36,7 @@ fun SettingsList(navController: NavController) {
         NavigationBar {
             items.forEachIndexed { _, item ->
                 NavigationBarItem(selected = false, onClick = {
-                    navController.navigate(Screen.MainScreen.withArgs())
+                    navController.navigateUp()
                 }, label = {
                     Text(text = item.title)
                 }, icon = {
@@ -81,5 +81,4 @@ fun SettingsList(navController: NavController) {
             Switch(checked = switchState2, onCheckedChange = { switchState2 = !switchState2 })
         }
     }
-
 }
