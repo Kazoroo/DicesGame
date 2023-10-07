@@ -64,52 +64,42 @@ fun calculateButtonsSize(): Array<Int> {
 fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavController) {
     val dice by viewModel.uiState.collectAsState()
     val buttonSize = calculateButtonsSize()
-    val showingDialog = remember { mutableStateOf(false) }
+    val isShowingExitDialog = remember { mutableStateOf(false) }
 
-    if(showingDialog.value) {
-        AlertDialog(
-                onDismissRequest = { showingDialog.value = false},
-                confirmButton = {
-                    TextButton(
-                            onClick = { showingDialog.value = false; navController.navigateUp() },
-                            modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(text = "Yes")
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                            onClick = { showingDialog.value = false },
-                            modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(text = "No")
-                    }
-                },
-                text = {
-                    Text(text = "Do you really want to leave a match? It will take 30 coins.")
-                },
-                title = {
-                    Text(text = "Leaving a match")
-                }
-        )
+    if (isShowingExitDialog.value) {
+        AlertDialog(onDismissRequest = { isShowingExitDialog.value = false }, confirmButton = {
+            TextButton(
+                    onClick = { isShowingExitDialog.value = false; navController.navigateUp() },
+                    modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Yes")
+            }
+        }, dismissButton = {
+            TextButton(
+                    onClick = { isShowingExitDialog.value = false },
+                    modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "No")
+            }
+        }, text = {
+            Text(text = "Do you really want to leave a match? It will take 30 coins.")
+        }, title = {
+            Text(text = "Leaving a match")
+        })
     }
 
     Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
         NavigationBar {
             items.forEachIndexed { _, item ->
-                NavigationBarItem(
-                        selected = false,
-                        onClick = {
-                            showingDialog.value = true
-                },
-                label = {
+                NavigationBarItem(selected = false, onClick = {
+                    isShowingExitDialog.value = true
+                }, label = {
                     Text(text = item.title)
-                },
-                icon = {
+                }, icon = {
                     Icon(
-                        imageVector = item.icon, contentDescription = item.title)
-                }
-                )
+                            imageVector = item.icon, contentDescription = item.title
+                    )
+                })
             }
         }
     }) {
@@ -128,10 +118,11 @@ fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavContro
                 dice = dice.dices,
                 isSelected = dice.isSelected,
                 onClick = viewModel,
-                shouldntExist = dice.shouldntExist
+                diceShouldntExist = dice.shouldntDiceExist
         )
-        Buttons(onQueueClick = { viewModel.queueEndBehavior() },
-                onThrowClick = { viewModel.throwEndBehavior() },
+        Buttons(
+                onQueueClick = { viewModel.queueEndBehavior() },
+                onRoundClick = { viewModel.roundEndBehavior() },
                 weight = buttonSize[0],
                 height = buttonSize[1]
         )
@@ -144,26 +135,28 @@ fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavContro
 }
 
 @Composable
-fun SkuchaScreen(showSkucha: Boolean, sumOfPoints: Int) {
-    @Composable
-    fun GameResultScreen(text: String, backgroundColor: Color, fontColor: Color) {
-        Box(modifier = Modifier.padding(bottom = 180.dp), contentAlignment = Alignment.Center) {
-            Text(
-                    text = text, fontFamily = FontFamily.Monospace, modifier = Modifier
-                .background(
-                        backgroundColor, RoundedCornerShape(8.dp)
-                )
-                .padding(7.dp), color = fontColor, fontSize = 85.sp
-            )
-        }
+fun GameResultScreen(text: String, fontColor: Color) {
+    Box(modifier = Modifier.padding(bottom = 180.dp), contentAlignment = Alignment.Center) {
+        Text(
+                text = text,
+                color = fontColor,
+                fontSize = 85.sp,
+                fontFamily = FontFamily.Monospace,
+                modifier = Modifier
+                    .background(Color(0x96000000), RoundedCornerShape(8.dp))
+                    .padding(7.dp),
+        )
     }
+}
 
+@Composable
+fun SkuchaScreen(showSkucha: Boolean, sumOfPoints: Int) {
     if (showSkucha) {
         if (sumOfPoints >= 2000) {
-            GameResultScreen("Win!", Color(0x96000000), Color(0xff6fd633))
+            GameResultScreen("Win!", Color(0xff6fd633))
         }
         else {
-            GameResultScreen("SKUCHA!", Color(0x96000000), Color.Red)
+            GameResultScreen("SKUCHA!", Color.Red)
         }
     }
 }
@@ -177,7 +170,7 @@ data class DicesInfo(val dice: Int,
 fun Dices(@DrawableRes dice: List<Int>,
           isSelected: List<Boolean>,
           onClick: DicesViewModel,
-          shouldntExist: List<Boolean>) {
+          diceShouldntExist: List<Boolean>) {
 
     val dicesRows = List(2) { rowIndex ->
         List(3) { columnIndex ->
@@ -186,7 +179,7 @@ fun Dices(@DrawableRes dice: List<Int>,
                     dice = dice[index],
                     isSelected = isSelected[index],
                     onClick = { onClick.isSelectedBehavior(index) },
-                    shouldntExist = shouldntExist[index]
+                    shouldntExist = diceShouldntExist[index]
             )
         }
     }
@@ -226,7 +219,7 @@ fun Dices(@DrawableRes dice: List<Int>,
 
 @Composable
 fun Buttons(modifier: Modifier = Modifier,
-            onThrowClick: () -> Unit,
+            onRoundClick: () -> Unit,
             onQueueClick: () -> Unit,
             weight: Int,
             height: Int) {
@@ -247,11 +240,11 @@ fun Buttons(modifier: Modifier = Modifier,
             )
         }
         Button(
-                onClick = onThrowClick,
+                onClick = onRoundClick,
                 shape = RoundedCornerShape(15.dp),
                 modifier = modifier
                     .height(height.dp)
-                    .width(weight.dp) //.weight(1f)
+                    .width(weight.dp)
                     .padding(start = 5.dp, end = 5.dp)
         ) {
             Text(
