@@ -18,9 +18,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            DicesTheme {
+            DicesTheme() {
                 Surface(
-                        modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
                 ) {
                     val viewModel: DicesViewModel = viewModel()
                     viewModel.roundEndBehavior()

@@ -15,9 +15,10 @@ import pl.kazoroo.dices.R
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-class DicesViewModel: ViewModel() {
+class DicesViewModel() : ViewModel() {
     private val _uiState = MutableStateFlow(DicesModel())
     val uiState: StateFlow<DicesModel> = _uiState.asStateFlow()
+
     private val dicesList = mutableListOf<String>()
 
     fun queueEndBehavior(skucha: Boolean = false) {
