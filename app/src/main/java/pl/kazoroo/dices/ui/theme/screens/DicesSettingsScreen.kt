@@ -1,12 +1,10 @@
 package pl.kazoroo.dices.ui.theme.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -14,24 +12,24 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
+import com.github.skydoves.colorpicker.compose.*
+import pl.kazoroo.dices.data.PreferencesViewModel
 import pl.kazoroo.dices.navigation.items
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SettingsScreen(navController: NavController) {
-    var switchState by remember { mutableStateOf(false) }
-    var switchState1 by remember { mutableStateOf(false) }
-    var switchState2 by remember { mutableStateOf(false) }
-
+fun SettingsScreen(
+    navController: NavController,
+) {
     Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
         NavigationBar {
             items.forEachIndexed { _, item ->
@@ -47,38 +45,85 @@ fun SettingsScreen(navController: NavController) {
             }
         }
     }) {
-
-    }
-
-    Column {
-        Row(
-                modifier = Modifier.padding(horizontal = 18.dp)
-        ) {
-            Text(text = "Dark mode", modifier = Modifier
-                .padding(top = 10.dp)
-                .width(100.dp))
-            Spacer(modifier = Modifier.width(20.dp))
-            Switch(checked = switchState, onCheckedChange = { switchState = !switchState })
-        }
-
-        Row(
-                modifier = Modifier.padding(horizontal = 18.dp)
-        ) {
-            Text(text = "Color", modifier = Modifier
-                .padding(top = 10.dp)
-                .width(100.dp))
-            Spacer(modifier = Modifier.width(20.dp))
-            Switch(checked = switchState1, onCheckedChange = { switchState1 = !switchState1 })
-        }
-
-        Row(
-                modifier = Modifier.padding(horizontal = 18.dp)
-        ) {
-            Text(text = "Dark mode", modifier = Modifier
-                .padding(top = 10.dp)
-                .width(100.dp))
-            Spacer(modifier = Modifier.width(20.dp))
-            Switch(checked = switchState2, onCheckedChange = { switchState2 = !switchState2 })
+        Column {
+            SettingsSwitches()
+            Spacer(modifier = Modifier.height(36.dp))
+            ColorPicker()
         }
     }
 }
+
+data class SwitchData(val label: String, val state: MutableState<Boolean>)
+
+@Composable
+fun SettingsSwitches() {
+    val switchData = listOf(SwitchData("Dark mode", remember { mutableStateOf(false) }),
+            SwitchData("Music", remember { mutableStateOf(true) }),
+            SwitchData("Sound", remember { mutableStateOf(true) })
+    )
+
+    Column {
+        for (item in switchData) {
+            Row(
+                    modifier = Modifier.padding(horizontal = 18.dp)
+            ) {
+                Text(
+                        text = item.label, modifier = Modifier
+                    .padding(top = 10.dp)
+                    .width(100.dp)
+                )
+                Spacer(modifier = Modifier.width(20.dp))
+                Switch(checked = item.state.value,
+                        onCheckedChange = { item.state.value = !item.state.value })
+            }
+        }
+    }
+}
+
+@Composable
+fun ColorPicker(viewModel: PreferencesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = PreferencesViewModel.Factory
+)) {
+    val controller = rememberColorPickerController()
+
+    Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(all = 15.dp)
+    ) {
+        Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        viewModel.saveLayoutColorRGB(
+                                controller.selectedColor.value.red.toString(),
+                                controller.selectedColor.value.green.toString(),
+                                controller.selectedColor.value.blue.toString()
+                        )
+                    }, contentAlignment = Alignment.Center
+        ) {
+            AlphaTile(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .clip(RoundedCornerShape(6.dp)),
+                    controller = controller
+            )
+            Text(text = "Click here to save the color", color = Color.White)
+        }
+        HsvColorPicker(modifier = Modifier
+            .fillMaxWidth()
+            .height(450.dp)
+            .padding(10.dp),
+                controller = controller,
+                onColorChanged = { })
+        BrightnessSlider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+                    .height(35.dp),
+                controller = controller,
+        )
+    }
+}
+

@@ -1,9 +1,6 @@
 package pl.kazoroo.dices.data
 
-import android.app.Activity
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +15,10 @@ import pl.kazoroo.dices.R
 import kotlin.random.Random
 import kotlin.system.measureTimeMillis
 
-class DicesViewModel: ViewModel() {
+class DicesViewModel() : ViewModel() {
     private val _uiState = MutableStateFlow(DicesModel())
     val uiState: StateFlow<DicesModel> = _uiState.asStateFlow()
+
     private val dicesList = mutableListOf<String>()
 
     fun queueEndBehavior(skucha: Boolean = false) {
@@ -31,11 +29,10 @@ class DicesViewModel: ViewModel() {
         }
 
         if (sumOfPoints >= 2000) {
-            val x = true
-            dicesModel.skucha = x
+            dicesModel.skucha = true
         }
 
-        dicesModel.shouldntExist = DicesModel().shouldntExist
+        dicesModel.shouldntDiceExist = DicesModel().shouldntDiceExist
         dicesModel.roundPoints = DicesModel().roundPoints
         dicesModel.points = DicesModel().points
         dicesModel.sumOfPoints = sumOfPoints
@@ -44,7 +41,7 @@ class DicesViewModel: ViewModel() {
         _uiState.value = DicesModel(
                 dices = drawDice(),
                 sumOfPoints = sumOfPoints,
-                shouldntExist = DicesModel().shouldntExist,
+                shouldntDiceExist = DicesModel().shouldntDiceExist,
                 points = DicesModel().points,
                 roundPoints = DicesModel().roundPoints,
                 skucha = dicesModel.skucha
@@ -62,7 +59,6 @@ class DicesViewModel: ViewModel() {
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                dicesModel.sumOfPoints = 0
                 queueEndBehavior(true)
             }
         }
@@ -71,51 +67,46 @@ class DicesViewModel: ViewModel() {
     private fun drawDice(): List<Int> {
         val listOfDices = mutableListOf<Int>()
 
-        for (i in 0..5) {
+        for (index in 0..5) {
             when (Random.nextInt(1, 7)) {
-                1 -> listOfDices.add(i, R.drawable.dice_1)
-                2 -> listOfDices.add(i, R.drawable.dice_2)
-                3 -> listOfDices.add(i, R.drawable.dice_3)
-                4 -> listOfDices.add(i, R.drawable.dice_4)
-                5 -> listOfDices.add(i, R.drawable.dice_5)
-                6 -> listOfDices.add(i, R.drawable.dice_6)
+                1 -> listOfDices.add(index, R.drawable.dice_1)
+                2 -> listOfDices.add(index, R.drawable.dice_2)
+                3 -> listOfDices.add(index, R.drawable.dice_3)
+                4 -> listOfDices.add(index, R.drawable.dice_4)
+                5 -> listOfDices.add(index, R.drawable.dice_5)
+                6 -> listOfDices.add(index, R.drawable.dice_6)
             }
         }
 
         dicesModel.dices = listOfDices
-        val dices = dicesModel.dices
         dicesList.clear()
-        _uiState.value = DicesModel(dices = dices)
+        _uiState.value = DicesModel(dices = listOfDices)
 
-        return dices
+        return listOfDices
     }
 
-    /**
-     * Function that
-     */
-    fun throwEndBehavior() {
-        val dices = drawDice() //draw new dices
+    fun roundEndBehavior() {
+        val dices = drawDice()
 
         var roundPoints = dicesModel.roundPoints
-        roundPoints += dicesModel.points //calculate round points
+        roundPoints += dicesModel.points
         dicesModel.roundPoints = roundPoints
 
-        val shouldntExist: MutableList<Boolean> = dicesModel.shouldntExist.toMutableList()
+        val shouldntExist: MutableList<Boolean> = dicesModel.shouldntDiceExist.toMutableList()
 
         for (i in 0..5) {
-            if (dicesModel.isSelected[i] || dicesModel.shouldntExist[i]) {
+            if (dicesModel.isSelected[i] || dicesModel.shouldntDiceExist[i]) {
                 shouldntExist[i] = true
             }
         }
-        dicesModel.shouldntExist = shouldntExist
+        dicesModel.shouldntDiceExist = shouldntExist
 
         fun <T> List<T>.findAllIndicesOf(value: T): List<Int> {
             return this.indices.filter { this[it] == value }
         }
 
         val shouldBeSkucha = mutableListOf<Boolean>()
-        val indices =
-            shouldntExist.findAllIndicesOf(false) // return list of indexes where occurs 'false'
+        val indices = shouldntExist.findAllIndicesOf(false)
 
         for (i in indices) {
             if (dices[i] == R.drawable.dice_1 || dices[i] == R.drawable.dice_5 || dices.count { it == i } == 3) {
@@ -126,9 +117,8 @@ class DicesViewModel: ViewModel() {
             }
         }
 
-        //if all indexes in shouldBeSkucha are true, game end
         _uiState.value = DicesModel(dices = dices,
-                shouldntExist = shouldntExist,
+                shouldntDiceExist = shouldntExist,
                 roundPoints = roundPoints,
                 skucha = shouldBeSkucha.count { it } == shouldBeSkucha.size,
                 sumOfPoints = dicesModel.sumOfPoints)
@@ -150,7 +140,7 @@ class DicesViewModel: ViewModel() {
                     isSelected = isSelected,
                     dices = dicesModel.dices,
                     points = dicesModel.points,
-                    shouldntExist = dicesModel.shouldntExist,
+                    shouldntDiceExist = dicesModel.shouldntDiceExist,
                     roundPoints = dicesModel.roundPoints,
                     sumOfPoints = dicesModel.sumOfPoints
             )
@@ -266,7 +256,7 @@ class DicesViewModel: ViewModel() {
                 isSelected = dicesModel.isSelected,
                 dices = dicesModel.dices,
                 points = points,
-                shouldntExist = dicesModel.shouldntExist,
+                shouldntDiceExist = dicesModel.shouldntDiceExist,
                 roundPoints = dicesModel.roundPoints
         )
 
