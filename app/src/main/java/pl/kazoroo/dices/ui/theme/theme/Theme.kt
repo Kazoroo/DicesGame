@@ -21,20 +21,19 @@ import pl.kazoroo.dices.ui.theme.theme.Teal200
 
 @Composable
 fun getUserPreferencesAppColorFromPreferences(preferencesState: DicePreferencesState): ColorScheme {
-    val appColor = Color(
+    val appColorRGB = Color(
             preferencesState.layoutColor.elementAt(0).toFloat(),
             preferencesState.layoutColor.elementAt(1).toFloat(),
             preferencesState.layoutColor.elementAt(2).toFloat(),
     )
-    println("appColor: $appColor")
     return if (isSystemInDarkTheme()) {
         darkColorScheme(
-                primary = appColor, secondary = Purple700, tertiary = Teal200
+                primary = appColorRGB, secondary = Purple700, tertiary = Teal200
         )
     }
     else {
         lightColorScheme(
-                primary = appColor, secondary = Purple700, tertiary = Teal200
+                primary = appColorRGB, secondary = Purple700, tertiary = Teal200
         )
     }
 }
@@ -45,10 +44,11 @@ fun DicesTheme(
     preferencesViewModel: PreferencesViewModel = viewModel(factory = PreferencesViewModel.Factory),
     content: @Composable () -> Unit,
 ) {
-    val colorScheme =
-        getUserPreferencesAppColorFromPreferences(preferencesViewModel.preferencesState.collectAsState().value)
-
+    val colorScheme = getUserPreferencesAppColorFromPreferences(
+            preferencesViewModel.preferencesState.collectAsState().value
+    )
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window

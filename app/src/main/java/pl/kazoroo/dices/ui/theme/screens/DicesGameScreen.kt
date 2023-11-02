@@ -1,7 +1,6 @@
 package pl.kazoroo.dices.ui.theme.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,8 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,7 +28,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import pl.kazoroo.dices.data.DicesViewModel
 import pl.kazoroo.dices.navigation.items
@@ -40,13 +36,10 @@ import pl.kazoroo.dices.navigation.items
 fun calculateButtonsSize(): Array<Int> {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
-    Log.d("calculateButtonsSize", "screenWidth - $screenWidth")
 
     val buttonWidth = screenWidth / 2
-    Log.d("calculateButtonsSize", "buttonWidth - $buttonWidth")
 
     val buttonHeight = buttonWidth / 1.61803398875
-    Log.d("calculateButtonsSize", "buttonHeight - $buttonHeight")
 
     return arrayOf(buttonWidth, buttonHeight.toInt())
 }
@@ -61,8 +54,7 @@ fun calculateButtonsSize(): Array<Int> {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @ExperimentalMaterial3Api
 @Composable
-fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavController) {
-    val dice by viewModel.uiState.collectAsState()
+fun GameScreen(viewModel: DicesViewModel, navController: NavController) {
     val buttonSize = calculateButtonsSize()
     val isShowingExitDialog = remember { mutableStateOf(false) }
 
@@ -109,16 +101,16 @@ fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavContro
     Column {
         Table(
                 columnHeaders = listOf("Points", "You", "Opponent"), rows = listOf(
-                listOf("Sum:          ", "${dice.sumOfPoints}/2000", ""),
-                listOf("    In this round:", "${dice.roundPoints}", ""),
-                listOf("  Selected:     ", "${dice.points}", "")
+                listOf("Sum:          ", "${viewModel.sumOfPoints}/2000", ""),
+                listOf("    In this round:", "${viewModel.roundPoints}", ""),
+                listOf("  Selected:     ", "${viewModel.points}", "")
         )
         )
         Dices(
-                dice = dice.dices,
-                isSelected = dice.isSelected,
+                dice = viewModel.dicesList,
+                isSelected = viewModel.isDiceSelected,
                 onClick = viewModel,
-                diceShouldntExist = dice.shouldntDiceExist
+                shouldDiceExist = viewModel.shouldDiceExist
         )
         Buttons(
                 onQueueClick = { viewModel.queueEndBehavior() },
@@ -128,9 +120,21 @@ fun GameScreen(viewModel: DicesViewModel = viewModel(), navController: NavContro
         )
     }
 
-    if (dice.skucha) {
-        SkuchaScreen(showSkucha = dice.showSkucha, sumOfPoints = dice.sumOfPoints)
-        viewModel.showSkuchaTextBehavior()
+    if (viewModel.gameEnd) {
+        SkuchaScreen(showSkucha = viewModel.showSkucha, sumOfPoints = viewModel.sumOfPoints)
+        viewModel.showSkuchaBehavior()
+    }
+}
+
+@Composable
+fun SkuchaScreen(showSkucha: Boolean, sumOfPoints: Int) {
+    if (showSkucha) {
+        if (sumOfPoints >= 2000) {
+            GameResultScreen("You win!", Color(0xff6fd633))
+        }
+        else {
+            GameResultScreen("SKUCHA!", Color.Red)
+        }
     }
 }
 
@@ -140,7 +144,7 @@ fun GameResultScreen(text: String, fontColor: Color) {
         Text(
                 text = text,
                 color = fontColor,
-                fontSize = 85.sp,
+                fontSize = 80.sp,
                 fontFamily = FontFamily.Monospace,
                 modifier = Modifier
                     .background(Color(0x96000000), RoundedCornerShape(8.dp))
@@ -149,28 +153,17 @@ fun GameResultScreen(text: String, fontColor: Color) {
     }
 }
 
-@Composable
-fun SkuchaScreen(showSkucha: Boolean, sumOfPoints: Int) {
-    if (showSkucha) {
-        if (sumOfPoints >= 2000) {
-            GameResultScreen("Win!", Color(0xff6fd633))
-        }
-        else {
-            GameResultScreen("SKUCHA!", Color.Red)
-        }
-    }
-}
-
 data class DicesInfo(val dice: Int,
                      val isSelected: Boolean,
                      val onClick: () -> Unit,
-                     val shouldntExist: Boolean)
+                     val shouldDiceExist: Boolean)
 
 @Composable
 fun Dices(@DrawableRes dice: List<Int>,
           isSelected: List<Boolean>,
           onClick: DicesViewModel,
-          diceShouldntExist: List<Boolean>) {
+          shouldDiceExist: List<Boolean>) {
+
 
     val dicesRows = List(2) { rowIndex ->
         List(3) { columnIndex ->
@@ -179,7 +172,7 @@ fun Dices(@DrawableRes dice: List<Int>,
                     dice = dice[index],
                     isSelected = isSelected[index],
                     onClick = { onClick.isSelectedBehavior(index) },
-                    shouldntExist = diceShouldntExist[index]
+                    shouldDiceExist = shouldDiceExist[index]
             )
         }
     }
@@ -201,7 +194,7 @@ fun Dices(@DrawableRes dice: List<Int>,
                             contentDescription = "Dice",
                             modifier = Modifier
                                 .padding(2.dp)
-                                .size(if (!info.shouldntExist) 110.dp else (-1).dp)
+                                .size(if (info.shouldDiceExist) 110.dp else (-1).dp)
                                 .border(
                                         if (info.isSelected) 2.dp else (-1).dp,
                                         Color.Black,
@@ -269,12 +262,12 @@ fun Table(columnHeaders: List<String>, rows: List<List<String>>) {
         Row(modifier = Modifier.fillMaxWidth()) {
             repeat(numColumns) { columnIndex ->
                 Text(
-                        text = columnHeaders[columnIndex], modifier = Modifier
-                    .weight(1f)
-                    .border(
-                            BorderStroke(0.5f.dp, borderColor)
-                    )
-                    .padding(6.dp), textAlign = TextAlign.Center
+                        text = columnHeaders[columnIndex],
+                        modifier = Modifier
+                            .weight(1f)
+                            .border(BorderStroke(0.5f.dp, borderColor))
+                            .padding(6.dp),
+                        textAlign = TextAlign.Center
                 )
             }
         } // Data rows
@@ -288,9 +281,7 @@ fun Table(columnHeaders: List<String>, rows: List<List<String>>) {
                             text = rows[rowIndex][columnIndex],
                             modifier = Modifier
                                 .weight(1f)
-                                .border(
-                                        BorderStroke(0.5f.dp, borderColor)
-                                )
+                                .border(BorderStroke(0.5f.dp, borderColor))
                                 .padding(6.dp),
                             textAlign = TextAlign.Center
                     )
