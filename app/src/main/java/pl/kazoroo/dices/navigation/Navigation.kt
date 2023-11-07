@@ -1,8 +1,19 @@
 package pl.kazoroo.dices.navigation
 
-/*@ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import pl.kazoroo.dices.data.DicesViewModel
+import pl.kazoroo.dices.ui.theme.screens.GameScreen
+import pl.kazoroo.dices.ui.theme.screens.MainMenuScreen
+import pl.kazoroo.dices.ui.theme.screens.SettingsScreen
+import pl.kazoroo.dices.ui.theme.screens.ShopScreen
+
+@ExperimentalMaterial3Api
 @Composable
-fun Navigation() {
+fun Navigation(viewModel: DicesViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
         composable(
@@ -19,7 +30,8 @@ fun Navigation() {
                 route = Screen.GameScreen.route
         ) { entry ->
             GameScreen(
-                    navController = navController
+                    navController = navController, viewModel = viewModel
+            )
         }
         composable(
                 route = Screen.ShopScreen.route
@@ -27,8 +39,4 @@ fun Navigation() {
             ShopScreen(navController = navController)
         }
     }
-}*/
-
-
-//Button(onClick = { navController.navigate(Screen.DetailScreen.withArgs(text)) })
-//name = entry.arguments?.getString("name")
+}

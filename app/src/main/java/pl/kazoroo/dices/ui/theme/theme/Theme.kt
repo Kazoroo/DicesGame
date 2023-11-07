@@ -20,7 +20,7 @@ import pl.kazoroo.dices.ui.theme.theme.Purple700
 import pl.kazoroo.dices.ui.theme.theme.Teal200
 
 @Composable
-fun getUserPreferencesAppColorFromPreferences(preferencesState: DicePreferencesState): ColorScheme {
+private fun getUserPreferencesAppColorFromPreferences(preferencesState: DicePreferencesState): ColorScheme {
     val appColorRGB = Color(
             preferencesState.layoutColor.elementAt(0).toFloat(),
             preferencesState.layoutColor.elementAt(1).toFloat(),

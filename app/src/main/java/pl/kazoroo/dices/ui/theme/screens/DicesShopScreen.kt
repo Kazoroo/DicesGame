@@ -10,6 +10,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavController
 import pl.kazoroo.dices.navigation.items
 
@@ -18,21 +20,24 @@ import pl.kazoroo.dices.navigation.items
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShopScreen(navController: NavController) {
-    Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
-        NavigationBar {
-            items.forEachIndexed { _, item ->
-                NavigationBarItem(selected = false, onClick = {
-                    navController.navigateUp()
-                }, label = {
-                    Text(text = item.title)
-                }, icon = {
-                    Icon(
-                            imageVector = item.icon, contentDescription = item.title
-                    )
-                })
-            }
-        }
-    }) {
+    Scaffold(modifier = Modifier
+        .fillMaxSize()
+        .semantics { contentDescription = "ShopScreen" },
+            bottomBar = {
+                NavigationBar {
+                    items.forEachIndexed { _, item ->
+                        NavigationBarItem(selected = false, onClick = {
+                            navController.navigateUp()
+                        }, label = {
+                            Text(text = item.title)
+                        }, icon = {
+                            Icon(
+                                    imageVector = item.icon, contentDescription = item.title
+                            )
+                        })
+                    }
+                }
+            }) {
 
     }
 }

@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -98,7 +100,7 @@ fun GameScreen(viewModel: DicesViewModel, navController: NavController) {
 
     }
 
-    Column {
+    Column(modifier = Modifier.semantics { contentDescription = "GameScreen" }) {
         Table(
                 columnHeaders = listOf("Points", "You", "Opponent"), rows = listOf(
                 listOf("Sum:          ", "${viewModel.sumOfPoints}/2000", ""),
@@ -107,8 +109,7 @@ fun GameScreen(viewModel: DicesViewModel, navController: NavController) {
         )
         )
         Dices(
-                dice = viewModel.dicesList,
-                isSelected = viewModel.isDiceSelected,
+                dice = viewModel.dicesList, isSelected = viewModel.isDiceSelected,
                 onClick = viewModel,
                 shouldDiceExist = viewModel.shouldDiceExist
         )

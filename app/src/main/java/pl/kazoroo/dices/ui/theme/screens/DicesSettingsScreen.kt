@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
 import com.github.skydoves.colorpicker.compose.*
@@ -30,21 +32,24 @@ import java.util.*
 fun SettingsScreen(
     navController: NavController,
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
-        NavigationBar {
-            items.forEachIndexed { _, item ->
-                NavigationBarItem(selected = false, onClick = {
-                    navController.navigateUp()
-                }, label = {
-                    Text(text = item.title)
-                }, icon = {
-                    Icon(
-                            imageVector = item.icon, contentDescription = item.title
-                    )
-                })
-            }
-        }
-    }) {
+    Scaffold(modifier = Modifier
+        .fillMaxSize()
+        .semantics { contentDescription = "SettingsScreen" },
+            bottomBar = {
+                NavigationBar {
+                    items.forEachIndexed { _, item ->
+                        NavigationBarItem(selected = false, onClick = {
+                            navController.navigateUp()
+                        }, label = {
+                            Text(text = item.title)
+                        }, icon = {
+                            Icon(
+                                    imageVector = item.icon, contentDescription = item.title
+                            )
+                        })
+                    }
+                }
+            }) {
         Column {
             SettingsSwitches()
             Spacer(modifier = Modifier.height(36.dp))

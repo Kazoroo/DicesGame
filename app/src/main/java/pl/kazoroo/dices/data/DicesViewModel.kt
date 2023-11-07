@@ -33,7 +33,7 @@ class DicesViewModel : ViewModel() {
         private set
     var points by mutableIntStateOf(0)
         private set
-    var sumOfPoints by mutableIntStateOf(1950)
+    var sumOfPoints by mutableIntStateOf(0)
         private set
     var showSkucha by mutableStateOf(false)
         private set
@@ -80,20 +80,21 @@ class DicesViewModel : ViewModel() {
         isDiceSelected = listOf(
                 false, false, false, false, false, false
         )
-        shouldDiceExist = listOf(
-                true, true, true, true, true, true,
-        )
 
         selectedDicesList.clear()
     }
 
+    /**
+     * Sets a delay so skucha screen can be visible for a while. Prepares a new queue.
+     * @param
+     * @return
+     */
     fun showSkuchaBehavior() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(1000)
             withContext(Dispatchers.Main) {
                 showSkucha = false
                 gameEnd = false
-                sumOfPoints = 0
             }
             delay(2000)
             withContext(Dispatchers.Main) {
@@ -102,9 +103,27 @@ class DicesViewModel : ViewModel() {
         }
     }
 
+    private val selectedDicesList: MutableList<String> = mutableListOf()
     fun roundEndBehavior() {
         val dices = drawDice()
+
+        val _shouldDiceExist = checkIfDiceShouldExist()
+        val indices = shouldDiceExist.findAllIndicesOf(true)
+        val shouldBeSkucha = checkForSkucha(indices, dices)
+
+        isDiceSelected = listOf(
+                false, false, false, false, false, false
+        )
+        dicesList = dices
         roundPoints += points
+        gameEnd = shouldBeSkucha.count { it } == shouldBeSkucha.size
+        points = 0
+        shouldDiceExist = _shouldDiceExist
+
+        selectedDicesList.clear()
+    }
+
+    private fun checkIfDiceShouldExist(): List<Boolean> {
         val _shouldDiceExist = shouldDiceExist.toMutableList()
 
         for (i in 0..5) {
@@ -112,26 +131,12 @@ class DicesViewModel : ViewModel() {
                 _shouldDiceExist[i] = false
             }
         }
-        shouldDiceExist = _shouldDiceExist
 
-        fun <T> List<T>.findAllIndicesOf(value: T): List<Int> {
-            return this.indices.filter { this[it] == value }
-        }
+        return _shouldDiceExist
+    }
 
-
-        val indices = shouldDiceExist.findAllIndicesOf(true)
-
-        val shouldBeSkucha = checkForSkucha(indices, dices)
-
-        isDiceSelected = listOf(
-                false, false, false, false, false, false
-        )
-        dicesList = dices
-        roundPoints = roundPoints
-        gameEnd = shouldBeSkucha.count { it } == shouldBeSkucha.size
-        points = 0
-
-        selectedDicesList.clear()
+    private fun <T> List<T>.findAllIndicesOf(value: T): List<Int> {
+        return this.indices.filter { this[it] == value }
     }
 
     private fun checkForSkucha(indices: List<Int>, dices: List<Int>): List<Boolean> {
@@ -148,6 +153,11 @@ class DicesViewModel : ViewModel() {
         return shouldBeSkucha
     }
 
+    /**
+     * Changes the selection state of a dice.
+     * @param index of a dice
+     * @return Unit
+     */
     fun isSelectedBehavior(index: Int) {
         val _isDiceSelected = isDiceSelected.toMutableList()
 
@@ -163,7 +173,6 @@ class DicesViewModel : ViewModel() {
         isDiceSelected = _isDiceSelected
     }
 
-    private val selectedDicesList: MutableList<String> = mutableListOf()
     private fun pointsCounter(dice: Int, isSelected: Boolean): Int {
         var _points = 0
 
