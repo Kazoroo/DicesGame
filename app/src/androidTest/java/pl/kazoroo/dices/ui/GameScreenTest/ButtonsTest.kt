@@ -1,0 +1,32 @@
+package pl.kazoroo.dices.ui.GameScreenTest
+
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import org.junit.Rule
+import org.junit.Test
+import pl.kazoroo.dices.ui.screens.Buttons
+
+class ButtonsTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    @Test
+    fun buttonEndQueueIsDisplayed() {
+        composeTestRule.setContent {
+            Buttons(onRoundClick = { }, onQueueClick = { }, weight = 2, height = 2
+            )
+        }
+
+        composeTestRule.onNodeWithText("Confirm and end the queue").assertExists()
+    }
+
+    @Test
+    fun buttonEndRoundIsDisplayed() {
+        composeTestRule.setContent {
+            Buttons(onRoundClick = { }, onQueueClick = { }, weight = 2, height = 2
+            )
+        }
+
+        composeTestRule.onNodeWithText("Confirm and complete the round").assertExists()
+    }
+}

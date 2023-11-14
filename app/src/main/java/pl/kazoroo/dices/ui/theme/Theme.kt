@@ -16,8 +16,6 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kazoroo.dices.data.DicePreferencesState
 import pl.kazoroo.dices.data.PreferencesViewModel
-import pl.kazoroo.dices.ui.theme.theme.Purple700
-import pl.kazoroo.dices.ui.theme.theme.Teal200
 
 @Composable
 private fun getUserPreferencesAppColorFromPreferences(preferencesState: DicePreferencesState): ColorScheme {

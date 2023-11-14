@@ -6,10 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import pl.kazoroo.dices.data.DicesViewModel
-import pl.kazoroo.dices.ui.theme.screens.GameScreen
-import pl.kazoroo.dices.ui.theme.screens.MainMenuScreen
-import pl.kazoroo.dices.ui.theme.screens.SettingsScreen
-import pl.kazoroo.dices.ui.theme.screens.ShopScreen
+import pl.kazoroo.dices.ui.screens.GameScreen
+import pl.kazoroo.dices.ui.screens.MainMenuScreen
+import pl.kazoroo.dices.ui.screens.SettingsScreen
+import pl.kazoroo.dices.ui.screens.ShopScreen
 
 @ExperimentalMaterial3Api
 @Composable

@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme.screens
+package pl.kazoroo.dices.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -62,7 +62,8 @@ data class SwitchData(val label: String, val state: MutableState<Boolean>)
 
 @Composable
 fun SettingsSwitches() {
-    val switchData = listOf(SwitchData("Dark mode", remember { mutableStateOf(false) }),
+    val switchData = listOf(
+            SwitchData("Dark mode", remember { mutableStateOf(false) }),
             SwitchData("Music", remember { mutableStateOf(true) }),
             SwitchData("Sound", remember { mutableStateOf(true) })
     )

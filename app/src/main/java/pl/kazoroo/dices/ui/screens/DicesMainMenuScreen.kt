@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme.screens
+package pl.kazoroo.dices.ui.screens
 
 import android.app.Activity
 import androidx.compose.foundation.Image

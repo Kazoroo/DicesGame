@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme.theme
+package pl.kazoroo.dices.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

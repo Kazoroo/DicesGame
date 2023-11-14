@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.theme.screens
+package pl.kazoroo.dices.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
