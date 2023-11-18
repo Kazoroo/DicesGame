@@ -17,6 +17,7 @@ import kotlin.random.Random
 class DicesViewModel : ViewModel() {
     var dicesList by mutableStateOf(drawDice())
         private set
+
     var isDiceSelected by mutableStateOf(
             listOf(
                     false, false, false, false, false, false
@@ -53,7 +54,7 @@ class DicesViewModel : ViewModel() {
                 6 -> listOfDices.add(index, R.drawable.dice_6)
             }
         }
-        return listOfDices
+        return listOfDices //return listOf(R.drawable.dice_2, R.drawable.dice_2, R.drawable.dice_3, R.drawable.dice_3, R.drawable.dice_4, R.drawable.dice_4)
     }
 
     /**

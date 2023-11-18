@@ -13,7 +13,12 @@ class ButtonsTest {
     @Test
     fun buttonEndQueueIsDisplayed() {
         composeTestRule.setContent {
-            Buttons(onRoundClick = { }, onQueueClick = { }, weight = 2, height = 2
+            Buttons(
+                    onRoundClick = { },
+                    onQueueClick = { },
+                    weight = 2,
+                    height = 2,
+                    isDiceSelected = listOf(true, true, true, true, true, true)
             )
         }
 
@@ -23,7 +28,12 @@ class ButtonsTest {
     @Test
     fun buttonEndRoundIsDisplayed() {
         composeTestRule.setContent {
-            Buttons(onRoundClick = { }, onQueueClick = { }, weight = 2, height = 2
+            Buttons(
+                    onRoundClick = { },
+                    onQueueClick = { },
+                    weight = 2,
+                    height = 2,
+                    isDiceSelected = listOf(true, true, true, true, true, true)
             )
         }
 

@@ -1,7 +1,7 @@
 package pl.kazoroo.dices.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.annotation.DrawableRes
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -108,16 +108,12 @@ fun GameScreen(viewModel: DicesViewModel, navController: NavController) {
                 listOf("  Selected:     ", "${viewModel.points}", "")
         )
         )
-        Dices(
-                dice = viewModel.dicesList, isSelected = viewModel.isDiceSelected,
-                onClick = viewModel,
-                shouldDiceExist = viewModel.shouldDiceExist
-        )
-        Buttons(
-                onQueueClick = { viewModel.queueEndBehavior() },
+        Dices(viewModel = viewModel)
+        Buttons(onQueueClick = { viewModel.queueEndBehavior() },
                 onRoundClick = { viewModel.roundEndBehavior() },
                 weight = buttonSize[0],
-                height = buttonSize[1]
+                height = buttonSize[1],
+                isDiceSelected = viewModel.isDiceSelected
         )
     }
 
@@ -160,20 +156,15 @@ data class DicesInfo(val dice: Int,
                      val shouldDiceExist: Boolean)
 
 @Composable
-fun Dices(@DrawableRes dice: List<Int>,
-          isSelected: List<Boolean>,
-          onClick: DicesViewModel,
-          shouldDiceExist: List<Boolean>) {
-
-
+fun Dices(viewModel: DicesViewModel) {
     val dicesRows = List(2) { rowIndex ->
         List(3) { columnIndex ->
             val index = rowIndex * 3 + columnIndex
             DicesInfo(
-                    dice = dice[index],
-                    isSelected = isSelected[index],
-                    onClick = { onClick.isSelectedBehavior(index) },
-                    shouldDiceExist = shouldDiceExist[index]
+                    dice = viewModel.dicesList[index],
+                    isSelected = viewModel.isDiceSelected[index],
+                    onClick = { viewModel.isSelectedBehavior(index) },
+                    shouldDiceExist = viewModel.shouldDiceExist[index]
             )
         }
     }
@@ -216,7 +207,8 @@ fun Buttons(modifier: Modifier = Modifier,
             onRoundClick: () -> Unit,
             onQueueClick: () -> Unit,
             weight: Int,
-            height: Int) {
+            height: Int,
+            isDiceSelected: List<Boolean>) {
     Row {
         OutlinedButton(
                 onClick = onQueueClick,
@@ -233,14 +225,16 @@ fun Buttons(modifier: Modifier = Modifier,
                     textAlign = TextAlign.Center
             )
         }
-        Button(
-                onClick = onRoundClick,
+        Log.i("dices",
+                "isDiceSelected.count { false } == 6 - ${isDiceSelected.count { false } == 6}")
+        Log.i("dices", "isDiceSelected - $isDiceSelected")
+        Button(onClick = onRoundClick,
+                enabled = isDiceSelected.count { !it } != 6,
                 shape = RoundedCornerShape(15.dp),
                 modifier = modifier
                     .height(height.dp)
                     .width(weight.dp)
-                    .padding(start = 5.dp, end = 5.dp)
-        ) {
+                    .padding(start = 5.dp, end = 5.dp)) {
             Text(
                     text = "Confirm and complete the round",
                     modifier = modifier,

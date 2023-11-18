@@ -7,6 +7,12 @@ android {
     namespace 'pl.kazoroo.dices'
     compileSdk 34
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
     defaultConfig {
         applicationId "pl.kazoroo.dices"
         minSdk 29
@@ -71,8 +77,6 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
     androidTestImplementation "androidx.navigation:navigation-testing:2.7.5"
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-
-    testImplementation project(':app')
 
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation "com.github.skydoves:colorpicker-compose:1.0.0"
