@@ -19,8 +19,8 @@ class DicesViewModelTest {
         viewModel.isSelectedBehavior(4)
 
         val points = viewModel.points
-        val roundPoints = viewModel.roundPoints
-        val sumOfPoints = points + roundPoints
+        val throwPoints = viewModel.throwPoints
+        val sumOfPoints = points + throwPoints
 
         viewModel.queueEndBehavior(false)
         assertThat(viewModel.sumOfPoints).isEqualTo(sumOfPoints)
@@ -33,10 +33,10 @@ class DicesViewModelTest {
     }
 
     @Test
-    fun roundEndBehavior() {
-        viewModel.roundEndBehavior()
+    fun throwEndBehavior() {
+        viewModel.throwEndBehaviour()
 
-        assertThat(viewModel.roundPoints).isEqualTo(viewModel.points + viewModel.roundPoints)
+        assertThat(viewModel.throwPoints).isEqualTo(viewModel.points + viewModel.throwPoints)
     }
 
     @Test
@@ -45,7 +45,7 @@ class DicesViewModelTest {
         viewModel.isSelectedBehavior(3)
         viewModel.isSelectedBehavior(4)
 
-        viewModel.roundEndBehavior()
+        viewModel.throwEndBehaviour()
 
         viewModel.isSelectedBehavior(1)
         viewModel.isSelectedBehavior(5)

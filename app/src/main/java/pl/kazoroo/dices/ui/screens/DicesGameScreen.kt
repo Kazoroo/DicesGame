@@ -61,39 +61,54 @@ fun GameScreen(viewModel: DicesViewModel, navController: NavController) {
     val isShowingExitDialog = remember { mutableStateOf(false) }
 
     if (isShowingExitDialog.value) {
-        AlertDialog(onDismissRequest = { isShowingExitDialog.value = false }, confirmButton = {
-            TextButton(
-                    onClick = { isShowingExitDialog.value = false; navController.navigateUp() },
-                    modifier = Modifier.padding(16.dp)
-            ) {
-                Text(text = "Yes")
+        AlertDialog(
+            onDismissRequest = { isShowingExitDialog.value = false },
+            confirmButton = {
+                TextButton(
+                        onClick = {
+                            isShowingExitDialog.value = false
+                            navController.navigateUp()
+                            viewModel.resetState()
+                        },
+                        modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(text = "Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                        onClick = { isShowingExitDialog.value = false },
+                        modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(text = "No")
+                }
+            },
+            text = {
+                Text(text = "Do you really want to leave a match? It will take 30 coins.")
+            },
+            title = {
+                Text(text = "Leaving a match")
             }
-        }, dismissButton = {
-            TextButton(
-                    onClick = { isShowingExitDialog.value = false },
-                    modifier = Modifier.padding(16.dp)
-            ) {
-                Text(text = "No")
-            }
-        }, text = {
-            Text(text = "Do you really want to leave a match? It will take 30 coins.")
-        }, title = {
-            Text(text = "Leaving a match")
-        })
+        )
     }
 
     Scaffold(modifier = Modifier.fillMaxSize(), bottomBar = {
         NavigationBar {
             items.forEachIndexed { _, item ->
-                NavigationBarItem(selected = false, onClick = {
-                    isShowingExitDialog.value = true
-                }, label = {
-                    Text(text = item.title)
-                }, icon = {
-                    Icon(
+                NavigationBarItem(
+                    selected = false,
+                    onClick = {
+                        isShowingExitDialog.value = true
+                    },
+                    label = {
+                        Text(text = item.title)
+                    },
+                    icon = {
+                        Icon(
                             imageVector = item.icon, contentDescription = item.title
-                    )
-                })
+                        )
+                    }
+                )
             }
         }
     }) {
@@ -104,13 +119,13 @@ fun GameScreen(viewModel: DicesViewModel, navController: NavController) {
         Table(
                 columnHeaders = listOf("Points", "You", "Opponent"), rows = listOf(
                 listOf("Sum:          ", "${viewModel.sumOfPoints}/2000", ""),
-                listOf("    In this round:", "${viewModel.roundPoints}", ""),
+                listOf("    In this throw:", "${viewModel.throwPoints}", ""),
                 listOf("  Selected:     ", "${viewModel.points}", "")
         )
         )
         Dices(viewModel = viewModel)
         Buttons(onQueueClick = { viewModel.queueEndBehavior() },
-                onRoundClick = { viewModel.roundEndBehavior() },
+                onThrowClick = { viewModel.throwEndBehaviour() },
                 weight = buttonSize[0],
                 height = buttonSize[1],
                 isDiceSelected = viewModel.isDiceSelected
@@ -118,7 +133,10 @@ fun GameScreen(viewModel: DicesViewModel, navController: NavController) {
     }
 
     if (viewModel.gameEnd) {
-        SkuchaScreen(showSkucha = viewModel.showSkucha, sumOfPoints = viewModel.sumOfPoints)
+        SkuchaScreen(
+                showSkucha = viewModel.showSkucha,
+                sumOfPoints = viewModel.sumOfPoints
+        )
         viewModel.showSkuchaBehavior()
     }
 }
@@ -204,7 +222,7 @@ fun Dices(viewModel: DicesViewModel) {
 
 @Composable
 fun Buttons(modifier: Modifier = Modifier,
-            onRoundClick: () -> Unit,
+            onThrowClick: () -> Unit,
             onQueueClick: () -> Unit,
             weight: Int,
             height: Int,
@@ -228,7 +246,7 @@ fun Buttons(modifier: Modifier = Modifier,
         Log.i("dices",
                 "isDiceSelected.count { false } == 6 - ${isDiceSelected.count { false } == 6}")
         Log.i("dices", "isDiceSelected - $isDiceSelected")
-        Button(onClick = onRoundClick,
+        Button(onClick = onThrowClick,
                 enabled = isDiceSelected.count { !it } != 6,
                 shape = RoundedCornerShape(15.dp),
                 modifier = modifier
@@ -236,7 +254,7 @@ fun Buttons(modifier: Modifier = Modifier,
                     .width(weight.dp)
                     .padding(start = 5.dp, end = 5.dp)) {
             Text(
-                    text = "Confirm and complete the round",
+                    text = "Confirm and complete the throw",
                     modifier = modifier,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center

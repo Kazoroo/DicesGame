@@ -14,7 +14,7 @@ class ButtonsTest {
     fun buttonEndQueueIsDisplayed() {
         composeTestRule.setContent {
             Buttons(
-                    onRoundClick = { },
+                    onThrowClick = { },
                     onQueueClick = { },
                     weight = 2,
                     height = 2,
@@ -29,7 +29,7 @@ class ButtonsTest {
     fun buttonEndRoundIsDisplayed() {
         composeTestRule.setContent {
             Buttons(
-                    onRoundClick = { },
+                    onThrowClick = { },
                     onQueueClick = { },
                     weight = 2,
                     height = 2,

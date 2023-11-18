@@ -30,7 +30,7 @@ class DicesViewModel : ViewModel() {
             )
     )
         private set
-    var roundPoints by mutableIntStateOf(0)
+    var throwPoints by mutableIntStateOf(0)
         private set
     var points by mutableIntStateOf(0)
         private set
@@ -58,13 +58,13 @@ class DicesViewModel : ViewModel() {
     }
 
     /**
-     * Ends a queue. Check if there is skucha or win and sum a points. Reset all dices, roundPoints and points.
+     * Ends a queue. Check if there is skucha or win and sum a points. Reset all dices, throwPoints and points.
      * @param isSkucha app should show skucha
-     * @return new uiState with reseted dices, points, roundpoints.
+     * @return new uiState with reseted dices, points, throwpoints.
      */
     fun queueEndBehavior(isSkucha: Boolean = false) {
         if (!isSkucha) {
-            sumOfPoints += points + roundPoints
+            sumOfPoints += points + throwPoints
         }
 
         if (sumOfPoints >= 2000) {
@@ -74,7 +74,7 @@ class DicesViewModel : ViewModel() {
         shouldDiceExist = listOf(
                 true, true, true, true, true, true,
         )
-        roundPoints = 0
+        throwPoints = 0
         points = 0
         showSkucha = true
         dicesList = drawDice()
@@ -94,6 +94,9 @@ class DicesViewModel : ViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             delay(1000)
             withContext(Dispatchers.Main) {
+                if (sumOfPoints >= 2000) {
+                    sumOfPoints = 0
+                }
                 showSkucha = false
                 gameEnd = false
             }
@@ -105,7 +108,7 @@ class DicesViewModel : ViewModel() {
     }
 
     private val selectedDicesList: MutableList<String> = mutableListOf()
-    fun roundEndBehavior() {
+    fun throwEndBehaviour() {
         val dices = drawDice()
 
         val _shouldDiceExist = checkIfDiceShouldExist()
@@ -116,7 +119,7 @@ class DicesViewModel : ViewModel() {
                 false, false, false, false, false, false
         )
         dicesList = dices
-        roundPoints += points
+        throwPoints += points
         gameEnd = shouldBeSkucha.count { it } == shouldBeSkucha.size
         points = 0
         shouldDiceExist = _shouldDiceExist
@@ -172,6 +175,21 @@ class DicesViewModel : ViewModel() {
         }
 
         isDiceSelected = _isDiceSelected
+    }
+
+    fun resetState() {
+        dicesList = drawDice()
+        sumOfPoints = 0
+        throwPoints = 0
+        points = 0
+        isDiceSelected = listOf(
+                false, false, false, false, false, false
+        )
+        shouldDiceExist = listOf(
+                true, true, true, true, true, true,
+        )
+
+        selectedDicesList.clear()
     }
 
     private fun pointsCounter(dice: Int, isSelected: Boolean): Int {
