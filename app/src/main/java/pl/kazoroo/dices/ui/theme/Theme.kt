@@ -17,13 +17,30 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kazoroo.dices.data.DicePreferencesState
 import pl.kazoroo.dices.data.PreferencesViewModel
 
+fun stringSetToColor(
+    layoutColor: Set<String>
+): Color {
+    var appColor = Color(21, 32, 28)
+
+    try {
+        appColor = Color(
+                layoutColor.elementAt(0).toFloat(),
+                layoutColor.elementAt(1).toFloat(),
+                layoutColor.elementAt(2).toFloat(),
+        )
+    } catch (e: IndexOutOfBoundsException) {
+        e.printStackTrace()
+    }
+
+    return appColor
+}
+
 @Composable
-private fun getUserPreferencesAppColorFromPreferences(preferencesState: DicePreferencesState): ColorScheme {
-    val appColorRGB = Color(
-            preferencesState.layoutColor.elementAt(0).toFloat(),
-            preferencesState.layoutColor.elementAt(1).toFloat(),
-            preferencesState.layoutColor.elementAt(2).toFloat(),
-    )
+private fun getAppColorSchemeFromPreferences(
+        preferencesState: DicePreferencesState
+): ColorScheme {
+    val appColorRGB = stringSetToColor(preferencesState.layoutColor)
+
     return if (isSystemInDarkTheme()) {
         darkColorScheme(
                 primary = appColorRGB, secondary = Purple700, tertiary = Teal200
@@ -42,7 +59,7 @@ fun DicesTheme(
     preferencesViewModel: PreferencesViewModel = viewModel(factory = PreferencesViewModel.Factory),
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = getUserPreferencesAppColorFromPreferences(
+    val colorScheme = getAppColorSchemeFromPreferences(
             preferencesViewModel.preferencesState.collectAsState().value
     )
     val view = LocalView.current

@@ -1,12 +1,18 @@
 package pl.kazoroo.dices.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -19,7 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.window.Popup
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.github.skydoves.colorpicker.compose.*
 import pl.kazoroo.dices.data.PreferencesViewModel
@@ -31,25 +42,57 @@ import java.util.*
 @Composable
 fun SettingsScreen(
     navController: NavController,
+    preferencesViewModel: PreferencesViewModel = viewModel(factory = PreferencesViewModel.Factory)
 ) {
-    Scaffold(modifier = Modifier
-        .fillMaxSize()
-        .semantics { contentDescription = "SettingsScreen" },
-            bottomBar = {
-                NavigationBar {
-                    items.forEachIndexed { _, item ->
-                        NavigationBarItem(selected = false, onClick = {
+
+    val appColor = MaterialTheme.colorScheme.primary
+
+    if(preferencesViewModel.showPopup) {
+        Popup(
+            alignment = Alignment.TopCenter,
+            offset = IntOffset(0, 25)
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(appColor, RoundedCornerShape(6.dp))
+                    .height(70.dp)
+                    .width(380.dp)
+                    .border(1.dp, Color.Black, RoundedCornerShape(6.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "WHITE THEME NOT ALLOWED!",
+                    fontSize = 24.sp, fontWeight = FontWeight.Medium
+                )
+            }
+        }
+    }
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .semantics { contentDescription = "SettingsScreen" },
+        bottomBar = {
+            NavigationBar {
+                items.forEachIndexed { _, item ->
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = {
                             navController.navigateUp()
-                        }, label = {
+                        },
+                        label = {
                             Text(text = item.title)
-                        }, icon = {
+                        },
+                        icon = {
                             Icon(
                                     imageVector = item.icon, contentDescription = item.title
                             )
-                        })
-                    }
+                        }
+                    )
                 }
-            }) {
+            }
+        }
+    ) {
         Column {
             SettingsSwitches()
             Spacer(modifier = Modifier.height(36.dp))
@@ -58,7 +101,10 @@ fun SettingsScreen(
     }
 }
 
-data class SwitchData(val label: String, val state: MutableState<Boolean>)
+data class SwitchData(
+        val label: String,
+        val state: MutableState<Boolean>
+)
 
 @Composable
 fun SettingsSwitches() {
@@ -87,48 +133,90 @@ fun SettingsSwitches() {
 }
 
 @Composable
-fun ColorPicker(viewModel: PreferencesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+fun ColorPicker(
+    viewModel: PreferencesViewModel = viewModel(
         factory = PreferencesViewModel.Factory
-)) {
+    )
+) {
     val controller = rememberColorPickerController()
 
     Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(all = 15.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 15.dp)
     ) {
-        Box(
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(
+                    onClick = { viewModel.saveLayoutColorRGB(
+                        viewModel.lastColor.red.toString(),
+                        viewModel.lastColor.green.toString(),
+                        viewModel.lastColor.blue.toString()
+                    ) },
+                    border = BorderStroke(1.dp, Color.Black),
+                    shape = RoundedCornerShape(42),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = viewModel.lastColor
+                    ),
+                    modifier = Modifier
+                        .height(60.dp)
+                        .weight(1f),
+            ) {
+                Text(
+                    text = "Back to previous color",
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Spacer(
+                    modifier = Modifier.width(10.dp)
+            )
+
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .clickable {
                         viewModel.saveLayoutColorRGB(
-                                controller.selectedColor.value.red.toString(),
-                                controller.selectedColor.value.green.toString(),
-                                controller.selectedColor.value.blue.toString()
+                            controller.selectedColor.value.red.toString(),
+                            controller.selectedColor.value.green.toString(),
+                            controller.selectedColor.value.blue.toString()
                         )
-                    }, contentAlignment = Alignment.Center
-        ) {
-            AlphaTile(
+                    }
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                AlphaTile(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .height(60.dp)
-                        .clip(RoundedCornerShape(6.dp)),
+                        .clip(shape = RoundedCornerShape(42))
+                        .border(1.dp, Color.Black, RoundedCornerShape(42)),
                     controller = controller
-            )
-            Text(text = "Click here to save the color", color = Color.White)
+                )
+                Text(
+                    text = "Save the color",
+                    color = Color.White,
+                    fontFamily = FontFamily.Default,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 18.sp
+                )
+            }
         }
+
         HsvColorPicker(modifier = Modifier
             .fillMaxWidth()
             .height(450.dp)
             .padding(10.dp),
                 controller = controller,
-                onColorChanged = { })
+                onColorChanged = { }
+        )
+
         BrightnessSlider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-                    .height(35.dp),
-                controller = controller,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+                .height(35.dp),
+            controller = controller,
         )
     }
 }
