@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.data
+package pl.kazoroo.dices.presentation.game
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf

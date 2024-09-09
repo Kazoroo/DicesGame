@@ -3,6 +3,7 @@ package pl.kazoroo.dices.data
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
+import pl.kazoroo.dices.presentation.game.DicesViewModel
 
 class DicesViewModelTest {
     private lateinit var viewModel: DicesViewModel

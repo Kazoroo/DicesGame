@@ -14,31 +14,47 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import pl.kazoroo.dices.data.DicesViewModel
-import pl.kazoroo.dices.data.SplashScreenViewModel
-import pl.kazoroo.dices.navigation.Navigation
+import pl.kazoroo.dices.presentation.game.DicesViewModel
+import pl.kazoroo.dices.presentation.splashscreen.SplashScreenViewModel
+import pl.kazoroo.dices.presentation.navigation.Navigation
 import pl.kazoroo.dices.ui.theme.DicesTheme
 
 class MainActivity : ComponentActivity() {
-    private val splashScreenViewModel by viewModels<SplashScreenViewModel>()
-
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        showSplashScreen()
+        setContent {
+            DicesTheme {
+                val viewModel by viewModels<DicesViewModel>()
+
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Navigation(viewModel)
+                }
+            }
+        }
+    }
+
+    private fun showSplashScreen() {
+        val splashScreenViewModel by viewModels<SplashScreenViewModel>()
+
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 !splashScreenViewModel.isReady.value
             }
             setOnExitAnimationListener { screen ->
                 val zoomX = ObjectAnimator.ofFloat(
-                        screen.iconView, View.SCALE_X, 0.4f, 0.0f
+                    screen.iconView, View.SCALE_X, 0.4f, 0.0f
                 )
                 zoomX.interpolator = OvershootInterpolator()
                 zoomX.duration = 500L
                 zoomX.doOnEnd { screen.remove() }
 
                 val zoomY = ObjectAnimator.ofFloat(
-                        screen.iconView, View.SCALE_Y, 0.4f, 0.0f
+                    screen.iconView, View.SCALE_Y, 0.4f, 0.0f
                 )
                 zoomY.interpolator = OvershootInterpolator()
                 zoomY.duration = 500L
@@ -46,17 +62,6 @@ class MainActivity : ComponentActivity() {
 
                 zoomX.start()
                 zoomY.start()
-            }
-        }
-        setContent {
-            DicesTheme {
-                val viewModel by viewModels<DicesViewModel>()
-                Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                ) {
-                    Navigation(viewModel)
-                }
             }
         }
     }

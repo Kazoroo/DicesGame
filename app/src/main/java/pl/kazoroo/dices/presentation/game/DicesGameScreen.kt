@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.screens
+package pl.kazoroo.dices.presentation.game
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -31,8 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import pl.kazoroo.dices.data.DicesViewModel
-import pl.kazoroo.dices.navigation.items
+import pl.kazoroo.dices.presentation.navigation.items
 
 @Composable
 fun calculateButtonsSize(): Array<Int> {

@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.ui.screens
+package pl.kazoroo.dices.presentation.settings
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,9 +32,7 @@ import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.github.skydoves.colorpicker.compose.*
-import pl.kazoroo.dices.data.PreferencesViewModel
-import pl.kazoroo.dices.navigation.items
-import java.util.*
+import pl.kazoroo.dices.presentation.navigation.items
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

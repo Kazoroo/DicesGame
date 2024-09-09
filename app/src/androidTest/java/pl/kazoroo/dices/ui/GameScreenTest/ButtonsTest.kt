@@ -4,7 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import org.junit.Rule
 import org.junit.Test
-import pl.kazoroo.dices.ui.screens.Buttons
+import pl.kazoroo.dices.presentation.game.Buttons
 
 class ButtonsTest {
     @get:Rule
