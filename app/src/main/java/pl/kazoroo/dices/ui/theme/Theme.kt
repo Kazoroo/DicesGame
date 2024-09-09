@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import pl.kazoroo.dices.data.DicePreferencesState
-import pl.kazoroo.dices.data.PreferencesViewModel
+import pl.kazoroo.dices.presentation.settings.DicePreferencesState
+import pl.kazoroo.dices.presentation.settings.PreferencesViewModel
 
 fun stringSetToColor(
     layoutColor: Set<String>

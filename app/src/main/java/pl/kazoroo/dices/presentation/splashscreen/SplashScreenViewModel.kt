@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.data
+package pl.kazoroo.dices.presentation.splashscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

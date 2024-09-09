@@ -12,8 +12,8 @@ import androidx.navigation.testing.TestNavHostController
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import pl.kazoroo.dices.data.DicesViewModel
-import pl.kazoroo.dices.navigation.Navigation
+import pl.kazoroo.dices.presentation.game.DicesViewModel
+import pl.kazoroo.dices.presentation.navigation.Navigation
 
 class NavigationTest {
     @get:Rule

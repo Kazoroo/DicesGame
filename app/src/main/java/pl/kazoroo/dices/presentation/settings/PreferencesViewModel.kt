@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.data
+package pl.kazoroo.dices.presentation.settings
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import pl.kazoroo.dices.DiceApplication
+import pl.kazoroo.dices.domain.FixedSizeList
+import pl.kazoroo.dices.data.UserPreferencesRepository
 import pl.kazoroo.dices.ui.theme.stringSetToColor
 
 class PreferencesViewModel(private val userPreferencesRepository: UserPreferencesRepository) : ViewModel() {

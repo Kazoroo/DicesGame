@@ -1,4 +1,4 @@
-package pl.kazoroo.dices.data
+package pl.kazoroo.dices.domain
 
 import androidx.compose.ui.graphics.Color
 
@@ -9,7 +9,6 @@ class FixedSizeList(private val maxSize: Int, initialItems: List<Color>) {
         items.add(initialItems[0])
         items.add(initialItems[1])
     }
-    //Nie da się cofać koloru
 
     fun addItem(item: Color) {
         if (items.size >= maxSize) {
