@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import pl.kazoroo.dices.presentation.game.DicesViewModel
-import pl.kazoroo.dices.presentation.splashscreen.SplashScreenViewModel
 import pl.kazoroo.dices.presentation.navigation.Navigation
+import pl.kazoroo.dices.presentation.splashscreen.SplashScreenViewModel
 import pl.kazoroo.dices.ui.theme.DicesTheme
 
 class MainActivity : ComponentActivity() {
