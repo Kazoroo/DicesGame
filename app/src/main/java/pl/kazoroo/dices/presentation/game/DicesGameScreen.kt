@@ -2,9 +2,23 @@ package pl.kazoroo.dices.presentation.game
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -178,7 +192,7 @@ fun Dices(viewModel: DicesViewModel) {
         List(3) { columnIndex ->
             val index = rowIndex * 3 + columnIndex
             DicesInfo(
-                    dice = viewModel.dicesList[index],
+                    dice = viewModel.diceList[index].image,
                     isSelected = viewModel.isDiceSelected[index],
                     onClick = { viewModel.isSelectedBehavior(index) },
                     shouldDiceExist = viewModel.shouldDiceExist[index]
@@ -187,32 +201,35 @@ fun Dices(viewModel: DicesViewModel) {
     }
 
     Column(
-            Modifier
-                .padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Modifier
+            .padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         dicesRows.forEach { row ->
             Row(
                     horizontalArrangement = Arrangement.Center
             ) {
-                row.forEachIndexed { _, info ->
+                row.forEach { info ->
                     Image(
-                            painter = painterResource(id = info.dice),
-                            contentDescription = "Dice",
-                            modifier = Modifier
-                                .padding(2.dp)
-                                .size(if (info.shouldDiceExist) 110.dp else (-1).dp)
-                                .border(
-                                        if (info.isSelected) 2.dp else (-1).dp,
-                                        Color.Black,
-                                        RoundedCornerShape(4)
-                                )
-                                .clickable(indication = null,
-                                        interactionSource = remember { MutableInteractionSource() }) {
-                                    info.onClick()
-                                })
+                        painter = painterResource(id = info.dice),
+                        contentDescription = "Dice",
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .size(if (info.shouldDiceExist) 110.dp else (-1).dp)
+                            .border(
+                                if (info.isSelected) 2.dp else (-1).dp,
+                                Color.Black,
+                                RoundedCornerShape(4)
+                            )
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                info.onClick()
+                            }
+                    )
                 }
             }
         }

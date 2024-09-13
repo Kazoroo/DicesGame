@@ -12,22 +12,25 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import pl.kazoroo.dices.R
-import kotlin.random.Random
+import pl.kazoroo.dices.domain.usecase.Dice
+import pl.kazoroo.dices.domain.usecase.DrawDiceUseCase
 
-class DicesViewModel : ViewModel() {
-    var dicesList by mutableStateOf(drawDice())
+class DicesViewModel(
+    private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase()
+) : ViewModel() {
+    var diceList by mutableStateOf(drawDiceUseCase())
         private set
 
     var isDiceSelected by mutableStateOf(
-            listOf(
-                    false, false, false, false, false, false
-            )
+        listOf(
+                false, false, false, false, false, false
+        )
     )
         private set
     var shouldDiceExist by mutableStateOf(
-            listOf(
-                    true, true, true, true, true, true,
-            )
+        listOf(
+                true, true, true, true, true, true,
+        )
     )
         private set
     var throwPoints by mutableIntStateOf(0)
@@ -41,20 +44,10 @@ class DicesViewModel : ViewModel() {
     var gameEnd by mutableStateOf(false)
         private set
 
-    private fun drawDice(): List<Int> {
-        val listOfDices = mutableListOf<Int>()
-
-        for (index in 0..5) {
-            when (Random.nextInt(1, 7)) {
-                1 -> listOfDices.add(index, R.drawable.dice_1)
-                2 -> listOfDices.add(index, R.drawable.dice_2)
-                3 -> listOfDices.add(index, R.drawable.dice_3)
-                4 -> listOfDices.add(index, R.drawable.dice_4)
-                5 -> listOfDices.add(index, R.drawable.dice_5)
-                6 -> listOfDices.add(index, R.drawable.dice_6)
-            }
+    private fun drawDice(): List<Dice>  {
+        return drawDiceUseCase().apply {
+            diceList = this
         }
-        return listOfDices //return listOf(R.drawable.dice_2, R.drawable.dice_2, R.drawable.dice_3, R.drawable.dice_3, R.drawable.dice_4, R.drawable.dice_4)
     }
 
     /**
@@ -77,7 +70,7 @@ class DicesViewModel : ViewModel() {
         throwPoints = 0
         points = 0
         showSkucha = true
-        dicesList = drawDice()
+        diceList = drawDice()
         isDiceSelected = listOf(
                 false, false, false, false, false, false
         )
@@ -109,16 +102,16 @@ class DicesViewModel : ViewModel() {
 
     private val selectedDicesList: MutableList<String> = mutableListOf()
     fun throwEndBehaviour() {
-        val dices = drawDice()
+        val dice = drawDice()
 
         val _shouldDiceExist = checkIfDiceShouldExist()
         val indices = shouldDiceExist.findAllIndicesOf(true)
-        val shouldBeSkucha = checkForSkucha(indices, dices)
+        val shouldBeSkucha = checkForSkucha(indices, dice)
 
         isDiceSelected = listOf(
                 false, false, false, false, false, false
         )
-        dicesList = dices
+        diceList = dice
         throwPoints += points
         gameEnd = shouldBeSkucha.count { it } == shouldBeSkucha.size
         points = 0
@@ -143,11 +136,11 @@ class DicesViewModel : ViewModel() {
         return this.indices.filter { this[it] == value }
     }
 
-    private fun checkForSkucha(indices: List<Int>, dices: List<Int>): List<Boolean> {
+    private fun checkForSkucha(indices: List<Int>, dices: List<Dice>): List<Boolean> {
         val shouldBeSkucha = mutableListOf<Boolean>()
 
         for (i in indices) {
-            if (dices[i] == R.drawable.dice_1 || dices[i] == R.drawable.dice_5 || dices.count { it == i } == 3) {
+            if (dices[i].value == R.drawable.dice_1 || dices[i].value == R.drawable.dice_5 || dices.count { it.value == i } == 3) {
                 shouldBeSkucha.add(false)
             }
             else {
@@ -170,7 +163,7 @@ class DicesViewModel : ViewModel() {
 
         runBlocking {
             launch {
-                points = pointsCounter(dicesList[index], _isDiceSelected[index])
+                points = pointsCounter(diceList[index].value, _isDiceSelected[index])
             }
         }
 
@@ -178,7 +171,7 @@ class DicesViewModel : ViewModel() {
     }
 
     fun resetState() {
-        dicesList = drawDice()
+        diceList = drawDice()
         sumOfPoints = 0
         throwPoints = 0
         points = 0
