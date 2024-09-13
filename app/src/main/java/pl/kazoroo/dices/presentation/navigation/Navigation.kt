@@ -32,10 +32,7 @@ fun Navigation(viewModel: DicesViewModel) {
         composable(
             route = Screen.GameScreen.route
         ) {
-            DicesGameScreen(
-                navController = navController,
-                viewModel = viewModel
-            )
+            DicesGameScreen()
         }
     }
 }
