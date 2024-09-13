@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import pl.kazoroo.dices.presentation.game.DicesGameScreen
 import pl.kazoroo.dices.presentation.game.DicesViewModel
-import pl.kazoroo.dices.presentation.game.GameScreen
 import pl.kazoroo.dices.presentation.mainmenu.MainMenuScreen
 import pl.kazoroo.dices.presentation.settings.SettingsScreen
 
@@ -17,7 +17,7 @@ fun Navigation(viewModel: DicesViewModel) {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.MainScreen.route
+        startDestination = Screen.GameScreen.route
     ) {
         composable(
             route = Screen.MainScreen.route
@@ -31,9 +31,10 @@ fun Navigation(viewModel: DicesViewModel) {
         }
         composable(
             route = Screen.GameScreen.route
-        ) { entry ->
-            GameScreen(
-                    navController = navController, viewModel = viewModel
+        ) {
+            DicesGameScreen(
+                navController = navController,
+                viewModel = viewModel
             )
         }
     }
