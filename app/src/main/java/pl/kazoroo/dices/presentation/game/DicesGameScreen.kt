@@ -56,12 +56,12 @@ fun DicesGameScreen() {
                 column(contentAlignment = Alignment.Center) {
                     Text("You")
                 }
-                column(contentAlignment = Alignment.CenterEnd) {
+                column(contentAlignment = Alignment.Center) {
                     Text("Opponent")
                 }
             },
             divider = { Text(text = ".") },
-            cellPadding = PaddingValues(horizontal = 50.dp, vertical = 6.dp),
+            cellPadding = PaddingValues(horizontal = 20.dp),
             modifier = Modifier.padding(top = 18.dp)
         ) {
             dataPlaceholder.forEach { record ->
