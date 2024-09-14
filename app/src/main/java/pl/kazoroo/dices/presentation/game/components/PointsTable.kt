@@ -1,15 +1,21 @@
 package pl.kazoroo.dices.presentation.game.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
+import io.github.windedge.table.components.Divider
 import pl.kazoroo.dices.domain.model.SimpleData
+import pl.kazoroo.dices.ui.theme.DarkGoldenBrown
+import pl.kazoroo.dices.ui.theme.HalfTransparentBlack
 
 @Composable
 fun PointsTable(data: List<SimpleData>) {
@@ -25,8 +31,30 @@ fun PointsTable(data: List<SimpleData>) {
                 Text("Opponent")
             }
         },
-        divider = { Text(text = ".") },
-        cellPadding = PaddingValues(horizontal = 20.dp),
+        divider = { rowIndex ->
+            if(rowIndex  == 1 || rowIndex == 2) {
+                Divider(
+                    thickness = 2.dp,
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colorStops = arrayOf(
+                                    0.0f to Color.Transparent,
+                                    0.4f to DarkGoldenBrown,
+                                    0.8f to HalfTransparentBlack,
+                                    1.0f to Color.Transparent
+                                )
+                            )
+                        ),
+                    color = Color.Transparent
+                )
+            } else {
+                Divider(
+                    color = Color.Transparent
+                )
+            }
+        },
+        cellPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
         modifier = Modifier.padding(top = 18.dp)
     ) {
         data.forEach { record ->
