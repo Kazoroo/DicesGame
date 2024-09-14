@@ -19,15 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pl.kazoroo.dices.R
-import pl.kazoroo.dices.presentation.game.DicesViewModel
 
 @Composable
-fun Dices(viewModel: DicesViewModel) {
-    val dicesRows = List(2) { rowIndex ->
-        List(3) { columnIndex ->
-            val index = rowIndex * 3 + columnIndex
-        }
-    }
+fun Dices() {
+    //row * 3 + column - index dla kostki w formie [0, 1, 2] [3, 4, 5]
 
     Column(
         modifier = Modifier
@@ -36,11 +31,11 @@ fun Dices(viewModel: DicesViewModel) {
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        dicesRows.forEach { row ->
+        for (row in 0..1) {
             Row(
                 horizontalArrangement = Arrangement.Center
             ) {
-                row.forEach { info ->
+                for (column in 0..2) {
                     Image(
                         painter = painterResource(id = R.drawable.dice_1),
                         contentDescription = "Dice",
@@ -49,8 +44,8 @@ fun Dices(viewModel: DicesViewModel) {
                             .size(if (true) 110.dp else (-1).dp)
                             .border(
                                 if (true) 2.dp else (-1).dp,
-                                Color.Black,
-                                RoundedCornerShape(4)
+                                Color.Red,
+                                RoundedCornerShape(100)
                             )
                             .clickable(
                                 indication = null,
