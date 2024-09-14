@@ -1,6 +1,7 @@
 package pl.kazoroo.dices.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -18,7 +19,8 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = imFellEnglish,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp
+        fontSize = 20.sp,
+        color = Color.Black
     ),
 
     labelLarge = TextStyle(
