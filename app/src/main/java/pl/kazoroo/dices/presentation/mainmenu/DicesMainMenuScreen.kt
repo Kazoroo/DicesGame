@@ -40,14 +40,6 @@ fun MainMenuScreen(navController: NavController) {
             navController.navigate(Screen.GameScreen.withArgs())
         },
         ButtonInfo(
-            text = "Settings",
-            modifier = Modifier
-                .width(200.dp)
-                .semantics { contentDescription = "Settings button" }
-        ) {
-            navController.navigate(Screen.SettingsScreen.withArgs())
-        },
-        ButtonInfo(
             text = "Exit",
             modifier = Modifier
                 .width(200.dp)
