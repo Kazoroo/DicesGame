@@ -1,57 +1,65 @@
 package pl.kazoroo.dices.presentation.game.components
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import pl.kazoroo.dices.R
 
 @Composable
-fun GameButtons(
-    modifier: Modifier = Modifier,
-        onThrowClick: () -> Unit,
-        onQueueClick: () -> Unit,
-        isDiceSelected: List<Boolean>) {
-    Row {
-        OutlinedButton(
-            onClick = onQueueClick,
-            shape = RoundedCornerShape(15.dp),
-            modifier = modifier
-                .padding(
-                    start = 5.dp,
-                    end = 5.dp
-                )
-        ) {
-            Text(
-                text = "Confirm and end the queue",
-                modifier = modifier,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
-            )
-        }
+fun GameButtons() {
+    val roundingPercentage = 25
 
-        Button(
-            onClick = onThrowClick,
-            enabled = isDiceSelected.count { !it } != 6,
-            shape = RoundedCornerShape(15.dp),
-            modifier = modifier
-                .padding(
-                    start = 5.dp,
-                    end = 5.dp
-                )
-        ) {
-            Text(
-                text = "Confirm and complete the throw",
-                modifier = modifier,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
-            )
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        for (i in 0..1) {
+            Button(
+                onClick = { },
+                shape = RoundedCornerShape(roundingPercentage),
+                modifier = Modifier
+                    .weight(0.5f)
+                    .height(230.dp)
+                    .padding(horizontal = 10.dp, vertical = 50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.paper_texture),
+                        contentDescription = "paper button background texture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(roundingPercentage))
+                    )
+
+                    Text(
+                        text = "Confirm and complete the throw",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black
+                    )
+                }
+            }
         }
     }
 }
