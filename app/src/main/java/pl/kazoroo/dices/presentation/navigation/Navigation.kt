@@ -26,7 +26,7 @@ fun Navigation(viewModel: DicesViewModel) {
         composable(
             route = Screen.GameScreen.route
         ) {
-            DicesGameScreen()
+            DicesGameScreen(viewModel)
         }
     }
 }
