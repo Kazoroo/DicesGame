@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -19,7 +20,7 @@ import pl.kazoroo.dices.presentation.game.components.GameButtons
 import pl.kazoroo.dices.presentation.game.components.PointsTable
 
 @Composable
-fun DicesGameScreen() {
+fun DicesGameScreen(viewModel: DicesViewModel) {
     val dataPlaceholder = listOf(
         SimpleData("Total","300", "700"),
         SimpleData("Round", "100", "0"),
@@ -49,7 +50,10 @@ fun DicesGameScreen() {
             modifier = Modifier.fillMaxSize()
         ) {
             PointsTable(data = dataPlaceholder)
-            Dices()
+            Dices(
+                diceState = viewModel.diceState.collectAsState().value,
+                diceOnClick = { index -> viewModel.toggleDiceSelection(index) }
+            )
             Spacer(modifier = Modifier.weight(1f))
             GameButtons()
         }

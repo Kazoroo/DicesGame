@@ -18,12 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import pl.kazoroo.dices.R
+import pl.kazoroo.dices.presentation.game.DiceInfo
 
 @Composable
-fun Dices() {
-    //row * 3 + column - index dla kostki w formie [0, 1, 2] [3, 4, 5]
-
+fun Dices(
+    diceState: DiceInfo,
+    diceOnClick: (Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp)
@@ -36,14 +37,16 @@ fun Dices() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 for (column in 0..2) {
+                    val index = row * 3 + column
+
                     Image(
-                        painter = painterResource(id = R.drawable.dice_1),
+                        painter = painterResource(id = diceState.diceList[index].image),
                         contentDescription = "Dice",
                         modifier = Modifier
                             .padding(2.dp)
-                            .size(if (true) 110.dp else (-1).dp)
+                            .size(if (diceState.isDiceVisible[index]) 110.dp else (-1).dp)
                             .border(
-                                if (true) 2.dp else (-1).dp,
+                                if (diceState.isDiceSelected[index]) 2.dp else (-1).dp,
                                 Color.Red,
                                 RoundedCornerShape(100)
                             )
@@ -51,7 +54,7 @@ fun Dices() {
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
                             ) {
-
+                                diceOnClick(index)
                             }
                     )
                 }
