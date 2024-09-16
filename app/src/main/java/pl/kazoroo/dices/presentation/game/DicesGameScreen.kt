@@ -22,9 +22,13 @@ import pl.kazoroo.dices.presentation.game.components.PointsTable
 @Composable
 fun DicesGameScreen(viewModel: DicesViewModel) {
     val dataPlaceholder = listOf(
-        SimpleData("Total","300", "700"),
+        SimpleData("Total", "300", "700"),
         SimpleData("Round", "100", "0"),
-        SimpleData("Selected","200", "0"),
+        SimpleData(
+            "Selected",
+            viewModel.pointsState.collectAsState().value.selectedPoints.toString(),
+            "0"
+        ),
     )
 
     Box(
@@ -52,7 +56,10 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
             PointsTable(data = dataPlaceholder)
             Dices(
                 diceState = viewModel.diceState.collectAsState().value,
-                diceOnClick = { index -> viewModel.toggleDiceSelection(index) }
+                diceOnClick = { index ->
+                    viewModel.toggleDiceSelection(index)
+                    viewModel.calculateScore()
+                }
             )
             Spacer(modifier = Modifier.weight(1f))
             GameButtons()

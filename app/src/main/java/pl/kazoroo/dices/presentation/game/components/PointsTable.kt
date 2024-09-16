@@ -32,7 +32,7 @@ fun PointsTable(data: List<SimpleData>) {
             }
         },
         divider = { rowIndex ->
-            if(rowIndex  == 1 || rowIndex == 2) {
+            if (rowIndex == 1 || rowIndex == 2) {
                 Divider(
                     thickness = 2.dp,
                     modifier = Modifier

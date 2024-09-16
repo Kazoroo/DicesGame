@@ -15,7 +15,11 @@ class DrawDiceUseCase {
         )
 
         return (0..5).map { index ->
-            Dice(index, diceDrawables[Random.nextInt(until = 6)])
+            val diceIndex = Random.nextInt(until = 6)
+            Dice(
+                value = diceIndex + 1,
+                image = diceDrawables[diceIndex]
+            )
         }
     }
 }
