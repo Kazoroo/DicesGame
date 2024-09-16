@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import pl.kazoroo.dices.presentation.game.DiceInfo
+import pl.kazoroo.dices.domain.model.DiceInfo
 
 @Composable
 fun Dices(
