@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.SimpleData
+import pl.kazoroo.dices.presentation.components.ButtonInfo
 import pl.kazoroo.dices.presentation.game.components.Dices
 import pl.kazoroo.dices.presentation.game.components.GameButtons
 import pl.kazoroo.dices.presentation.game.components.PointsTable
@@ -71,7 +72,18 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                 }
             )
             Spacer(modifier = Modifier.weight(1f))
-            GameButtons()
+
+            val buttonsInfo = listOf(
+                ButtonInfo(
+                    text = stringResource(id = R.string.score_and_roll_again),
+                    onClick = { viewModel.calculateScore() }
+                ),
+                ButtonInfo(
+                    text = stringResource(id = R.string.pass),
+                    onClick = { viewModel.calculateScore() }
+                ),
+            )
+            GameButtons(buttonsInfo)
         }
     }
 }
