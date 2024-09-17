@@ -9,10 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
 import io.github.windedge.table.components.Divider
+import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.SimpleData
 import pl.kazoroo.dices.ui.theme.DarkGoldenBrown
 import pl.kazoroo.dices.ui.theme.HalfTransparentBlack
@@ -25,10 +27,10 @@ fun PointsTable(data: List<SimpleData>) {
                 Text("")
             }
             column(contentAlignment = Alignment.Center) {
-                Text("You")
+                Text(stringResource(R.string.you))
             }
             column(contentAlignment = Alignment.Center) {
-                Text("Opponent")
+                Text(stringResource(R.string.opponent))
             }
         },
         divider = { rowIndex ->

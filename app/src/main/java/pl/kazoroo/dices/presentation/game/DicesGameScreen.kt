@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.SimpleData
@@ -22,12 +23,20 @@ import pl.kazoroo.dices.presentation.game.components.PointsTable
 @Composable
 fun DicesGameScreen(viewModel: DicesViewModel) {
     val dataPlaceholder = listOf(
-        SimpleData("Total", "300", "700"),
-        SimpleData("Round", "100", "0"),
         SimpleData(
-            "Selected",
-            viewModel.pointsState.collectAsState().value.selectedPoints.toString(),
-            "0"
+            pointsType = stringResource(R.string.total),
+            yourPoints = "0",
+            opponentPoints = "0"
+        ),
+        SimpleData(
+            pointsType = stringResource(R.string.round),
+            yourPoints = "0",
+            opponentPoints = "0"
+        ),
+        SimpleData(
+            pointsType = stringResource(R.string.selected),
+            yourPoints = viewModel.pointsState.collectAsState().value.selectedPoints.toString(),
+            opponentPoints = "0"
         ),
     )
 

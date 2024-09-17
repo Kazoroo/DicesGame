@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -32,7 +33,7 @@ fun MainMenuScreen(navController: NavController) {
     val activity = (LocalContext.current as? Activity)
     val buttons = listOf(
         ButtonInfo(
-            text = "Play with AI",
+            text = stringResource(R.string.play_with_ai),
             modifier = Modifier
                 .width(200.dp)
                 .semantics { contentDescription = "Play with AI button" }
@@ -40,7 +41,7 @@ fun MainMenuScreen(navController: NavController) {
             navController.navigate(Screen.GameScreen.withArgs())
         },
         ButtonInfo(
-            text = "Exit",
+            text = stringResource(R.string.exit),
             modifier = Modifier
                 .width(200.dp)
                 .semantics { contentDescription = "Exit button" }
