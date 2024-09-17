@@ -23,17 +23,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import pl.kazoroo.dices.R
+import pl.kazoroo.dices.presentation.components.ButtonInfo
 
 @Composable
-fun GameButtons() {
+fun GameButtons(buttonsInfo: List<ButtonInfo>) {
     val roundingPercentage = 25
 
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
-        for (i in 0..1) {
+        buttonsInfo.forEach { buttonInfo ->
             Button(
-                onClick = { },
+                onClick = buttonInfo.onClick,
                 shape = RoundedCornerShape(roundingPercentage),
                 modifier = Modifier
                     .weight(0.5f)
@@ -55,7 +56,7 @@ fun GameButtons() {
                     )
 
                     Text(
-                        text = stringResource(R.string.pass),
+                        text = buttonInfo.text,
                         textAlign = TextAlign.Center,
                         color = Color.Black
                     )

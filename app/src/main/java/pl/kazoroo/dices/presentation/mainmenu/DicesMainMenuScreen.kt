@@ -20,13 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
+import pl.kazoroo.dices.presentation.components.ButtonInfo
 import pl.kazoroo.dices.presentation.navigation.Screen
-
-data class ButtonInfo(
-    val text: String,
-    val modifier: Modifier,
-    val onClick: () -> Unit
-)
 
 @Composable
 fun MainMenuScreen(navController: NavController) {
