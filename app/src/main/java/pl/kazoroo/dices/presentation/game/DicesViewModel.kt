@@ -11,7 +11,7 @@ import pl.kazoroo.dices.domain.usecase.DrawDiceUseCase
 
 
 class DicesViewModel(
-    drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
+    private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
     private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase()
 ) : ViewModel() {
     private val _diceState = MutableStateFlow(
@@ -55,6 +55,31 @@ class DicesViewModel(
         _pointsState.update { currentState ->
             currentState.copy(
                 selectedPoints = calculatePointsUseCase(diceValuesList)
+            )
+        }
+    }
+
+    fun countPoints() {
+        val newIsDiceVisible = diceState.value.isDiceVisible.toMutableList()
+
+        for (i in diceState.value.isDiceVisible.indices) {
+            if (diceState.value.isDiceVisible[i] && diceState.value.isDiceSelected[i]) {
+                newIsDiceVisible[i] = false
+            }
+        }
+
+        _diceState.update { currentState ->
+            currentState.copy(
+                diceList = drawDiceUseCase(),
+                isDiceSelected = List(6) { false },
+                isDiceVisible = newIsDiceVisible
+            )
+        }
+
+        _pointsState.update { currentState ->
+            currentState.copy(
+                roundPoints = pointsState.value.selectedPoints + pointsState.value.roundPoints,
+                selectedPoints = 0
             )
         }
     }

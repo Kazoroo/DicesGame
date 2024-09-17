@@ -31,7 +31,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
         ),
         SimpleData(
             pointsType = stringResource(R.string.round),
-            yourPoints = "0",
+            yourPoints = viewModel.pointsState.collectAsState().value.roundPoints.toString(),
             opponentPoints = "0"
         ),
         SimpleData(
@@ -76,11 +76,11 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
             val buttonsInfo = listOf(
                 ButtonInfo(
                     text = stringResource(id = R.string.score_and_roll_again),
-                    onClick = { viewModel.calculateScore() }
+                    onClick = { viewModel.countPoints() }
                 ),
                 ButtonInfo(
                     text = stringResource(id = R.string.pass),
-                    onClick = { viewModel.calculateScore() }
+                    onClick = { }
                 ),
             )
             GameButtons(buttonsInfo)
