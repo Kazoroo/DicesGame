@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import pl.kazoroo.dices.R
@@ -47,14 +48,14 @@ fun GameButtons() {
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.paper_texture),
-                        contentDescription = "paper button background texture",
+                        contentDescription = stringResource(R.string.score_and_roll_again),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .clip(RoundedCornerShape(roundingPercentage))
                     )
 
                     Text(
-                        text = "Confirm and complete the throw",
+                        text = stringResource(R.string.pass),
                         textAlign = TextAlign.Center,
                         color = Color.Black
                     )

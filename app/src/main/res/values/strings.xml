@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Dices</string>
+    <string name="pass">Pass</string>
+    <string name="score_and_roll_again">Score and roll again</string>
+    <string name="total">Total</string>
+    <string name="round">Round</string>
+    <string name="selected">Selected</string>
+    <string name="you">You</string>
+    <string name="opponent">Opponent</string>
+    <string name="play_with_ai">Play with AI</string>
+    <string name="exit">Exit</string>
 </resources>
