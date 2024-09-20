@@ -1,7 +1,16 @@
 package pl.kazoroo.dices.domain.usecase
 
 class CalculatePointsUseCase {
-    operator fun invoke(diceValuesList: IntArray): Int {
+    operator fun invoke(diceList: List<Dice>, isDiceSelected: List<Boolean>): Int {
+        val diceValuesList: IntArray = diceList.mapIndexed { index, dice ->
+            if (isDiceSelected[index]) {
+                dice.value
+            } else {
+                0
+            }
+
+        }.toIntArray()
+
         return diceValuesList.groupBy { it }.map {
             val size = it.value.size
 

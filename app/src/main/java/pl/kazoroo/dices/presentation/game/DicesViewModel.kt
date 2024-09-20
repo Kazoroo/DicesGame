@@ -7,12 +7,14 @@ import kotlinx.coroutines.flow.update
 import pl.kazoroo.dices.domain.model.DiceInfo
 import pl.kazoroo.dices.domain.model.PointsState
 import pl.kazoroo.dices.domain.usecase.CalculatePointsUseCase
+import pl.kazoroo.dices.domain.usecase.CheckForSkuchaUseCase
 import pl.kazoroo.dices.domain.usecase.DrawDiceUseCase
 
 
 class DicesViewModel(
     private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
-    private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase()
+    private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase(),
+    private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase()
 ) : ViewModel() {
     private val _diceState = MutableStateFlow(
         DiceInfo(
@@ -32,6 +34,10 @@ class DicesViewModel(
     )
     val pointsState = _pointsState.asStateFlow()
 
+    private val _skuchaState = MutableStateFlow(false)
+    val skuchaState = _skuchaState.asStateFlow()
+
+
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
             val updatedDiceSelected = currentState.isDiceSelected.toMutableList().apply {
@@ -43,18 +49,14 @@ class DicesViewModel(
     }
 
     fun calculateScore() {
-        val diceValuesList: IntArray = diceState.value.diceList.mapIndexed { index, dice ->
-            if (diceState.value.isDiceSelected[index]) {
-                dice.value
-            } else {
-                0
-            }
 
-        }.toIntArray()
 
         _pointsState.update { currentState ->
             currentState.copy(
-                selectedPoints = calculatePointsUseCase(diceValuesList)
+                selectedPoints = calculatePointsUseCase(
+                    diceList = diceState.value.diceList,
+                    isDiceSelected = diceState.value.isDiceSelected
+                )
             )
         }
     }
@@ -82,5 +84,14 @@ class DicesViewModel(
                 selectedPoints = 0
             )
         }
+    }
+
+    fun checkForSkucha() {
+        val isSkucha = checkForSkuchaUseCase(
+            diceState.value.diceList,
+            diceState.value.isDiceVisible
+        )
+
+        _skuchaState.value = isSkucha
     }
 }
