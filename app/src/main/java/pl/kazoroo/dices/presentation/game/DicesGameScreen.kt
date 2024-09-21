@@ -26,7 +26,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.SimpleData
 import pl.kazoroo.dices.presentation.components.ButtonInfo
@@ -106,13 +105,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
         var showTextWithDelay by remember { mutableStateOf(false) }
 
         LaunchedEffect(isSkucha) {
-            if (isSkucha) {
-                delay(1000L)
-                showTextWithDelay = true
-                delay(2000L)
-                showTextWithDelay = false
-                //TODO reseting points and new dice set function call
-            }
+            showTextWithDelay = isSkucha
         }
 
         Box(
