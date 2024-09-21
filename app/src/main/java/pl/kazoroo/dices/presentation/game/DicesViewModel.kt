@@ -1,9 +1,12 @@
 package pl.kazoroo.dices.presentation.game
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import pl.kazoroo.dices.domain.model.DiceInfo
 import pl.kazoroo.dices.domain.model.PointsState
 import pl.kazoroo.dices.domain.usecase.CalculatePointsUseCase
@@ -92,6 +95,29 @@ class DicesViewModel(
             diceState.value.isDiceVisible
         )
 
-        _skuchaState.value = isSkucha
+        if(isSkucha) {
+            viewModelScope.launch {
+                delay(1000L)
+                _skuchaState.value = true
+                delay(2000L)
+
+                _skuchaState.value = false
+
+                _diceState.update { currentState ->
+                    currentState.copy(
+                        diceList = drawDiceUseCase(),
+                        isDiceSelected = List(6) { false },
+                        isDiceVisible = List(6) { true }
+                    )
+                }
+
+                _pointsState.update { currentState ->
+                    currentState.copy(
+                        roundPoints = 0,
+                        selectedPoints = 0 //NOTE: maybe can be deleted
+                    )
+                }
+            }
+        }
     }
 }
