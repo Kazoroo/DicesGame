@@ -26,7 +26,7 @@ import pl.kazoroo.dices.R
 import pl.kazoroo.dices.presentation.components.ButtonInfo
 
 @Composable
-fun GameButtons(buttonsInfo: List<ButtonInfo>) {
+fun GameButtons(buttonsInfo: List<ButtonInfo>, isSkucha: Boolean) {
     val roundingPercentage = 25
 
     Row(
@@ -34,7 +34,7 @@ fun GameButtons(buttonsInfo: List<ButtonInfo>) {
     ) {
         buttonsInfo.forEach { buttonInfo ->
             Button(
-                onClick = buttonInfo.onClick,
+                onClick = if(!isSkucha) buttonInfo.onClick else { { Unit } },
                 shape = RoundedCornerShape(roundingPercentage),
                 modifier = Modifier
                     .weight(0.5f)

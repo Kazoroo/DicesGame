@@ -80,8 +80,10 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
             Dices(
                 diceState = viewModel.diceState.collectAsState().value,
                 diceOnClick = { index ->
-                    viewModel.toggleDiceSelection(index)
-                    viewModel.calculateScore()
+                    if(!viewModel.skuchaState.value) {
+                        viewModel.toggleDiceSelection(index)
+                        viewModel.calculateScore()
+                    }
                 }
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -99,7 +101,10 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                     onClick = { }
                 ),
             )
-            GameButtons(buttonsInfo)
+            GameButtons(
+                buttonsInfo,
+                isSkucha
+            )
         }
 
         var showTextWithDelay by remember { mutableStateOf(false) }
