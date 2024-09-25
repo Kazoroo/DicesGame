@@ -113,11 +113,28 @@ class DicesViewModel(
 
                 _pointsState.update { currentState ->
                     currentState.copy(
-                        roundPoints = 0,
-                        selectedPoints = 0 //NOTE: maybe can be deleted
+                        roundPoints = 0
                     )
                 }
             }
+        }
+    }
+
+    fun passTheRound() {
+        _pointsState.update { currentState ->
+            currentState.copy(
+                roundPoints = 0,
+                selectedPoints = 0,
+                totalPoints = pointsState.value.selectedPoints + pointsState.value.roundPoints + pointsState.value.totalPoints
+            )
+        }
+
+        _diceState.update { currentState ->
+            currentState.copy(
+                diceList = drawDiceUseCase(),
+                isDiceSelected = List(6) { false },
+                isDiceVisible = List(6) { true }
+            )
         }
     }
 }
