@@ -15,12 +15,12 @@ import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
 import io.github.windedge.table.components.Divider
 import pl.kazoroo.dices.R
-import pl.kazoroo.dices.domain.model.SimpleData
+import pl.kazoroo.dices.domain.model.TableData
 import pl.kazoroo.dices.ui.theme.DarkGoldenBrown
 import pl.kazoroo.dices.ui.theme.HalfTransparentBlack
 
 @Composable
-fun PointsTable(data: List<SimpleData>) {
+fun PointsTable(data: List<TableData>) {
     DataTable(
         columns = {
             column(contentAlignment = Alignment.Center) {
