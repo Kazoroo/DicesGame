@@ -27,7 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pl.kazoroo.dices.R
-import pl.kazoroo.dices.domain.model.SimpleData
+import pl.kazoroo.dices.domain.model.TableData
 import pl.kazoroo.dices.presentation.components.ButtonInfo
 import pl.kazoroo.dices.presentation.game.components.Dices
 import pl.kazoroo.dices.presentation.game.components.GameButtons
@@ -35,18 +35,18 @@ import pl.kazoroo.dices.presentation.game.components.PointsTable
 
 @Composable
 fun DicesGameScreen(viewModel: DicesViewModel) {
-    val dataPlaceholder = listOf(
-        SimpleData(
+    val tableData = listOf(
+        TableData(
             pointsType = stringResource(R.string.total),
             yourPoints = viewModel.pointsState.collectAsState().value.totalPoints.toString(),
             opponentPoints = "0"
         ),
-        SimpleData(
+        TableData(
             pointsType = stringResource(R.string.round),
             yourPoints = viewModel.pointsState.collectAsState().value.roundPoints.toString(),
             opponentPoints = "0"
         ),
-        SimpleData(
+        TableData(
             pointsType = stringResource(R.string.selected),
             yourPoints = viewModel.pointsState.collectAsState().value.selectedPoints.toString(),
             opponentPoints = "0"
@@ -76,7 +76,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            PointsTable(data = dataPlaceholder)
+            PointsTable(data = tableData)
             Dices(
                 diceState = viewModel.diceState.collectAsState().value,
                 diceOnClick = { index ->

@@ -27,7 +27,7 @@ fun Dices(
 ) {
     Column(
         modifier = Modifier
-            .padding(top = 28.dp, start = 10.dp, end = 10.dp, bottom = 26.dp)
+            .padding(vertical = 34.dp, horizontal = 10.dp)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -44,7 +44,7 @@ fun Dices(
                         contentDescription = "Dice",
                         modifier = Modifier
                             .padding(2.dp)
-                            .size(if (diceState.isDiceVisible[index]) 110.dp else (-1).dp)
+                            .size(if (diceState.isDiceVisible[index]) 125.dp else (-1).dp)
                             .border(
                                 if (diceState.isDiceSelected[index]) 2.dp else (-1).dp,
                                 Color.Red,
