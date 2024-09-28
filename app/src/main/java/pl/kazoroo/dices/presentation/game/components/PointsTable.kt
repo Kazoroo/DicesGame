@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,8 +57,8 @@ fun PointsTable(data: List<TableData>) {
                 )
             }
         },
-        cellPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
-        modifier = Modifier.padding(top = 18.dp)
+        cellPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.medium_padding), vertical = dimensionResource(id = R.dimen.small_padding)),
+        modifier = Modifier.padding(top = dimensionResource(id = R.dimen.medium_padding))
     ) {
         data.forEach { record ->
             row {
