@@ -13,10 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.presentation.components.ButtonInfo
@@ -29,7 +28,7 @@ fun MainMenuScreen(navController: NavController) {
         ButtonInfo(
             text = stringResource(R.string.play_with_ai),
             modifier = Modifier
-                .width(220.dp)
+                .width(dimensionResource(id = R.dimen.menu_button_width))
         ) {
             navController.navigate(Screen.GameScreen.withArgs())
         }
@@ -39,7 +38,7 @@ fun MainMenuScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(painter = painterResource(id = R.drawable.dice_1), contentDescription = "Dice")
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.large_padding)))
 
         buttons.forEach { buttonInfo ->
             Button(
@@ -47,7 +46,7 @@ fun MainMenuScreen(navController: NavController) {
                 modifier = buttonInfo.modifier
             ) {
                 Text(
-                    text = buttonInfo.text, fontSize = 18.sp
+                    text = buttonInfo.text
                 )
             }
         }
@@ -59,11 +58,11 @@ fun MainMenuScreen(navController: NavController) {
                 activity?.finish()
             },
             modifier = Modifier
-                .width(220.dp)
-                .padding(bottom = 50.dp)
+                .width(dimensionResource(id = R.dimen.menu_button_width))
+                .padding(bottom = dimensionResource(id = R.dimen.large_padding))
         ) {
             Text(
-                text = stringResource(R.string.exit), fontSize = 18.sp
+                text = stringResource(R.string.exit)
             )
         }
     }

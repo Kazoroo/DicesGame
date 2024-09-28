@@ -16,8 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.DiceInfo
 
 @Composable
@@ -27,7 +29,7 @@ fun Dices(
 ) {
     Column(
         modifier = Modifier
-            .padding(vertical = 34.dp, horizontal = 10.dp)
+            .padding(vertical = 34.dp, horizontal = dimensionResource(id = R.dimen.small_padding))
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -44,7 +46,7 @@ fun Dices(
                         contentDescription = "Dice",
                         modifier = Modifier
                             .padding(2.dp)
-                            .size(if (diceState.isDiceVisible[index]) 125.dp else (-1).dp)
+                            .size(if (diceState.isDiceVisible[index]) dimensionResource(id = R.dimen.dice_size) else (-1).dp)
                             .border(
                                 if (diceState.isDiceSelected[index]) 2.dp else (-1).dp,
                                 Color.Red,

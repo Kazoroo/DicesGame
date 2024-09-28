@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -27,19 +28,20 @@ import pl.kazoroo.dices.presentation.components.ButtonInfo
 
 @Composable
 fun GameButtons(buttonsInfo: List<ButtonInfo>, isSkucha: Boolean) {
-    val roundingPercentage = 25
-
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         buttonsInfo.forEach { buttonInfo ->
             Button(
                 onClick = if(!isSkucha) buttonInfo.onClick else { { Unit } },
-                shape = RoundedCornerShape(roundingPercentage),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner)),
                 modifier = Modifier
                     .weight(0.5f)
                     .height(230.dp)
-                    .padding(horizontal = 10.dp, vertical = 50.dp),
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.small_padding),
+                        vertical = 50.dp
+                    ),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues(0.dp)
             ) {
@@ -52,7 +54,7 @@ fun GameButtons(buttonsInfo: List<ButtonInfo>, isSkucha: Boolean) {
                         contentDescription = stringResource(R.string.score_and_roll_again),
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .clip(RoundedCornerShape(roundingPercentage))
+                            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner)))
                     )
 
                     Text(
