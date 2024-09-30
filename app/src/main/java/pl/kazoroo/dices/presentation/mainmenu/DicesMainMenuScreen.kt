@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,13 +30,15 @@ fun MainMenuScreen(navController: NavController) {
             text = stringResource(R.string.play_with_ai),
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.menu_button_width))
+                .testTag("Play with AI button")
         ) {
             navController.navigate(Screen.GameScreen.withArgs())
         }
     )
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.testTag("Main menu screen")
     ) {
         Image(painter = painterResource(id = R.drawable.dice_1), contentDescription = "Dice")
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.large_padding)))
@@ -60,6 +63,7 @@ fun MainMenuScreen(navController: NavController) {
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.menu_button_width))
                 .padding(bottom = dimensionResource(id = R.dimen.large_padding))
+                .testTag("Exit button")
         ) {
             Text(
                 text = stringResource(R.string.exit)

@@ -1,8 +1,8 @@
 package pl.kazoroo.dices.presentation.navigation
 
 sealed class Screen(val route: String) {
-    object MainScreen : Screen("main_screen")
-    object GameScreen : Screen("game_screen")
+    data object MainScreen : Screen("main_screen")
+    data object GameScreen : Screen("game_screen")
 
     /**
      * Creates a string route including arguments

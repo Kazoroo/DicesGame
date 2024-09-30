@@ -1,19 +1,19 @@
-package pl.kazoroo.dices
+package pl.kazoroo.dices.presentation.navigation
 
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import androidx.test.espresso.Espresso
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.kazoroo.dices.presentation.game.DicesViewModel
-import pl.kazoroo.dices.presentation.navigation.Navigation
 
 class NavigationTest {
     @get:Rule
@@ -37,43 +37,29 @@ class NavigationTest {
 
     @Test
     fun navigation_verifyOverviewStartDestination() {
-        composeTestRule.onNodeWithContentDescription("Main menu screen").assertIsDisplayed()
-    }
-
-    @Test
-    fun navigation_clickPlayWithAI_navigatesToGameScreen() {
-        composeTestRule.onNodeWithContentDescription("Play with AI button").performClick()
-
-        composeTestRule.onNodeWithContentDescription("GameScreen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Main menu screen").assertIsDisplayed()
     }
 
     @Test
     fun navigation_clickPlayWithPlayer_navigatesToGameScreen() {
-        composeTestRule.onNodeWithContentDescription("Play with player button").performClick()
+        composeTestRule.onNodeWithTag("Play with AI button").performClick()
 
-        composeTestRule.onNodeWithContentDescription("GameScreen").assertIsDisplayed()
-    }
-
-    @Test
-    fun navigation_clickShop_navigatesToShopScreen() {
-        composeTestRule.onNodeWithContentDescription("Shop button").performClick()
-
-        composeTestRule.onNodeWithContentDescription("ShopScreen").assertIsDisplayed()
-    }
-
-    @Test
-    fun navigation_clickSettings_navigatesToSettingsScreen() {
-        composeTestRule.onNodeWithContentDescription("Settings button").performClick()
-
-        composeTestRule.onNodeWithContentDescription("SettingsScreen").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("Game screen").assertIsDisplayed()
     }
 
     @Test
     fun navigation_clickExit_exitFromApplication() {
-        composeTestRule.onNodeWithContentDescription("Exit button").performClick()
+        composeTestRule.onNodeWithTag("Exit button").performClick()
 
         if (activity != null) {
             assert(activity!!.isFinishing)
         }
+    }
+
+    @Test
+    fun navigation_clickDeviceBackButton_navigatesToMainMenuScreen() {
+        composeTestRule.onNodeWithTag("Play with AI button").performClick()
+        Espresso.pressBack()
+        composeTestRule.onNodeWithTag("Main menu screen").assertIsDisplayed()
     }
 }
