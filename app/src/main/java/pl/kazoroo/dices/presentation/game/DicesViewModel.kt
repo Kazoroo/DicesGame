@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import pl.kazoroo.dices.domain.model.DiceInfo
+import pl.kazoroo.dices.domain.model.DiceSetInfo
 import pl.kazoroo.dices.domain.model.PointsState
 import pl.kazoroo.dices.domain.usecase.CalculatePointsUseCase
 import pl.kazoroo.dices.domain.usecase.CheckForSkuchaUseCase
@@ -20,7 +20,7 @@ class DicesViewModel(
     private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase()
 ) : ViewModel() {
     private val _diceState = MutableStateFlow(
-        DiceInfo(
+        DiceSetInfo(
             diceList = drawDiceUseCase(),
             isDiceSelected = List(6) { false },
             isDiceVisible = List(6) { true }

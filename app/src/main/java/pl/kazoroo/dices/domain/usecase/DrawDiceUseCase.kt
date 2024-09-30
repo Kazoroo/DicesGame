@@ -1,6 +1,7 @@
 package pl.kazoroo.dices.domain.usecase
 
 import pl.kazoroo.dices.R
+import pl.kazoroo.dices.domain.model.Dice
 import kotlin.random.Random
 
 class DrawDiceUseCase {
@@ -14,7 +15,7 @@ class DrawDiceUseCase {
             R.drawable.dice_6
         )
 
-        return (0..5).map { index ->
+        return (0..5).map { _ ->
             val diceIndex = Random.nextInt(until = 6)
             Dice(
                 value = diceIndex + 1,
@@ -23,8 +24,3 @@ class DrawDiceUseCase {
         }
     }
 }
-
-data class Dice(
-    val value: Int,
-    val image: Int
-)

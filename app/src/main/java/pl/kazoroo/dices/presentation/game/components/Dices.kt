@@ -20,11 +20,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pl.kazoroo.dices.R
-import pl.kazoroo.dices.domain.model.DiceInfo
+import pl.kazoroo.dices.domain.model.DiceSetInfo
 
 @Composable
 fun Dices(
-    diceState: DiceInfo,
+    diceState: DiceSetInfo,
     diceOnClick: (Int) -> Unit
 ) {
     Column(
