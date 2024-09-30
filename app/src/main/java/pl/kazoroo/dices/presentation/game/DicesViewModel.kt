@@ -52,8 +52,6 @@ class DicesViewModel(
     }
 
     fun calculateScore() {
-
-
         _pointsState.update { currentState ->
             currentState.copy(
                 selectedPoints = calculatePointsUseCase(
