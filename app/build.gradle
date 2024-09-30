@@ -91,4 +91,7 @@ dependencies {
 
     //Table
     implementation("io.github.windedge.table:table-m3:0.1.8")
+
+    //LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 }
