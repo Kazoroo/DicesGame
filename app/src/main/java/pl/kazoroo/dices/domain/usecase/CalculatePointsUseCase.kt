@@ -13,13 +13,12 @@ class CalculatePointsUseCase {
 
         }.toIntArray()
 
-        return diceValuesList.groupBy { it }.map {
-            val size = it.value.size
-
-            when (it.key) {
-                1 -> (size / 3) * 1000 + (size % 3) * 100
-                5 -> (size / 3) * 500 + (size % 3) * 50
-                else -> (size / 3) * 100 * it.key
+        return diceValuesList.toList().groupBy { it }.map { (value, occurrences) ->
+            val count = occurrences.size
+            when (value) {
+                1 -> if (count < 3) 100 * count else 1000 * (count - 2)
+                5 -> if (count < 3) 50 * count else 500 * (count - 2)
+                else -> if (count >= 3) value * 100 * (count - 2) else 0
             }
         }.sum()
     }
