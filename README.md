@@ -8,13 +8,7 @@ Jetpack Compose and Kotlin are used. Work in progress
 
 Feel free to commit to this project!
 
-![App showcase](./app/dice_showcase_03102024.gif)
-
-
-<table>
-  <tr>
-    <td><img src="app/gameScreenshot1.png" alt="Main menu"></td>
-    <td><img src="app/gameScreenshot2.png" alt="Game"></td>
-  </tr>
-</table>
-
+<video width="500" loop autoplay muted>
+    <source src="app/dice_showcase_03102024.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
