@@ -72,7 +72,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
             contentDescription = "paper table background texture",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .height(dimensionResource(id = R.dimen.menu_button_width))
+                .height(dimensionResource(id = R.dimen.desks_size))
                 .fillMaxWidth()
         )
 
@@ -95,20 +95,24 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                 ButtonInfo(
                     text = stringResource(id = R.string.score_and_roll_again),
                     onClick = {
-                        viewModel.countPoints()
-                        viewModel.checkForSkucha()
+                        if(!isSkucha) {
+                            viewModel.countPoints()
+                            viewModel.checkForSkucha()
+                        } else { Unit }
                     }
                 ),
                 ButtonInfo(
                     text = stringResource(id = R.string.pass),
                     onClick = {
-                        viewModel.passTheRound()
+                        if(!isSkucha) {
+                            viewModel.passTheRound()
+                        } else { Unit }
                     }
                 ),
             )
+
             GameButtons(
-                buttonsInfo,
-                isSkucha
+                buttonsInfo = buttonsInfo,
             )
         }
 

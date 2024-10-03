@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <dimen name="menu_button_width">220dp</dimen>
+    <dimen name="menu_button_width">280dp</dimen>
+    <dimen name="menu_button_height">70dp</dimen>
+    <dimen name="desks_size">220dp</dimen>
     <dimen name="xlarge_padding">220dp</dimen>
     <dimen name="rounded_corner">25dp</dimen>
     <dimen name="medium_padding">20dp</dimen>
     <dimen name="large_padding">40dp</dimen>
     <dimen name="small_padding">10dp</dimen>
-    <dimen name="dice_size">125dp</dimen>
+    <dimen name="dice_size">130dp</dimen>
+    <dimen name="buttons_vertical_padding">50dp</dimen>
 </resources>

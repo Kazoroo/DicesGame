@@ -16,6 +16,10 @@ val imFellEnglish = FontFamily(
     Font(R.font.imfelldwpica_italic, FontWeight.Normal, FontStyle.Italic)
 )
 
+val maximilian = FontFamily(
+    Font(R.font.maximilian, FontWeight.Normal)
+)
+
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = imFellEnglish,
@@ -35,5 +39,12 @@ val Typography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 45.sp,
         shadow = Shadow(color = Color.Black)
+    ),
+
+    titleLarge = TextStyle(
+        fontFamily = maximilian,
+        fontSize = 80.sp,
+        shadow = Shadow(color = Color.Black),
+        color = Color.White
     )
 )
