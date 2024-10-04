@@ -8,7 +8,4 @@ Jetpack Compose and Kotlin are used. Work in progress
 
 Feel free to commit to this project!
 
-<video width="40%" loop autoplay muted>
-    <source src="app/dice_showcase_03102024.gif" type="video/gif">
-    Your browser does not support the video tag.
-</video>
+<img src="app/dice_showcase_03102024.gif" alt="App showcase gif" width="40%">
