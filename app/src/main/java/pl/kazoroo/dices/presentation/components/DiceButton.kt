@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -30,6 +31,7 @@ fun DiceButton(
         onClick = buttonInfo.onClick,
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner)),
         modifier = modifier,
+        enabled = buttonInfo.enabled,
         colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         contentPadding = PaddingValues(0.dp)
     ) {
@@ -42,7 +44,8 @@ fun DiceButton(
                 contentDescription = stringResource(R.string.score_and_roll_again),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner)))
+                    .clip(RoundedCornerShape(dimensionResource(id = R.dimen.rounded_corner))),
+                colorFilter = if(!buttonInfo.enabled) ColorFilter.tint(Color(0xDD4A4A4A)) else null
             )
 
             Text(

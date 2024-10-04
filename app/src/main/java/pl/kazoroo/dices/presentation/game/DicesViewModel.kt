@@ -40,6 +40,9 @@ class DicesViewModel(
     private val _skuchaState = MutableStateFlow(false)
     val skuchaState = _skuchaState.asStateFlow()
 
+    private val _areButtonsEnabled = MutableStateFlow(false)
+    val areButtonsEnabled = _areButtonsEnabled.asStateFlow()
+
 
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
@@ -59,6 +62,10 @@ class DicesViewModel(
                     isDiceSelected = diceState.value.isDiceSelected
                 )
             )
+        }
+
+        if(pointsState.value.selectedPoints != 0) {
+            _areButtonsEnabled.value = true
         }
     }
 
