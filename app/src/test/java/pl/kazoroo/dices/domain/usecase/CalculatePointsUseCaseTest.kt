@@ -5,7 +5,6 @@ import org.junit.Test
 import pl.kazoroo.dices.domain.model.Dice
 
 open class CalculatePointsUseCaseTest {
-
     @Test
     fun `check if three 1s gives 1000 points`() {
         val result = CalculatePointsUseCase().invoke(
@@ -21,9 +20,9 @@ open class CalculatePointsUseCaseTest {
                 true,
                 true,
                 true,
-                true,
-                true,
-                true,
+                false,
+                false,
+                false,
             )
         )
 
@@ -70,8 +69,8 @@ open class CalculatePointsUseCaseTest {
                 true,
                 true,
                 true,
-                true,
-                true,
+                false,
+                false,
             )
         )
 
@@ -94,8 +93,8 @@ open class CalculatePointsUseCaseTest {
                 true,
                 true,
                 true,
-                true,
-                true,
+                false,
+                false,
             )
         )
 
@@ -228,9 +227,9 @@ open class CalculatePointsUseCaseTest {
             diceList = listOf(
                 Dice(1, 0),
                 Dice(2, 0),
-                Dice(3, 0),
-                Dice(4, 0),
                 Dice(5, 0),
+                Dice(4, 0),
+                Dice(3, 0),
                 Dice(4, 0),
             ),
             isDiceSelected = listOf(
@@ -251,11 +250,11 @@ open class CalculatePointsUseCaseTest {
         val result = CalculatePointsUseCase().invoke(
             diceList = listOf(
                 Dice(1, 0),
+                Dice(6, 0),
+                Dice(5, 0),
+                Dice(4, 0),
                 Dice(2, 0),
                 Dice(3, 0),
-                Dice(4, 0),
-                Dice(5, 0),
-                Dice(6, 0),
             ),
             isDiceSelected = listOf(
                 false,
@@ -292,5 +291,53 @@ open class CalculatePointsUseCaseTest {
         )
 
         assertEquals(1500, result)
+    }
+
+    @Test
+    fun `check if straight 1 to 5 plus mismatched dice gives 0 points`() {
+        val result = CalculatePointsUseCase().invoke(
+            diceList = listOf(
+                Dice(1, 0),
+                Dice(2, 0),
+                Dice(3, 0),
+                Dice(4, 0),
+                Dice(5, 0),
+                Dice(4, 0),
+            ),
+            isDiceSelected = listOf(
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+            )
+        )
+
+        assertEquals(0, result)
+    }
+
+    @Test
+    fun `check if two 5 and mismatched dice gives 0 points`() {
+        val result = CalculatePointsUseCase().invoke(
+            diceList = listOf(
+                Dice(5, 0),
+                Dice(5, 0),
+                Dice(3, 0),
+                Dice(1, 0),
+                Dice(3, 0),
+                Dice(4, 0),
+            ),
+            isDiceSelected = listOf(
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+            )
+        )
+
+        assertEquals(0, result)
     }
 }

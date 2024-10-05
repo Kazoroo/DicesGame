@@ -13,7 +13,6 @@ import pl.kazoroo.dices.domain.usecase.CalculatePointsUseCase
 import pl.kazoroo.dices.domain.usecase.CheckForSkuchaUseCase
 import pl.kazoroo.dices.domain.usecase.DrawDiceUseCase
 
-
 class DicesViewModel(
     private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
     private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase(),
@@ -40,10 +39,6 @@ class DicesViewModel(
     private val _skuchaState = MutableStateFlow(false)
     val skuchaState = _skuchaState.asStateFlow()
 
-    private val _areButtonsEnabled = MutableStateFlow(false)
-    val areButtonsEnabled = _areButtonsEnabled.asStateFlow()
-
-
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
             val updatedDiceSelected = currentState.isDiceSelected.toMutableList().apply {
@@ -62,10 +57,6 @@ class DicesViewModel(
                     isDiceSelected = diceState.value.isDiceSelected
                 )
             )
-        }
-
-        if(pointsState.value.selectedPoints != 0) {
-            _areButtonsEnabled.value = true
         }
     }
 
