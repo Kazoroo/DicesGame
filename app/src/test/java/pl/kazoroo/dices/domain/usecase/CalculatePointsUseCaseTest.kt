@@ -246,6 +246,30 @@ open class CalculatePointsUseCaseTest {
     }
 
     @Test
+    fun `check if straight 1 to 5 plus 1 gives 600 points`() {
+        val result = CalculatePointsUseCase().invoke(
+            diceList = listOf(
+                Dice(1, 0),
+                Dice(2, 0),
+                Dice(5, 0),
+                Dice(4, 0),
+                Dice(3, 0),
+                Dice(1, 0),
+            ),
+            isDiceSelected = listOf(
+                true,
+                true,
+                true,
+                true,
+                true,
+                true,
+            )
+        )
+
+        assertEquals(600, result)
+    }
+
+    @Test
     fun `check if straight 2 to 6 gives 750 points`() {
         val result = CalculatePointsUseCase().invoke(
             diceList = listOf(

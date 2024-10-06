@@ -91,6 +91,18 @@ class DicesViewModel(
             diceState.value.isDiceVisible
         )
 
+        if(diceState.value.isDiceVisible.all { !it }) {
+            _diceState.update { currentState ->
+                currentState.copy(
+                    diceList = drawDiceUseCase(),
+                    isDiceSelected = List(6) { false },
+                    isDiceVisible = List(6) { true }
+                )
+            }
+
+            return
+        }
+
         if(isSkucha) {
             viewModelScope.launch {
                 delay(1000L)
