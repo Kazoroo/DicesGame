@@ -19,7 +19,10 @@ class CalculatePointsUseCase {
         when (valuesOfSelectedDicesList.sorted()) {
             listOf(1, 2, 3, 4, 5, 6) -> points += 1500
             listOf(2, 3, 4, 5, 6) -> points += 750
+            listOf(2, 3, 4, 5, 5, 6) -> points += 800
             listOf(1, 2, 3, 4, 5) -> points += 500
+            listOf(1, 2, 3, 4, 5, 5) -> points += 550
+            listOf(1, 1, 2, 3, 4, 5) -> points += 600
         }
 
         if(points == 0) {
