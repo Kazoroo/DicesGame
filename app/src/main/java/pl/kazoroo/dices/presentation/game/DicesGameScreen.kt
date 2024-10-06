@@ -36,6 +36,8 @@ import pl.kazoroo.dices.presentation.game.components.PointsTable
 
 @Composable
 fun DicesGameScreen(viewModel: DicesViewModel) {
+    val isSkucha = viewModel.skuchaState.collectAsState().value
+    val selectedPoints = viewModel.pointsState.collectAsState().value.selectedPoints
     val tableData = listOf(
         TableData(
             pointsType = stringResource(R.string.total),
@@ -49,11 +51,10 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
         ),
         TableData(
             pointsType = stringResource(R.string.selected),
-            yourPoints = viewModel.pointsState.collectAsState().value.selectedPoints.toString(),
+            yourPoints = selectedPoints.toString(),
             opponentPoints = "0"
         ),
     )
-    val isSkucha = viewModel.skuchaState.collectAsState().value
 
     Box(
         modifier = Modifier
@@ -99,7 +100,8 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                             viewModel.countPoints()
                             viewModel.checkForSkucha()
                         } else { Unit }
-                    }
+                    },
+                    enabled = selectedPoints != 0
                 ),
                 ButtonInfo(
                     text = stringResource(id = R.string.pass),
@@ -107,7 +109,8 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                         if(!isSkucha) {
                             viewModel.passTheRound()
                         } else { Unit }
-                    }
+                    },
+                    enabled = selectedPoints != 0
                 ),
             )
 
