@@ -56,6 +56,10 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
         ),
     )
 
+    LaunchedEffect(true) {
+        viewModel.checkForSkucha()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
