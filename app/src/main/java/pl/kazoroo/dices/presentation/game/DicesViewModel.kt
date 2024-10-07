@@ -2,6 +2,7 @@ package pl.kazoroo.dices.presentation.game
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,17 +28,29 @@ class DicesViewModel(
     )
     val diceState = _diceState.asStateFlow()
 
-    private val _pointsState = MutableStateFlow(
+    private val _userPointsState = MutableStateFlow(
         PointsState(
             selectedPoints = 0,
             roundPoints = 0,
             totalPoints = 0
         )
     )
-    val pointsState = _pointsState.asStateFlow()
+    val userPointsState = _userPointsState.asStateFlow()
+
+    private val _opponentPointsState = MutableStateFlow(
+        PointsState(
+            selectedPoints = 0,
+            roundPoints = 0,
+            totalPoints = 0
+        )
+    )
+    val opponentPointsState = _opponentPointsState.asStateFlow()
 
     private val _skuchaState = MutableStateFlow(false)
     val skuchaState = _skuchaState.asStateFlow()
+
+    private val _isOpponentTurn = MutableStateFlow(false)
+    val isOpponentTurn = _isOpponentTurn.asStateFlow()
 
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
@@ -50,7 +63,9 @@ class DicesViewModel(
     }
 
     fun calculateScore() {
-        _pointsState.update { currentState ->
+        val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
+
+        stateToUpdate.update { currentState ->
             currentState.copy(
                 selectedPoints = calculatePointsUseCase(
                     diceList = diceState.value.diceList,
@@ -77,9 +92,11 @@ class DicesViewModel(
             )
         }
 
-        _pointsState.update { currentState ->
+        val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
+
+        stateToUpdate.update { currentState ->
             currentState.copy(
-                roundPoints = pointsState.value.selectedPoints + pointsState.value.roundPoints,
+                roundPoints = stateToUpdate.value.selectedPoints + stateToUpdate.value.roundPoints,
                 selectedPoints = 0
             )
         }
@@ -104,36 +121,40 @@ class DicesViewModel(
         }
 
         if(isSkucha) {
-            viewModelScope.launch {
-                delay(1000L)
-                _skuchaState.value = true
-                delay(2000L)
+            performSkuchaActions()
+        }
+    }
 
-                _skuchaState.value = false
+    private fun performSkuchaActions() {
+        viewModelScope.launch {
+            delay(1000L)
+            _skuchaState.value = true
 
-                _diceState.update { currentState ->
-                    currentState.copy(
-                        diceList = drawDiceUseCase(),
-                        isDiceSelected = List(6) { false },
-                        isDiceVisible = List(6) { true }
-                    )
-                }
+            delay(2000L)
+            _skuchaState.value = false
 
-                _pointsState.update { currentState ->
-                    currentState.copy(
-                        roundPoints = 0
-                    )
-                }
+            _diceState.update { currentState ->
+                currentState.copy(
+                    diceList = drawDiceUseCase(),
+                    isDiceSelected = List(6) { false },
+                    isDiceVisible = List(6) { true }
+                )
+            }
+
+            _userPointsState.update { currentState ->
+                currentState.copy(
+                    roundPoints = 0
+                )
             }
         }
     }
 
     fun passTheRound() {
-        _pointsState.update { currentState ->
+        _userPointsState.update { currentState ->
             currentState.copy(
                 roundPoints = 0,
                 selectedPoints = 0,
-                totalPoints = pointsState.value.selectedPoints + pointsState.value.roundPoints + pointsState.value.totalPoints
+                totalPoints = userPointsState.value.selectedPoints + userPointsState.value.roundPoints + userPointsState.value.totalPoints
             )
         }
 
@@ -143,6 +164,28 @@ class DicesViewModel(
                 isDiceSelected = List(6) { false },
                 isDiceVisible = List(6) { true }
             )
+        }
+
+        computerPlayerTurn()
+    }
+
+    private fun computerPlayerTurn() {
+        _isOpponentTurn.value = true
+
+        viewModelScope.launch(Dispatchers.Unconfined) {
+            val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
+                if(dice.value == 1 || dice.value == 5) index else null
+            }
+
+            delay(1000L)
+
+            for (i in indexesOfDiceGivingPoints.indices) {
+                toggleDiceSelection(indexesOfDiceGivingPoints[i])
+                calculateScore()
+                delay(1000L)
+            }
+
+            countPoints()
         }
     }
 }
