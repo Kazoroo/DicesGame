@@ -37,22 +37,22 @@ import pl.kazoroo.dices.presentation.game.components.PointsTable
 @Composable
 fun DicesGameScreen(viewModel: DicesViewModel) {
     val isSkucha = viewModel.skuchaState.collectAsState().value
-    val selectedPoints = viewModel.pointsState.collectAsState().value.selectedPoints
+    val selectedPoints = viewModel.userPointsState.collectAsState().value.selectedPoints
     val tableData = listOf(
         TableData(
             pointsType = stringResource(R.string.total),
-            yourPoints = viewModel.pointsState.collectAsState().value.totalPoints.toString(),
-            opponentPoints = "0"
+            yourPoints = viewModel.userPointsState.collectAsState().value.totalPoints.toString(),
+            opponentPoints = viewModel.opponentPointsState.collectAsState().value.totalPoints.toString()
         ),
         TableData(
             pointsType = stringResource(R.string.round),
-            yourPoints = viewModel.pointsState.collectAsState().value.roundPoints.toString(),
-            opponentPoints = "0"
+            yourPoints = viewModel.userPointsState.collectAsState().value.roundPoints.toString(),
+            opponentPoints = viewModel.opponentPointsState.collectAsState().value.roundPoints.toString()
         ),
         TableData(
             pointsType = stringResource(R.string.selected),
             yourPoints = selectedPoints.toString(),
-            opponentPoints = "0"
+            opponentPoints = viewModel.opponentPointsState.collectAsState().value.selectedPoints.toString()
         ),
     )
 
