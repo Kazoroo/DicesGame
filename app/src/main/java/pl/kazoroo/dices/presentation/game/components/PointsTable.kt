@@ -18,20 +18,30 @@ import io.github.windedge.table.components.Divider
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.TableData
 import pl.kazoroo.dices.ui.theme.DarkGoldenBrown
+import pl.kazoroo.dices.ui.theme.DarkRed
 import pl.kazoroo.dices.ui.theme.HalfTransparentBlack
 
 @Composable
-fun PointsTable(data: List<TableData>) {
+fun PointsTable(
+    data: List<TableData>,
+    isOpponentTurn: Boolean
+) {
     DataTable(
         columns = {
             column(contentAlignment = Alignment.Center) {
                 Text("")
             }
             column(contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.you))
+                Text(
+                    text = stringResource(R.string.you),
+                    modifier = if(!isOpponentTurn) Modifier.bottomBorder(3.dp, DarkRed) else Modifier
+                )
             }
             column(contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.opponent))
+                Text(
+                    text = stringResource(R.string.opponent),
+                    modifier = if(isOpponentTurn) Modifier.bottomBorder(3.dp, DarkRed) else Modifier
+                )
             }
         },
         divider = { rowIndex ->
