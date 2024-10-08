@@ -92,7 +92,8 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                         viewModel.toggleDiceSelection(index)
                         viewModel.calculateScore()
                     }
-                }
+                },
+                isDiceClickable = !viewModel.isOpponentTurn.value
             )
             Spacer(modifier = Modifier.weight(1f))
 
@@ -105,7 +106,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                             viewModel.checkForSkucha()
                         } else { Unit }
                     },
-                    enabled = selectedPoints != 0
+                    enabled = selectedPoints != 0 && !viewModel.isOpponentTurn.value
                 ),
                 ButtonInfo(
                     text = stringResource(id = R.string.pass),
@@ -114,7 +115,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                             viewModel.passTheRound()
                         } else { Unit }
                     },
-                    enabled = selectedPoints != 0
+                    enabled = selectedPoints != 0 && !viewModel.isOpponentTurn.value
                 ),
             )
 
