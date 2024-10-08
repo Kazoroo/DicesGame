@@ -150,11 +150,14 @@ class DicesViewModel(
     }
 
     fun passTheRound() {
-        _userPointsState.update { currentState ->
+        val _stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
+        val stateToUpdate = if (_isOpponentTurn.value) opponentPointsState else userPointsState
+
+        _stateToUpdate.update { currentState ->
             currentState.copy(
                 roundPoints = 0,
                 selectedPoints = 0,
-                totalPoints = userPointsState.value.selectedPoints + userPointsState.value.roundPoints + userPointsState.value.totalPoints
+                totalPoints = stateToUpdate.value.selectedPoints + stateToUpdate.value.roundPoints + stateToUpdate.value.totalPoints
             )
         }
 
@@ -166,26 +169,33 @@ class DicesViewModel(
             )
         }
 
-        computerPlayerTurn()
+        if(!isOpponentTurn.value) {
+            computerPlayerTurn()
+        }
     }
 
     private fun computerPlayerTurn() {
         _isOpponentTurn.value = true
 
         viewModelScope.launch(Dispatchers.Unconfined) {
-            val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
-                if(dice.value == 1 || dice.value == 5) index else null
-            }
+            while(diceState.value.isDiceVisible.count { it } > 3) {
+                val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
+                    if(dice.value == 1 || dice.value == 5 && diceState.value.isDiceVisible[index]) index else null
+                }
 
-            delay(1000L)
-
-            for (i in indexesOfDiceGivingPoints.indices) {
-                toggleDiceSelection(indexesOfDiceGivingPoints[i])
-                calculateScore()
                 delay(1000L)
+
+                for (i in indexesOfDiceGivingPoints.indices) {
+                    toggleDiceSelection(indexesOfDiceGivingPoints[i])
+                    calculateScore()
+                    delay(1000L)
+                }
+
+                countPoints()
             }
 
-            countPoints()
+            passTheRound()
+            _isOpponentTurn.value = false
         }
     }
 }

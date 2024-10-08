@@ -25,7 +25,8 @@ import pl.kazoroo.dices.domain.model.DiceSetInfo
 @Composable
 fun Dices(
     diceState: DiceSetInfo,
-    diceOnClick: (Int) -> Unit
+    diceOnClick: (Int) -> Unit,
+    isDiceClickable: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -54,7 +55,8 @@ fun Dices(
                             )
                             .clickable(
                                 indication = null,
-                                interactionSource = remember { MutableInteractionSource() }
+                                interactionSource = remember { MutableInteractionSource() },
+                                enabled = isDiceClickable
                             ) {
                                 diceOnClick(index)
                             }
