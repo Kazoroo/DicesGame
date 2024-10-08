@@ -37,6 +37,7 @@ import pl.kazoroo.dices.presentation.game.components.PointsTable
 @Composable
 fun DicesGameScreen(viewModel: DicesViewModel) {
     val isSkucha = viewModel.skuchaState.collectAsState().value
+    val isOpponentTurn = viewModel.isOpponentTurn.collectAsState().value
     val selectedPoints = viewModel.userPointsState.collectAsState().value.selectedPoints
     val tableData = listOf(
         TableData(
@@ -84,7 +85,10 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            PointsTable(data = tableData)
+            PointsTable(
+                data = tableData,
+                isOpponentTurn = isOpponentTurn
+            )
             Dices(
                 diceState = viewModel.diceState.collectAsState().value,
                 diceOnClick = { index ->
@@ -93,7 +97,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                         viewModel.calculateScore()
                     }
                 },
-                isDiceClickable = !viewModel.isOpponentTurn.value
+                isDiceClickable = !isOpponentTurn
             )
             Spacer(modifier = Modifier.weight(1f))
 
@@ -106,7 +110,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                             viewModel.checkForSkucha()
                         } else { Unit }
                     },
-                    enabled = selectedPoints != 0 && !viewModel.isOpponentTurn.value
+                    enabled = selectedPoints != 0 && !isOpponentTurn
                 ),
                 ButtonInfo(
                     text = stringResource(id = R.string.pass),
@@ -115,7 +119,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                             viewModel.passTheRound()
                         } else { Unit }
                     },
-                    enabled = selectedPoints != 0 && !viewModel.isOpponentTurn.value
+                    enabled = selectedPoints != 0 && !isOpponentTurn
                 ),
             )
 
