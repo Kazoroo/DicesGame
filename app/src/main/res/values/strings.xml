@@ -1,5 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Dices</string>
+<resources>
+    <string name="app_name" translatable="false">Dices</string>
     <string name="pass">Pass</string>
     <string name="score_and_roll_again">Score and roll again</string>
     <string name="total">Total</string>
@@ -8,5 +8,5 @@
     <string name="opponent">Opponent</string>
     <string name="play_with_ai">Play with AI</string>
     <string name="exit">Exit</string>
-    <string name="selected" tools:ignore="PrivateResource">Selected</string>
+    <string name="selected_forDices">Selected</string>
 </resources>

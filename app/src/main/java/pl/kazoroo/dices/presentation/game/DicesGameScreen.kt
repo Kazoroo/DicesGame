@@ -50,7 +50,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
             opponentPoints = viewModel.opponentPointsState.collectAsState().value.roundPoints.toString()
         ),
         TableData(
-            pointsType = stringResource(R.string.selected),
+            pointsType = stringResource(R.string.selected_forDices),
             yourPoints = selectedPoints.toString(),
             opponentPoints = viewModel.opponentPointsState.collectAsState().value.selectedPoints.toString()
         ),
