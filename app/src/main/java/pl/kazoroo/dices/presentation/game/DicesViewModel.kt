@@ -108,7 +108,15 @@ class DicesViewModel(
             diceState.value.isDiceVisible
         )
 
-        if(diceState.value.isDiceVisible.all { !it }) {
+        if(startNewRoundIfAllDiceInvisible()) return
+
+        if(isSkucha) {
+            performSkuchaActions()
+        }
+    }
+
+    private fun startNewRoundIfAllDiceInvisible(): Boolean {
+        return if (diceState.value.isDiceVisible.all { !it }) {
             _diceState.update { currentState ->
                 currentState.copy(
                     diceList = drawDiceUseCase(),
@@ -116,12 +124,9 @@ class DicesViewModel(
                     isDiceVisible = List(6) { true }
                 )
             }
-
-            return
-        }
-
-        if(isSkucha) {
-            performSkuchaActions()
+            true
+        } else {
+            false
         }
     }
 
@@ -146,6 +151,8 @@ class DicesViewModel(
                     roundPoints = 0
                 )
             }
+            
+            computerPlayerTurn()
         }
     }
 
