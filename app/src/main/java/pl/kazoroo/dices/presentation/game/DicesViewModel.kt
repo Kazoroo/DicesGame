@@ -191,14 +191,14 @@ class DicesViewModel(
         _isOpponentTurn.value = true
 
         viewModelScope.launch(Dispatchers.Default) {
-            while(diceState.value.isDiceVisible.count { it } > 3) {
+            while(diceState.value.isDiceVisible.count { it } > (2..4).random()) {
                 val sequenceDice: List<Int> = diceState.value.diceList.groupingBy { it.value }.eachCount().filter { it.value >= 3 }.keys.toList()
 
                 val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
                     if((dice.value == 1 || dice.value == 5 || sequenceDice.contains(dice.value)) && diceState.value.isDiceVisible[index]) index else null
                 }
 
-                delay(1000L)
+                delay((600L..1500L).random())
 
                 if(indexesOfDiceGivingPoints.isEmpty()) {
                     performSkuchaActions()
@@ -209,7 +209,7 @@ class DicesViewModel(
                 for (i in indexesOfDiceGivingPoints.indices) {
                     toggleDiceSelection(indexesOfDiceGivingPoints[i])
                     calculateScore()
-                    delay(1000L)
+                    delay((300L..1200L).random())
                 }
 
                 countPoints()
