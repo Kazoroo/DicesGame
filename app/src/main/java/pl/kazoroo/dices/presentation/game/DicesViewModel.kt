@@ -111,7 +111,9 @@ class DicesViewModel(
         if(startNewRoundIfAllDiceInvisible()) return
 
         if(isSkucha) {
-            performSkuchaActions()
+            viewModelScope.launch {
+                performSkuchaActions()
+            }
         }
     }
 
@@ -130,37 +132,41 @@ class DicesViewModel(
         }
     }
 
-    private fun performSkuchaActions() {
-        viewModelScope.launch {
-            delay(1000L)
-            _skuchaState.value = true
+    private suspend fun performSkuchaActions() {
+        val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
-            delay(2000L)
-            _skuchaState.value = false
+        delay(1000L)
+        _skuchaState.value = true
 
-            _diceState.update { currentState ->
-                currentState.copy(
-                    diceList = drawDiceUseCase(),
-                    isDiceSelected = List(6) { false },
-                    isDiceVisible = List(6) { true }
-                )
-            }
+        delay(2000L)
+        _skuchaState.value = false
 
-            _userPointsState.update { currentState ->
-                currentState.copy(
-                    roundPoints = 0
-                )
-            }
-            
+        _diceState.update { currentState ->
+            currentState.copy(
+                diceList = drawDiceUseCase(),
+                isDiceSelected = List(6) { false },
+                isDiceVisible = List(6) { true }
+            )
+        }
+
+        stateToUpdate.update { currentState ->
+            currentState.copy(
+                roundPoints = 0
+            )
+        }
+
+        if(_isOpponentTurn.value) {
+            _isOpponentTurn.value = false
+            return
+        } else {
             computerPlayerTurn()
         }
     }
 
     fun passTheRound() {
-        val _stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
-        val stateToUpdate = if (_isOpponentTurn.value) opponentPointsState else userPointsState
+        val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
-        _stateToUpdate.update { currentState ->
+        stateToUpdate.update { currentState ->
             currentState.copy(
                 roundPoints = 0,
                 selectedPoints = 0,
@@ -184,13 +190,19 @@ class DicesViewModel(
     private fun computerPlayerTurn() {
         _isOpponentTurn.value = true
 
-        viewModelScope.launch(Dispatchers.Unconfined) {
+        viewModelScope.launch(Dispatchers.Default) {
             while(diceState.value.isDiceVisible.count { it } > 3) {
                 val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
-                    if(dice.value == 1 || dice.value == 5 && diceState.value.isDiceVisible[index]) index else null
+                    if((dice.value == 1 || dice.value == 5) && diceState.value.isDiceVisible[index]) index else null
                 }
 
                 delay(1000L)
+
+                if(indexesOfDiceGivingPoints.isEmpty()) {
+                    performSkuchaActions()
+
+                    return@launch
+                }
 
                 for (i in indexesOfDiceGivingPoints.indices) {
                     toggleDiceSelection(indexesOfDiceGivingPoints[i])
