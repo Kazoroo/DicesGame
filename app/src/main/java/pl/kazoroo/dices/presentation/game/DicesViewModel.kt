@@ -196,7 +196,7 @@ class DicesViewModel(
 
                 val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
                     if((dice.value == 1 || dice.value == 5 || sequenceDice.contains(dice.value)) && diceState.value.isDiceVisible[index]) index else null
-                }
+                }.shuffled()
 
                 delay((600L..1500L).random())
 
