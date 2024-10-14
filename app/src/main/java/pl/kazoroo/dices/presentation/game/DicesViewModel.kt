@@ -192,7 +192,7 @@ class DicesViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             while(diceState.value.isDiceVisible.count { it } > (2..4).random()) {
-                val sequenceDice: List<Int> = diceState.value.diceList.groupingBy { it.value }.eachCount().filter { it.value >= 3 }.keys.toList()
+                val sequenceDice: List<Int> = diceState.value.diceList.filterIndexed { index, _ -> diceState.value.isDiceVisible[index] }.groupingBy { it.value }.eachCount().filter { it.value >= 3 }.keys.toList()
 
                 val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
                     if((dice.value == 1 || dice.value == 5 || sequenceDice.contains(dice.value)) && diceState.value.isDiceVisible[index]) index else null
