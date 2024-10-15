@@ -3,6 +3,7 @@ package pl.kazoroo.dices.presentation.game.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -75,19 +76,22 @@ fun PointsTable(
                 cell {
                     Text(
                         text = record.pointsType,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.width(dimensionResource(R.dimen.table_cell_width))
                     )
                 }
                 cell(contentAlignment = Alignment.Center) {
                     Text(
                         text = record.yourPoints,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.width(dimensionResource(R.dimen.table_cell_width))
                     )
                 }
                 cell(contentAlignment = Alignment.Center) {
                     Text(
                         text = record.opponentPoints,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.width(dimensionResource(R.dimen.table_cell_width))
                     )
                 }
             }
