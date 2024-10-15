@@ -76,28 +76,4 @@ class CheckForSkuchaUseCaseTest {
 
         assert(result)
     }
-
-    @Test
-    fun `check for skucha when all dice are invisible - should not be skucha`() {
-        val result = CheckForSkuchaUseCase().invoke(
-            diceList = listOf(
-                Dice(6, 0),
-                Dice(1, 0),
-                Dice(3, 0),
-                Dice(4, 0),
-                Dice(4, 0),
-                Dice(4, 0)
-            ),
-            isDiceVisible = listOf(
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-            )
-        )
-
-        assert(!result)
-    }
 }

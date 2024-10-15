@@ -94,7 +94,6 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                 diceOnClick = { index ->
                     if(!viewModel.skuchaState.value) {
                         viewModel.toggleDiceSelection(index)
-                        viewModel.calculateScore()
                     }
                 },
                 isDiceClickable = !isOpponentTurn
