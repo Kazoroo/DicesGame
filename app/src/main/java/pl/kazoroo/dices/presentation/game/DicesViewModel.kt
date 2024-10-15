@@ -60,9 +60,11 @@ class DicesViewModel(
 
             currentState.copy(isDiceSelected = updatedDiceSelected)
         }
+
+        calculateScore()
     }
 
-    fun calculateScore() {
+    private fun calculateScore() {
         val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
         stateToUpdate.update { currentState ->
@@ -192,13 +194,9 @@ class DicesViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             while(diceState.value.isDiceVisible.count { it } > (2..4).random()) {
-                val sequenceDice: List<Int> = diceState.value.diceList.filterIndexed { index, _ -> diceState.value.isDiceVisible[index] }.groupingBy { it.value }.eachCount().filter { it.value >= 3 }.keys.toList()
+                val indexesOfDiceGivingPoints = searchForDiceIndexGivingPoints()
 
-                val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
-                    if((dice.value == 1 || dice.value == 5 || sequenceDice.contains(dice.value)) && diceState.value.isDiceVisible[index]) index else null
-                }.shuffled()
-
-                delay((600L..1500L).random())
+                delay((800L..1500L).random())
 
                 if(indexesOfDiceGivingPoints.isEmpty()) {
                     performSkuchaActions()
@@ -208,8 +206,7 @@ class DicesViewModel(
 
                 for (i in indexesOfDiceGivingPoints.indices) {
                     toggleDiceSelection(indexesOfDiceGivingPoints[i])
-                    calculateScore()
-                    delay((300L..1200L).random())
+                    delay((800L..1200L).random())
                 }
 
                 countPoints()
@@ -218,5 +215,20 @@ class DicesViewModel(
             passTheRound()
             _isOpponentTurn.value = false
         }
+    }
+
+    /**
+     * @return List of dice indexes that gives points
+     */
+    private fun searchForDiceIndexGivingPoints(): List<Int> {
+        val sequenceDice: List<Int> =
+            diceState.value.diceList.filterIndexed { index, _ -> diceState.value.isDiceVisible[index] }
+                .groupingBy { it.value }.eachCount().filter { it.value >= 3 }.keys.toList()
+
+        val indexesOfDiceGivingPoints = diceState.value.diceList.mapIndexedNotNull { index, dice ->
+            if ((dice.value == 1 || dice.value == 5 || sequenceDice.contains(dice.value)) && diceState.value.isDiceVisible[index]) index else null
+        }.shuffled()
+
+        return indexesOfDiceGivingPoints
     }
 }
