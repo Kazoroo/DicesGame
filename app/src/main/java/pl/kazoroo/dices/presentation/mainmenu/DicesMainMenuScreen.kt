@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.presentation.components.ButtonInfo
@@ -44,6 +47,9 @@ fun MainMenuScreen(navController: NavController) {
         }
     )
 
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val imageSize = (screenWidth / 1.5f)
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -60,7 +66,11 @@ fun MainMenuScreen(navController: NavController) {
             verticalArrangement = Arrangement.Top,
             modifier = Modifier.testTag("Main menu screen")
         ) {
-            Image(painter = painterResource(id = R.drawable.dice_1), contentDescription = "Dice")
+            Image(
+                painter = painterResource(id = R.drawable.dice_1),
+                contentDescription = "Dice",
+                modifier = Modifier.size(imageSize)
+            )
 
             Text(
                 text = stringResource(R.string.app_name),

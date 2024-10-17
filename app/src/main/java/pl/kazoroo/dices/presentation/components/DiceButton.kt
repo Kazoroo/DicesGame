@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -51,7 +52,8 @@ fun DiceButton(
             Text(
                 text = buttonInfo.text,
                 textAlign = TextAlign.Center,
-                color = Color.Black
+                color = Color.Black,
+                modifier = Modifier.padding(5.dp)
             )
         }
     }

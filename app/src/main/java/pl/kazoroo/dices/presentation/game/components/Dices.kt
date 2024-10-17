@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -35,6 +36,10 @@ fun Dices(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+        val imageSize = (screenWidth / 3) - 10.dp
+
+
         for (row in 0..1) {
             Row(
                 horizontalArrangement = Arrangement.Center
@@ -47,7 +52,7 @@ fun Dices(
                         contentDescription = "Dice",
                         modifier = Modifier
                             .padding(2.dp)
-                            .size(if (diceState.isDiceVisible[index]) dimensionResource(id = R.dimen.dice_size) else (-1).dp)
+                            .size(if (diceState.isDiceVisible[index]) imageSize else (-1).dp)
                             .border(
                                 if (diceState.isDiceSelected[index]) 2.dp else (-1).dp,
                                 Color.Red,
