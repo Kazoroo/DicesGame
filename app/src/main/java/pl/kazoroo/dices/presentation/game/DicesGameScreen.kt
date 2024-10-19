@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,16 +28,25 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.TableData
 import pl.kazoroo.dices.presentation.components.ButtonInfo
 import pl.kazoroo.dices.presentation.game.components.Dices
 import pl.kazoroo.dices.presentation.game.components.GameButtons
 import pl.kazoroo.dices.presentation.game.components.PointsTable
+import pl.kazoroo.dices.ui.theme.DarkRed
 
 @Composable
-fun DicesGameScreen(viewModel: DicesViewModel) {
+fun DicesGameScreen(
+    viewModel: DicesViewModel,
+    navController: NavHostController
+) {
+    val coroutineScope = rememberCoroutineScope()
     val isSkucha = viewModel.skuchaState.collectAsState().value
+    val isGameEnd = viewModel.isGameEnd.collectAsState().value
     val isOpponentTurn = viewModel.isOpponentTurn.collectAsState().value
     val selectedPoints = viewModel.userPointsState.collectAsState().value.selectedPoints
     val tableData = listOf(
@@ -58,7 +68,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
     )
 
     LaunchedEffect(true) {
-        viewModel.checkForSkucha()
+        viewModel.checkForSkucha(navController)
     }
 
     Box(
@@ -96,7 +106,7 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                         viewModel.toggleDiceSelection(index)
                     }
                 },
-                isDiceClickable = !isOpponentTurn
+                isDiceClickable = !isOpponentTurn && !isGameEnd
             )
             Spacer(modifier = Modifier.weight(1f))
 
@@ -106,19 +116,21 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                     onClick = {
                         if(!isSkucha) {
                             viewModel.countPoints()
-                            viewModel.checkForSkucha()
+                            viewModel.checkForSkucha(navController)
                         } else { Unit }
                     },
-                    enabled = selectedPoints != 0 && !isOpponentTurn
+                    enabled = (selectedPoints != 0 && !isOpponentTurn) || isGameEnd
                 ),
                 ButtonInfo(
                     text = stringResource(id = R.string.pass),
                     onClick = {
                         if(!isSkucha) {
-                            viewModel.passTheRound()
+                            coroutineScope.launch {
+                                viewModel.passTheRound(navController)
+                            }
                         } else { Unit }
                     },
-                    enabled = selectedPoints != 0 && !isOpponentTurn
+                    enabled = (selectedPoints != 0 && !isOpponentTurn) || isGameEnd
                 ),
             )
 
@@ -127,20 +139,15 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
             )
         }
 
-        var showTextWithDelay by remember { mutableStateOf(false) }
-
-        LaunchedEffect(isSkucha) {
-            showTextWithDelay = isSkucha
-        }
-
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            if(showTextWithDelay) {
+        @Composable
+        fun gameResultAndSkuchaDialog(text: String, textColor: Color) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(
-                    text = "Skucha!",
-                    color = Color(212, 212, 212),
+                    text = text,
+                    color = textColor,
                     style = MaterialTheme.typography.displayLarge,
                     modifier = Modifier
                         .background(
@@ -150,6 +157,29 @@ fun DicesGameScreen(viewModel: DicesViewModel) {
                         .padding(dimensionResource(id = R.dimen.medium_padding))
                 )
             }
+        }
+
+        var isSkuchaDialogVisible by remember { mutableStateOf(false) }
+        var isGameResultDialogVisible by remember { mutableStateOf(false) }
+
+        LaunchedEffect(isSkucha) {
+            isSkuchaDialogVisible = isSkucha
+        }
+
+        LaunchedEffect(isGameEnd) {
+            delay(1000L)
+
+            isGameResultDialogVisible = isGameEnd
+        }
+
+        if(isSkuchaDialogVisible) {
+            gameResultAndSkuchaDialog(text = "Skucha!", textColor = Color(212, 212, 212))
+        }
+
+        if(isGameResultDialogVisible && isOpponentTurn) {
+            gameResultAndSkuchaDialog(text = "Defeat", textColor = DarkRed)
+        } else if(isGameResultDialogVisible) {
+            gameResultAndSkuchaDialog(text = "Win!", textColor = Color.Green)
         }
     }
 }

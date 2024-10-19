@@ -2,6 +2,7 @@ package pl.kazoroo.dices.presentation.game
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import pl.kazoroo.dices.domain.model.PointsState
 import pl.kazoroo.dices.domain.usecase.CalculatePointsUseCase
 import pl.kazoroo.dices.domain.usecase.CheckForSkuchaUseCase
 import pl.kazoroo.dices.domain.usecase.DrawDiceUseCase
+import pl.kazoroo.dices.presentation.navigation.Screen
 
 class DicesViewModel(
     private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
@@ -51,6 +53,9 @@ class DicesViewModel(
 
     private val _isOpponentTurn = MutableStateFlow(false)
     val isOpponentTurn = _isOpponentTurn.asStateFlow()
+
+    private val _isGameEnd = MutableStateFlow(false)
+    val isGameEnd = _isGameEnd.asStateFlow()
 
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
@@ -104,7 +109,7 @@ class DicesViewModel(
         }
     }
 
-    fun checkForSkucha() {
+    fun checkForSkucha(navController: NavHostController) {
         val isSkucha = checkForSkuchaUseCase(
             diceState.value.diceList,
             diceState.value.isDiceVisible
@@ -114,7 +119,7 @@ class DicesViewModel(
 
         if(isSkucha) {
             viewModelScope.launch {
-                performSkuchaActions()
+                performSkuchaActions(navController)
             }
         }
     }
@@ -134,7 +139,7 @@ class DicesViewModel(
         }
     }
 
-    private suspend fun performSkuchaActions() {
+    private suspend fun performSkuchaActions(navController: NavHostController) {
         val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
         delay(1000L)
@@ -159,13 +164,13 @@ class DicesViewModel(
 
         if(_isOpponentTurn.value) {
             _isOpponentTurn.value = false
-            return
+            return //TODO: Maybe return can be deleted
         } else {
-            computerPlayerTurn()
+            computerPlayerTurn(navController)
         }
     }
 
-    fun passTheRound() {
+    suspend fun passTheRound(navController: NavHostController) {
         val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
         stateToUpdate.update { currentState ->
@@ -174,6 +179,12 @@ class DicesViewModel(
                 selectedPoints = 0,
                 totalPoints = stateToUpdate.value.selectedPoints + stateToUpdate.value.roundPoints + stateToUpdate.value.totalPoints
             )
+        }
+
+        if(stateToUpdate.value.totalPoints >= 4000) {
+            performGameEndActions(navController)
+
+            return
         }
 
         _diceState.update { currentState ->
@@ -185,11 +196,45 @@ class DicesViewModel(
         }
 
         if(!isOpponentTurn.value) {
-            computerPlayerTurn()
+            computerPlayerTurn(navController)
         }
     }
 
-    private fun computerPlayerTurn() {
+    private suspend fun performGameEndActions(navController: NavHostController) {
+        _isGameEnd.value = true
+
+        delay(3000L)
+
+        _isGameEnd.value = false
+        _isOpponentTurn.value = false
+        _diceState.update { currentState ->
+            currentState.copy(
+                diceList = drawDiceUseCase(),
+                isDiceSelected = List(6) { false },
+                isDiceVisible = List(6) { true }
+            )
+        }
+        _opponentPointsState.update { currentState ->
+            currentState.copy(
+                selectedPoints = 0,
+                roundPoints = 0,
+                totalPoints = 0
+            )
+        }
+        _userPointsState.update { currentState ->
+            currentState.copy(
+                selectedPoints = 0,
+                roundPoints = 0,
+                totalPoints = 0
+            )
+        }
+
+        navController.navigate(Screen.MainScreen.withArgs()) {
+            popUpTo(Screen.GameScreen.withArgs()) { inclusive = true }
+        }
+    }
+
+    private fun computerPlayerTurn(navController: NavHostController) {
         _isOpponentTurn.value = true
 
         viewModelScope.launch(Dispatchers.Default) {
@@ -199,7 +244,7 @@ class DicesViewModel(
                 delay((800L..1500L).random())
 
                 if(indexesOfDiceGivingPoints.isEmpty()) {
-                    performSkuchaActions()
+                    performSkuchaActions(navController)
 
                     return@launch
                 }
@@ -212,7 +257,7 @@ class DicesViewModel(
                 countPoints()
             }
 
-            passTheRound()
+            passTheRound(navController)
             _isOpponentTurn.value = false
         }
     }
