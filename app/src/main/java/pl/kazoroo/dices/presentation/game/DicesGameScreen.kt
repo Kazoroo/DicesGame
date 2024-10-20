@@ -115,7 +115,7 @@ fun DicesGameScreen(
                     text = stringResource(id = R.string.score_and_roll_again),
                     onClick = {
                         if(!isSkucha) {
-                            viewModel.countPoints()
+                            viewModel.prepareForNextThrow()
                             viewModel.checkForSkucha(navController)
                         } else { Unit }
                     },

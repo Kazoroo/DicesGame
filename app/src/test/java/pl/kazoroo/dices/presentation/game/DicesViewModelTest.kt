@@ -21,17 +21,17 @@ class DicesViewModelTest {
     }
 
     @Test
-    fun countPoints() {
+    fun prepareForNextThrow() {
         viewModel.toggleDiceSelection(1)
         viewModel.toggleDiceSelection(5)
 
-        viewModel.countPoints()
+        viewModel.prepareForNextThrow()
 
         assert(viewModel.diceState.value.isDiceVisible == listOf(true, false, true, true, true, false))
 
         viewModel.toggleDiceSelection(3)
 
-        viewModel.countPoints()
+        viewModel.prepareForNextThrow()
 
         assert(viewModel.diceState.value.isDiceVisible == listOf(true, false, true, false, true, false))
     }

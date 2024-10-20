@@ -66,10 +66,10 @@ class DicesViewModel(
             currentState.copy(isDiceSelected = updatedDiceSelected)
         }
 
-        calculateScore()
+        updateSelectedPointsState()
     }
 
-    private fun calculateScore() {
+    private fun updateSelectedPointsState() {
         val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
         stateToUpdate.update { currentState ->
@@ -82,7 +82,10 @@ class DicesViewModel(
         }
     }
 
-    fun countPoints() {
+    /**
+     * Prepare the dice and points state for the next current player's throw.
+     */
+    fun prepareForNextThrow() {
         val newIsDiceVisible = diceState.value.isDiceVisible.toMutableList()
 
         for (i in diceState.value.isDiceVisible.indices) {
@@ -164,7 +167,6 @@ class DicesViewModel(
 
         if(_isOpponentTurn.value) {
             _isOpponentTurn.value = false
-            return //TODO: Maybe return can be deleted
         } else {
             computerPlayerTurn(navController)
         }
@@ -254,7 +256,7 @@ class DicesViewModel(
                     delay((800L..1200L).random())
                 }
 
-                countPoints()
+                prepareForNextThrow()
             }
 
             passTheRound(navController)
