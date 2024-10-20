@@ -119,7 +119,7 @@ fun DicesGameScreen(
                             viewModel.checkForSkucha(navController)
                         } else { Unit }
                     },
-                    enabled = (selectedPoints != 0 && !isOpponentTurn) || isGameEnd
+                    enabled = (selectedPoints != 0 && !isOpponentTurn) && !isGameEnd
                 ),
                 ButtonInfo(
                     text = stringResource(id = R.string.pass),
@@ -130,7 +130,7 @@ fun DicesGameScreen(
                             }
                         } else { Unit }
                     },
-                    enabled = (selectedPoints != 0 && !isOpponentTurn) || isGameEnd
+                    enabled = (selectedPoints != 0 && !isOpponentTurn) && !isGameEnd
                 ),
             )
 
