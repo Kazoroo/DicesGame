@@ -18,7 +18,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +29,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.TableData
 import pl.kazoroo.dices.presentation.components.ButtonInfo
@@ -44,7 +42,6 @@ fun DicesGameScreen(
     viewModel: DicesViewModel,
     navController: NavHostController
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val isSkucha = viewModel.skuchaState.collectAsState().value
     val isGameEnd = viewModel.isGameEnd.collectAsState().value
     val isOpponentTurn = viewModel.isOpponentTurn.collectAsState().value
@@ -125,9 +122,8 @@ fun DicesGameScreen(
                     text = stringResource(id = R.string.pass),
                     onClick = {
                         if(!isSkucha) {
-                            coroutineScope.launch {
-                                viewModel.passTheRound(navController)
-                            }
+                            viewModel.passTheRound(navController)
+
                         } else { Unit }
                     },
                     enabled = (selectedPoints != 0 && !isOpponentTurn) && !isGameEnd

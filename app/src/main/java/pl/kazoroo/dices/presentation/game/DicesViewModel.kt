@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pl.kazoroo.dices.domain.model.DiceSetInfo
 import pl.kazoroo.dices.domain.model.PointsState
 import pl.kazoroo.dices.domain.usecase.CalculatePointsUseCase
@@ -172,33 +173,38 @@ class DicesViewModel(
         }
     }
 
-    suspend fun passTheRound(navController: NavHostController) {
-        val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
+    fun passTheRound(navController: NavHostController) {
+        viewModelScope.launch {
+            val stateToUpdate =
+                if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
-        stateToUpdate.update { currentState ->
-            currentState.copy(
-                roundPoints = 0,
-                selectedPoints = 0,
-                totalPoints = stateToUpdate.value.selectedPoints + stateToUpdate.value.roundPoints + stateToUpdate.value.totalPoints
-            )
-        }
+            stateToUpdate.update { currentState ->
+                currentState.copy(
+                    roundPoints = 0,
+                    selectedPoints = 0,
+                    totalPoints = stateToUpdate.value.selectedPoints + stateToUpdate.value.roundPoints + stateToUpdate.value.totalPoints
+                )
+            }
 
-        if(stateToUpdate.value.totalPoints >= 4000) {
-            performGameEndActions(navController)
+            if (stateToUpdate.value.totalPoints >= 4000) {
+                performGameEndActions(navController)
 
-            return
-        }
+                return@launch
+            }
 
-        _diceState.update { currentState ->
-            currentState.copy(
-                diceList = drawDiceUseCase(),
-                isDiceSelected = List(6) { false },
-                isDiceVisible = List(6) { true }
-            )
-        }
+            _diceState.update { currentState ->
+                currentState.copy(
+                    diceList = drawDiceUseCase(),
+                    isDiceSelected = List(6) { false },
+                    isDiceVisible = List(6) { true }
+                )
+            }
 
-        if(!isOpponentTurn.value) {
-            computerPlayerTurn(navController)
+            if (!isOpponentTurn.value) {
+                computerPlayerTurn(navController)
+            } else {
+                _isOpponentTurn.value = false
+            }
         }
     }
 
@@ -208,7 +214,13 @@ class DicesViewModel(
         delay(3000L)
 
         _isGameEnd.value = false
-        _isOpponentTurn.value = false
+
+        navController.navigate(Screen.MainScreen.withArgs()) {
+            popUpTo(Screen.GameScreen.withArgs()) { inclusive = true }
+        }
+
+        delay(1000L)
+
         _diceState.update { currentState ->
             currentState.copy(
                 diceList = drawDiceUseCase(),
@@ -230,10 +242,7 @@ class DicesViewModel(
                 totalPoints = 0
             )
         }
-
-        navController.navigate(Screen.MainScreen.withArgs()) {
-            popUpTo(Screen.GameScreen.withArgs()) { inclusive = true }
-        }
+        _isOpponentTurn.value = false
     }
 
     private fun computerPlayerTurn(navController: NavHostController) {
@@ -259,8 +268,9 @@ class DicesViewModel(
                 prepareForNextThrow()
             }
 
-            passTheRound(navController)
-            _isOpponentTurn.value = false
+            withContext(Dispatchers.Main) {
+                passTheRound(navController)
+            }
         }
     }
 
