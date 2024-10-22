@@ -33,7 +33,6 @@ class CalculatePointsUseCase {
             }
         }
 
-
         return if(nonScoringDice.isEmpty() || !includeNonScoringDice) points else 0
     }
 
