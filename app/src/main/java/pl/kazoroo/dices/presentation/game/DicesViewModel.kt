@@ -22,6 +22,7 @@ class DicesViewModel(
     private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase(),
     private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase()
 ) : ViewModel() {
+    private val pointsGoal: Int = 4000
     private val _diceState = MutableStateFlow(
         DiceSetInfo(
             diceList = drawDiceUseCase(),
@@ -87,19 +88,11 @@ class DicesViewModel(
      * Prepare the dice and points state for the next current player's throw.
      */
     fun prepareForNextThrow() {
-        val newIsDiceVisible = diceState.value.isDiceVisible.toMutableList()
-
-        for (i in diceState.value.isDiceVisible.indices) {
-            if (diceState.value.isDiceVisible[i] && diceState.value.isDiceSelected[i]) {
-                newIsDiceVisible[i] = false
-            }
-        }
-
         _diceState.update { currentState ->
             currentState.copy(
                 diceList = drawDiceUseCase(),
                 isDiceSelected = List(6) { false },
-                isDiceVisible = newIsDiceVisible
+                isDiceVisible = getUpdatedDiceVisibility()
             )
         }
 
@@ -111,6 +104,18 @@ class DicesViewModel(
                 selectedPoints = 0
             )
         }
+    }
+
+    private fun getUpdatedDiceVisibility(): MutableList<Boolean> {
+        val newIsDiceVisible: MutableList<Boolean> = diceState.value.isDiceVisible.toMutableList()
+
+        for (i in diceState.value.isDiceVisible.indices) {
+            if (diceState.value.isDiceVisible[i] && diceState.value.isDiceSelected[i]) {
+                newIsDiceVisible[i] = false
+            }
+        }
+
+        return newIsDiceVisible
     }
 
     fun checkForSkucha(navController: NavHostController) {
@@ -186,7 +191,7 @@ class DicesViewModel(
                 )
             }
 
-            if (stateToUpdate.value.totalPoints >= 4000) {
+            if (stateToUpdate.value.totalPoints >= pointsGoal) {
                 performGameEndActions(navController)
 
                 return@launch
@@ -209,6 +214,13 @@ class DicesViewModel(
     }
 
     private suspend fun performGameEndActions(navController: NavHostController) {
+        _diceState.update { currentState ->
+            currentState.copy(
+                isDiceSelected = List(6) { false },
+                isDiceVisible = getUpdatedDiceVisibility()
+            )
+        }
+
         _isGameEnd.value = true
 
         delay(3000L)
@@ -263,6 +275,10 @@ class DicesViewModel(
                 for (i in indexesOfDiceGivingPoints.indices) {
                     toggleDiceSelection(indexesOfDiceGivingPoints[i])
                     delay((800L..1200L).random())
+                }
+
+                if(opponentPointsState.value.totalPoints + opponentPointsState.value.roundPoints + opponentPointsState.value.selectedPoints >= pointsGoal) {
+                    break
                 }
 
                 prepareForNextThrow()

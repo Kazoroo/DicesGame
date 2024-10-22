@@ -123,7 +123,6 @@ fun DicesGameScreen(
                     onClick = {
                         if(!isSkucha) {
                             viewModel.passTheRound(navController)
-
                         } else { Unit }
                     },
                     enabled = (selectedPoints != 0 && !isOpponentTurn) && !isGameEnd
