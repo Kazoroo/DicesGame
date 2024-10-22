@@ -39,7 +39,7 @@ fun MainMenuScreen(navController: NavController) {
 
     val buttons = listOf(
         ButtonInfo(
-            text = stringResource(R.string.play_with_ai),
+            text = stringResource(R.string.play_with_computer),
             modifier = buttonsModifier
                 .testTag("Play with AI button")
         ) {

@@ -6,7 +6,7 @@
     <string name="round">Round</string>
     <string name="you">You</string>
     <string name="opponent">Opponent</string>
-    <string name="play_with_ai">Play with AI</string>
+    <string name="play_with_computer">Play with computer</string>
     <string name="exit">Exit</string>
     <string name="selected_forDices">Selected</string>
 </resources>
