@@ -46,5 +46,12 @@ val Typography = Typography(
         fontSize = 80.sp,
         shadow = Shadow(color = Color.Black),
         color = Color.White
+    ),
+
+    titleSmall = TextStyle(
+        fontFamily = imFellEnglish,
+        fontSize = 30.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.Black
     )
 )
