@@ -102,7 +102,7 @@ fun MainMenuScreen(navController: NavController) {
                 }
 
                 Text(
-                    text = "Salve, lorem ipsum dolor sit amet, consequendor adipisci elit, argumentum ad misericordiam et argumentum ad populum.",
+                    text = stringResource(R.string.how_to_play_long_tutorial),
                     modifier = Modifier
                         .padding(dimensionResource(R.dimen.medium_padding))
                 )
