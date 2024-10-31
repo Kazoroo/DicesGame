@@ -19,6 +19,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import pl.kazoroo.dices.presentation.game.DicesViewModel
 import pl.kazoroo.dices.presentation.navigation.Navigation
+import pl.kazoroo.dices.presentation.sound.SoundPlayer
 import pl.kazoroo.dices.presentation.splashscreen.SplashScreenViewModel
 import pl.kazoroo.dices.service.MusicService
 import pl.kazoroo.dices.ui.theme.DicesTheme
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SoundPlayer.initialize(this)
         showSplashScreen()
         setContent {
             DicesTheme {
@@ -45,6 +47,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SoundPlayer.release()
     }
 
     override fun onPause() {

@@ -39,6 +39,8 @@ import pl.kazoroo.dices.presentation.components.ButtonInfo
 import pl.kazoroo.dices.presentation.components.DiceButton
 import pl.kazoroo.dices.presentation.mainmenu.components.HowToPlayDialog
 import pl.kazoroo.dices.presentation.navigation.Screen
+import pl.kazoroo.dices.presentation.sound.SoundPlayer
+import pl.kazoroo.dices.presentation.sound.SoundType
 
 @Composable
 fun MainMenuScreen(navController: NavController) {
@@ -52,6 +54,7 @@ fun MainMenuScreen(navController: NavController) {
             modifier = buttonsModifier
                 .testTag("Play with AI button")
         ) {
+            SoundPlayer.playSound(SoundType.CLICK)
             navController.navigate(Screen.GameScreen.withArgs())
         }
     )
@@ -126,7 +129,10 @@ fun MainMenuScreen(navController: NavController) {
             DiceButton(
                 buttonInfo = ButtonInfo(
                     text = stringResource(R.string.exit),
-                    onClick = { activity?.finish() }
+                    onClick = {
+                        activity?.finish()
+                        SoundPlayer.playSound(SoundType.CLICK)
+                    }
                 ),
                 modifier = buttonsModifier
                     .testTag("Exit button")
