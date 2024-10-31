@@ -1,6 +1,7 @@
 package pl.kazoroo.dices
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.OvershootInterpolator
@@ -11,12 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import pl.kazoroo.dices.presentation.game.DicesViewModel
 import pl.kazoroo.dices.presentation.navigation.Navigation
 import pl.kazoroo.dices.presentation.splashscreen.SplashScreenViewModel
+import pl.kazoroo.dices.service.MusicService
 import pl.kazoroo.dices.ui.theme.DicesTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,6 +31,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             DicesTheme {
                 val viewModel by viewModels<DicesViewModel>()
+                val context = LocalContext.current
+                LaunchedEffect(Unit) {
+                    val intent = Intent(context, MusicService::class.java)
+                    context.startService(intent)
+                }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -36,6 +45,17 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopService(Intent(this, MusicService::class.java))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intent = Intent(this, MusicService::class.java)
+        startService(intent)
     }
 
     private fun showSplashScreen() {
