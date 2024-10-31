@@ -16,6 +16,8 @@ import pl.kazoroo.dices.domain.usecase.CalculatePointsUseCase
 import pl.kazoroo.dices.domain.usecase.CheckForSkuchaUseCase
 import pl.kazoroo.dices.domain.usecase.DrawDiceUseCase
 import pl.kazoroo.dices.presentation.navigation.Screen
+import pl.kazoroo.dices.presentation.sound.SoundPlayer
+import pl.kazoroo.dices.presentation.sound.SoundType
 
 class DicesViewModel(
     private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
@@ -153,6 +155,7 @@ class DicesViewModel(
 
         delay(1000L)
         _skuchaState.value = true
+        SoundPlayer.playSound(SoundType.SKUCHA)
 
         delay(2000L)
         _skuchaState.value = false
@@ -223,6 +226,12 @@ class DicesViewModel(
 
         _isGameEnd.value = true
 
+        if(_opponentPointsState.value.totalPoints >= pointsGoal) {
+            SoundPlayer.playSound(SoundType.FAILURE)
+        } else {
+            SoundPlayer.playSound(SoundType.WIN)
+        }
+
         delay(3000L)
 
         _isGameEnd.value = false
@@ -281,10 +290,12 @@ class DicesViewModel(
                     break
                 }
 
+                SoundPlayer.playSound(SoundType.DICE_ROLLING)
                 prepareForNextThrow()
             }
 
             withContext(Dispatchers.Main) {
+                SoundPlayer.playSound(SoundType.DICE_ROLLING)
                 passTheRound(navController)
             }
         }
