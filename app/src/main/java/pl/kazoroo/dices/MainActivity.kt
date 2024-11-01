@@ -1,8 +1,12 @@
 package pl.kazoroo.dices
 
 import android.animation.ObjectAnimator
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.os.PowerManager
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
@@ -25,11 +29,27 @@ import pl.kazoroo.dices.service.MusicService
 import pl.kazoroo.dices.ui.theme.DicesTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var powerManager: PowerManager
+    private val screenStateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                Intent.ACTION_SCREEN_ON -> SoundPlayer.setAppOnFocusState(true)
+                Intent.ACTION_SCREEN_OFF -> SoundPlayer.setAppOnFocusState(false)
+            }
+        }
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         SoundPlayer.initialize(this)
+        powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        SoundPlayer.setAppOnFocusState(powerManager.isInteractive)
+        registerReceiver(screenStateReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
+        registerReceiver(screenStateReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
         showSplashScreen()
+
         setContent {
             DicesTheme {
                 val viewModel by viewModels<DicesViewModel>()
@@ -51,18 +71,23 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        unregisterReceiver(screenStateReceiver)
         SoundPlayer.release()
     }
 
     override fun onPause() {
         super.onPause()
         stopService(Intent(this, MusicService::class.java))
+        SoundPlayer.pauseAllSounds()
+        SoundPlayer.setAppOnFocusState(false)
     }
 
     override fun onResume() {
         super.onResume()
         val intent = Intent(this, MusicService::class.java)
         startService(intent)
+        SoundPlayer.resumeAllSounds()
+        SoundPlayer.setAppOnFocusState(true)
     }
 
     private fun showSplashScreen() {

@@ -7,6 +7,12 @@ import pl.kazoroo.dices.R
 object SoundPlayer {
     private val soundPool: SoundPool = SoundPool.Builder().setMaxStreams(5).build()
     private lateinit var soundMap: Map<SoundType, List<Int>>
+    private var isAppOnFocus = true
+    private val activeSounds = mutableListOf<Int>()
+
+    fun setAppOnFocusState(isOn: Boolean) {
+        isAppOnFocus = isOn
+    }
 
     fun initialize(context: Context) {
         soundMap = mapOf(
@@ -23,9 +29,23 @@ object SoundPlayer {
     }
 
     fun playSound(type: SoundType) {
-        soundMap[type]?.let { soundId ->
-            soundPool.play(soundId.random(), 1f, 1f, 1, 0, 1f)
+        if(isAppOnFocus) {
+            soundMap[type]?.let { sounds ->
+                val soundId = sounds.random()
+                val streamId = soundPool.play(soundId, 1f, 1f, 1, 0, 1f)
+                if (streamId != 0) {
+                    activeSounds.add(streamId)  // Dodanie aktywnego dźwięku do listy
+                }
+            }
         }
+    }
+
+    fun pauseAllSounds() {
+        activeSounds.forEach { soundPool.pause(it) }
+    }
+
+    fun resumeAllSounds() {
+        activeSounds.forEach { soundPool.resume(it) }
     }
 
     fun release() {
