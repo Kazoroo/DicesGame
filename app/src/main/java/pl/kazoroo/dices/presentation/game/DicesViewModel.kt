@@ -157,7 +157,7 @@ class DicesViewModel(
         _skuchaState.value = true
         SoundPlayer.playSound(SoundType.SKUCHA)
 
-        delay(2000L)
+        delay(3500L)
         _skuchaState.value = false
 
         _diceState.update { currentState ->
