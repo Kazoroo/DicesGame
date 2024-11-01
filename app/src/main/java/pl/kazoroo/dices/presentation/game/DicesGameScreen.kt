@@ -66,8 +66,10 @@ fun DicesGameScreen(
         ),
     )
 
-    LaunchedEffect(true) {
-        viewModel.checkForSkucha(navController)
+    LaunchedEffect(isOpponentTurn) {
+        if(!isOpponentTurn) {
+            viewModel.checkForSkucha(navController)
+        }
     }
 
     Box(
