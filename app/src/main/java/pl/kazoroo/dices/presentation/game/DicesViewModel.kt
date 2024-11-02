@@ -24,7 +24,7 @@ class DicesViewModel(
     private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase(),
     private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase()
 ) : ViewModel() {
-    private val pointsGoal: Int = 4000
+    private val winningPoints: Int = 4000
     private val _diceState = MutableStateFlow(
         DiceSetInfo(
             diceList = drawDiceUseCase(),
@@ -168,24 +168,34 @@ class DicesViewModel(
     private suspend fun performSkuchaActions(navController: NavHostController) {
         val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
-        delay(2000L)
+        delay(1000L)
         _skuchaState.value = true
         SoundPlayer.playSound(SoundType.SKUCHA)
 
-        delay(3500L)
+        delay(3000L)
         _skuchaState.value = false
-
-        _diceState.update { currentState ->
-            currentState.copy(
-                diceList = drawDiceUseCase(),
-                isDiceSelected = List(6) { false },
-                isDiceVisible = List(6) { true }
-            )
-        }
 
         stateToUpdate.update { currentState ->
             currentState.copy(
                 roundPoints = 0
+            )
+        }
+
+        delay(300L) //Waiting for selected dice horizontal slide animation finish
+        _isDiceAnimating.value = true
+        delay(500L)
+        _diceState.update { currentState ->
+            currentState.copy(
+                diceList = drawDiceUseCase()
+            )
+        }
+        delay(500L)
+        _isDiceAnimating.value = false
+
+        _diceState.update { currentState ->
+            currentState.copy(
+                isDiceSelected = List(6) { false },
+                isDiceVisible = List(6) { true }
             )
         }
 
@@ -198,8 +208,7 @@ class DicesViewModel(
 
     fun passTheRound(navController: NavHostController) {
         viewModelScope.launch {
-            val stateToUpdate =
-                if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
+            val stateToUpdate = if(_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
             stateToUpdate.update { currentState ->
                 currentState.copy(
@@ -209,15 +218,30 @@ class DicesViewModel(
                 )
             }
 
-            if (stateToUpdate.value.totalPoints >= pointsGoal) {
+            if (stateToUpdate.value.totalPoints >= winningPoints) {
                 performGameEndActions(navController)
 
                 return@launch
             }
+            _diceState.update { currentState ->
+                currentState.copy(
+                    isDiceVisible = getUpdatedDiceVisibility()
+                )
+            }
+
+            delay(300L) //Waiting for selected dice horizontal slide animation finish
+            _isDiceAnimating.value = true
+            delay(500L)
+            _diceState.update { currentState ->
+                currentState.copy(
+                    diceList = drawDiceUseCase()
+                )
+            }
+            delay(500L)
+            _isDiceAnimating.value = false
 
             _diceState.update { currentState ->
                 currentState.copy(
-                    diceList = drawDiceUseCase(),
                     isDiceSelected = List(6) { false },
                     isDiceVisible = List(6) { true }
                 )
@@ -241,7 +265,7 @@ class DicesViewModel(
 
         _isGameEnd.value = true
 
-        if(_opponentPointsState.value.totalPoints >= pointsGoal) {
+        if(_opponentPointsState.value.totalPoints >= winningPoints) {
             SoundPlayer.playSound(SoundType.FAILURE)
         } else {
             SoundPlayer.playSound(SoundType.WIN)
@@ -286,9 +310,9 @@ class DicesViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             while(diceState.value.isDiceVisible.count { it } > (2..4).random()) {
-                val indexesOfDiceGivingPoints = searchForDiceIndexGivingPoints()
+                delay((1600L..2000L).random())
 
-                delay((1000L..1700L).random())
+                val indexesOfDiceGivingPoints = searchForDiceIndexGivingPoints()
 
                 if(indexesOfDiceGivingPoints.isEmpty()) {
                     performSkuchaActions(navController)
@@ -301,7 +325,7 @@ class DicesViewModel(
                     delay((1200L..1600L).random())
                 }
 
-                if(opponentPointsState.value.totalPoints + opponentPointsState.value.roundPoints + opponentPointsState.value.selectedPoints >= pointsGoal) {
+                if(opponentPointsState.value.totalPoints + opponentPointsState.value.roundPoints + opponentPointsState.value.selectedPoints >= winningPoints) {
                     break
                 }
 
