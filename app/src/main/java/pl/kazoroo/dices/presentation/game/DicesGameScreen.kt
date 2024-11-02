@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.TableData
 import pl.kazoroo.dices.presentation.components.ButtonInfo
@@ -65,6 +67,7 @@ fun DicesGameScreen(
             opponentPoints = viewModel.opponentPointsState.collectAsState().value.selectedPoints.toString()
         ),
     )
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(isOpponentTurn) {
         if(!isOpponentTurn) {
@@ -107,7 +110,8 @@ fun DicesGameScreen(
                         viewModel.toggleDiceSelection(index)
                     }
                 },
-                isDiceClickable = !isOpponentTurn && !isGameEnd
+                isDiceClickable = !isOpponentTurn && !isGameEnd,
+                isDiceAnimating = viewModel.isDiceAnimating.collectAsState().value
             )
             Spacer(modifier = Modifier.weight(1f))
 
@@ -116,9 +120,12 @@ fun DicesGameScreen(
                     text = stringResource(id = R.string.score_and_roll_again),
                     onClick = {
                         if(!isSkucha) {
-                            SoundPlayer.playSound(SoundType.DICE_ROLLING)
-                            viewModel.prepareForNextThrow()
-                            viewModel.checkForSkucha(navController)
+                            scope.launch {
+                                SoundPlayer.playSound(SoundType.DICE_ROLLING)
+                                viewModel.prepareForNextThrow()
+                                delay(1000L)
+                                viewModel.checkForSkucha(navController)
+                            }
                         } else { Unit }
                     },
                     enabled = (selectedPoints != 0 && !isOpponentTurn) && !isGameEnd
