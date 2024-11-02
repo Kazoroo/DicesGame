@@ -32,8 +32,8 @@ import kotlinx.coroutines.delay
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.TableData
 import pl.kazoroo.dices.presentation.components.ButtonInfo
-import pl.kazoroo.dices.presentation.game.components.Dices
 import pl.kazoroo.dices.presentation.game.components.GameButtons
+import pl.kazoroo.dices.presentation.game.components.InteractiveDiceLayout
 import pl.kazoroo.dices.presentation.game.components.PointsTable
 import pl.kazoroo.dices.presentation.sound.SoundPlayer
 import pl.kazoroo.dices.presentation.sound.SoundType
@@ -100,7 +100,7 @@ fun DicesGameScreen(
                 data = tableData,
                 isOpponentTurn = isOpponentTurn
             )
-            Dices(
+            InteractiveDiceLayout(
                 diceState = viewModel.diceState.collectAsState().value,
                 diceOnClick = { index ->
                     if(!viewModel.skuchaState.value) {

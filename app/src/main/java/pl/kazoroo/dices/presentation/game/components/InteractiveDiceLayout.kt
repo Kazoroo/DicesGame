@@ -24,7 +24,7 @@ import pl.kazoroo.dices.R
 import pl.kazoroo.dices.domain.model.DiceSetInfo
 
 @Composable
-fun Dices(
+fun InteractiveDiceLayout(
     diceState: DiceSetInfo,
     diceOnClick: (Int) -> Unit,
     isDiceClickable: Boolean
@@ -38,7 +38,6 @@ fun Dices(
     ) {
         val screenWidth = LocalConfiguration.current.screenWidthDp.dp
         val imageSize = (screenWidth / 3) - 10.dp
-
 
         for (row in 0..1) {
             Row(
