@@ -61,6 +61,9 @@ class DicesViewModel(
     private val _isGameEnd = MutableStateFlow(false)
     val isGameEnd = _isGameEnd.asStateFlow()
 
+    private val _isDiceAnimating = MutableStateFlow(false)
+    val isDiceAnimating = _isDiceAnimating.asStateFlow()
+
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
             val updatedDiceSelected = currentState.isDiceSelected.toMutableList().apply {
@@ -90,9 +93,21 @@ class DicesViewModel(
      * Prepare the dice and points state for the next current player's throw.
      */
     fun prepareForNextThrow() {
+        viewModelScope.launch {
+            delay(300L) //Waiting for selected dice horizontal slide animation finish
+            _isDiceAnimating.value = true
+            delay(500L)
+            _diceState.update { currentState ->
+                currentState.copy(
+                    diceList = drawDiceUseCase()
+                )
+            }
+            delay(500L)
+            _isDiceAnimating.value = false
+        }
+
         _diceState.update { currentState ->
             currentState.copy(
-                diceList = drawDiceUseCase(),
                 isDiceSelected = List(6) { false },
                 isDiceVisible = getUpdatedDiceVisibility()
             )
@@ -153,7 +168,7 @@ class DicesViewModel(
     private suspend fun performSkuchaActions(navController: NavHostController) {
         val stateToUpdate = if (_isOpponentTurn.value) _opponentPointsState else _userPointsState
 
-        delay(1000L)
+        delay(2000L)
         _skuchaState.value = true
         SoundPlayer.playSound(SoundType.SKUCHA)
 
@@ -273,7 +288,7 @@ class DicesViewModel(
             while(diceState.value.isDiceVisible.count { it } > (2..4).random()) {
                 val indexesOfDiceGivingPoints = searchForDiceIndexGivingPoints()
 
-                delay((800L..1500L).random())
+                delay((1000L..1700L).random())
 
                 if(indexesOfDiceGivingPoints.isEmpty()) {
                     performSkuchaActions(navController)
@@ -283,7 +298,7 @@ class DicesViewModel(
 
                 for (i in indexesOfDiceGivingPoints.indices) {
                     toggleDiceSelection(indexesOfDiceGivingPoints[i])
-                    delay((800L..1200L).random())
+                    delay((1200L..1600L).random())
                 }
 
                 if(opponentPointsState.value.totalPoints + opponentPointsState.value.roundPoints + opponentPointsState.value.selectedPoints >= pointsGoal) {

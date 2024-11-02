@@ -1,5 +1,8 @@
 package pl.kazoroo.dices.presentation.game.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,7 +30,8 @@ import pl.kazoroo.dices.domain.model.DiceSetInfo
 fun InteractiveDiceLayout(
     diceState: DiceSetInfo,
     diceOnClick: (Int) -> Unit,
-    isDiceClickable: Boolean
+    isDiceClickable: Boolean,
+    isDiceAnimating: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -40,31 +44,48 @@ fun InteractiveDiceLayout(
         val imageSize = (screenWidth / 3) - 10.dp
 
         for (row in 0..1) {
-            Row(
-                horizontalArrangement = Arrangement.Center
+            AnimatedVisibility(
+                visible = !isDiceAnimating
             ) {
-                for (column in 0..2) {
-                    val index = row * 3 + column
-
-                    Image(
-                        painter = painterResource(id = diceState.diceList[index].image),
-                        contentDescription = "Dice",
-                        modifier = Modifier
-                            .padding(2.dp)
-                            .size(if (diceState.isDiceVisible[index]) imageSize else (-1).dp)
-                            .border(
-                                if (diceState.isDiceSelected[index]) 2.dp else (-1).dp,
-                                Color.Red,
-                                RoundedCornerShape(100)
+                Row(
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    for (column in 0..2) {
+                        val index = row * 3 + column
+                        AnimatedVisibility(
+                            visible = diceState.isDiceVisible[index],
+                            enter = slideInHorizontally(
+                                initialOffsetX = {
+                                    (if(index == 0 || index == 3) -it else it) * 3
+                                }
+                            ),
+                            exit = slideOutHorizontally(
+                                targetOffsetX = {
+                                    (if(index == 0 || index == 3) -it else it) * 3
+                                }
                             )
-                            .clickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() },
-                                enabled = isDiceClickable
-                            ) {
-                                diceOnClick(index)
-                            }
-                    )
+                        ) {
+                            Image(
+                                painter = painterResource(id = diceState.diceList[index].image),
+                                contentDescription = "Dice",
+                                modifier = Modifier
+                                    .padding(2.dp)
+                                    .size(imageSize)
+                                    .border(
+                                        if (diceState.isDiceSelected[index]) 2.dp else (-1).dp,
+                                        Color.Red,
+                                        RoundedCornerShape(100)
+                                    )
+                                    .clickable(
+                                        indication = null,
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        enabled = isDiceClickable
+                                    ) {
+                                        diceOnClick(index)
+                                    }
+                            )
+                        }
+                    }
                 }
             }
         }
