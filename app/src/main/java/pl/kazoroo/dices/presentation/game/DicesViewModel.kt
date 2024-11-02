@@ -66,9 +66,8 @@ class DicesViewModel(
 
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
-            val updatedDiceSelected = currentState.isDiceSelected.toMutableList().apply {
-                this[index] = !this[index]
-            }
+            val updatedDiceSelected = currentState.isDiceSelected.toMutableList()
+            updatedDiceSelected[index] = !updatedDiceSelected[index]
 
             currentState.copy(isDiceSelected = updatedDiceSelected)
         }
