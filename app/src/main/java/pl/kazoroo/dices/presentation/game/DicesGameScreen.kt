@@ -37,8 +37,6 @@ import pl.kazoroo.dices.presentation.components.ButtonInfo
 import pl.kazoroo.dices.presentation.game.components.GameButtons
 import pl.kazoroo.dices.presentation.game.components.InteractiveDiceLayout
 import pl.kazoroo.dices.presentation.game.components.PointsTable
-import pl.kazoroo.dices.presentation.sound.SoundPlayer
-import pl.kazoroo.dices.presentation.sound.SoundType
 import pl.kazoroo.dices.ui.theme.DarkRed
 
 @Composable
@@ -121,7 +119,6 @@ fun DicesGameScreen(
                     onClick = {
                         if(!isSkucha) {
                             scope.launch {
-                                SoundPlayer.playSound(SoundType.DICE_ROLLING)
                                 viewModel.prepareForNextThrow()
                                 delay(1000L)
                                 viewModel.checkForSkucha(navController)
@@ -134,7 +131,6 @@ fun DicesGameScreen(
                     text = stringResource(id = R.string.pass),
                     onClick = {
                         if(!isSkucha) {
-                            SoundPlayer.playSound(SoundType.DICE_ROLLING)
                             viewModel.passTheRound(navController)
                         } else { Unit }
                     },

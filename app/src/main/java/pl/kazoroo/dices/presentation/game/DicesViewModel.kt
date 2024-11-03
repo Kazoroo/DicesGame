@@ -93,16 +93,7 @@ class DicesViewModel(
      */
     fun prepareForNextThrow() {
         viewModelScope.launch {
-            delay(300L) //Waiting for selected dice horizontal slide animation finish
-            _isDiceAnimating.value = true
-            delay(500L)
-            _diceState.update { currentState ->
-                currentState.copy(
-                    diceList = drawDiceUseCase()
-                )
-            }
-            delay(500L)
-            _isDiceAnimating.value = false
+            triggerDiceRowAnimation()
         }
 
         _diceState.update { currentState ->
@@ -180,16 +171,7 @@ class DicesViewModel(
             )
         }
 
-        delay(300L) //Waiting for selected dice horizontal slide animation finish
-        _isDiceAnimating.value = true
-        delay(500L)
-        _diceState.update { currentState ->
-            currentState.copy(
-                diceList = drawDiceUseCase()
-            )
-        }
-        delay(500L)
-        _isDiceAnimating.value = false
+        triggerDiceRowAnimation()
 
         _diceState.update { currentState ->
             currentState.copy(
@@ -228,16 +210,7 @@ class DicesViewModel(
                 )
             }
 
-            delay(300L) //Waiting for selected dice horizontal slide animation finish
-            _isDiceAnimating.value = true
-            delay(500L)
-            _diceState.update { currentState ->
-                currentState.copy(
-                    diceList = drawDiceUseCase()
-                )
-            }
-            delay(500L)
-            _isDiceAnimating.value = false
+            triggerDiceRowAnimation()
 
             _diceState.update { currentState ->
                 currentState.copy(
@@ -252,6 +225,20 @@ class DicesViewModel(
                 _isOpponentTurn.value = false
             }
         }
+    }
+
+    private suspend fun triggerDiceRowAnimation() {
+        delay(300L) //Waiting for selected dice horizontal slide animation finish
+        _isDiceAnimating.value = true
+        delay(500L)
+        SoundPlayer.playSound(SoundType.DICE_ROLLING)
+        _diceState.update { currentState ->
+            currentState.copy(
+                diceList = drawDiceUseCase()
+            )
+        }
+        delay(500L)
+        _isDiceAnimating.value = false
     }
 
     private suspend fun performGameEndActions(navController: NavHostController) {
@@ -308,7 +295,8 @@ class DicesViewModel(
         _isOpponentTurn.value = true
 
         viewModelScope.launch(Dispatchers.Default) {
-            while(diceState.value.isDiceVisible.count { it } > (2..4).random()) {
+            val minDiceCount = (2..4).random()
+            while(diceState.value.isDiceVisible.count { it } > minDiceCount) {
                 delay((1600L..2000L).random())
 
                 val indexesOfDiceGivingPoints = searchForDiceIndexGivingPoints()
@@ -328,13 +316,13 @@ class DicesViewModel(
                     break
                 }
 
-                SoundPlayer.playSound(SoundType.DICE_ROLLING)
-                prepareForNextThrow()
-            }
-
-            withContext(Dispatchers.Main) {
-                SoundPlayer.playSound(SoundType.DICE_ROLLING)
-                passTheRound(navController)
+                if(diceState.value.isDiceVisible.count { it } - diceState.value.isDiceSelected.count { it } > minDiceCount) {
+                    prepareForNextThrow()
+                } else {
+                    withContext(Dispatchers.Main) {
+                        passTheRound(navController)
+                    }
+                }
             }
         }
     }
