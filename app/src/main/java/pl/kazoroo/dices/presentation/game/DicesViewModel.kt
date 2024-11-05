@@ -64,6 +64,9 @@ class DicesViewModel(
     private val _isDiceAnimating = MutableStateFlow(false)
     val isDiceAnimating = _isDiceAnimating.asStateFlow()
 
+    private val _isDiceVisibleAfterGameEnd = MutableStateFlow(List(6) { false })
+    val isDiceVisibleAfterGameEnd = _isDiceVisibleAfterGameEnd.asStateFlow()
+
     fun toggleDiceSelection(index: Int) {
         _diceState.update { currentState ->
             val updatedDiceSelected = currentState.isDiceSelected.toMutableList()
@@ -242,10 +245,11 @@ class DicesViewModel(
     }
 
     private suspend fun performGameEndActions(navController: NavHostController) {
+        _isDiceVisibleAfterGameEnd.value = getUpdatedDiceVisibility().map { !it }
+
         _diceState.update { currentState ->
             currentState.copy(
-                isDiceSelected = List(6) { false },
-                isDiceVisible = getUpdatedDiceVisibility()
+                isDiceSelected = List(6) { false }
             )
         }
 
@@ -289,6 +293,7 @@ class DicesViewModel(
             )
         }
         _isOpponentTurn.value = false
+        _isDiceVisibleAfterGameEnd.value = List(6) { false }
     }
 
     private fun computerPlayerTurn(navController: NavHostController) {
@@ -312,16 +317,13 @@ class DicesViewModel(
                     delay((1200L..1600L).random())
                 }
 
-                if(opponentPointsState.value.totalPoints + opponentPointsState.value.roundPoints + opponentPointsState.value.selectedPoints >= winningPoints) {
-                    break
-                }
-
                 if(diceState.value.isDiceVisible.count { it } - diceState.value.isDiceSelected.count { it } > minDiceCount) {
                     prepareForNextThrow()
                 } else {
                     withContext(Dispatchers.Main) {
                         passTheRound(navController)
                     }
+                    break
                 }
             }
         }

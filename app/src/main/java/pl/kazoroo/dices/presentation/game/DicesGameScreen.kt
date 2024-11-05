@@ -109,7 +109,8 @@ fun DicesGameScreen(
                     }
                 },
                 isDiceClickable = !isOpponentTurn && !isGameEnd,
-                isDiceAnimating = viewModel.isDiceAnimating.collectAsState().value
+                isDiceAnimating = viewModel.isDiceAnimating.collectAsState().value,
+                isDiceVisibleAfterGameEnd = viewModel.isDiceVisibleAfterGameEnd.collectAsState().value
             )
             Spacer(modifier = Modifier.weight(1f))
 
