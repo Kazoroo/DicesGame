@@ -20,11 +20,12 @@ fun GameButtons(buttonsInfo: List<ButtonInfo>) {
             DiceButton(
                 buttonInfo,
                 modifier = Modifier
-                    .height(dimensionResource(R.dimen.xlarge_padding))
+                    .height(dimensionResource(R.dimen.game_button_height))
                     .weight(0.5f)
                     .padding(
-                        horizontal = dimensionResource(id = R.dimen.small_padding),
-                        vertical = dimensionResource(R.dimen.buttons_vertical_padding)
+                        start = dimensionResource(id = R.dimen.small_padding),
+                        end = dimensionResource(id = R.dimen.small_padding),
+                        bottom = dimensionResource(R.dimen.buttons_vertical_padding)
                     )
             )
         }
