@@ -6,6 +6,7 @@
     <dimen name="icon_button_size">50dp</dimen>
     <dimen name="desks_size">220dp</dimen>
     <dimen name="xlarge_padding">220dp</dimen>
+    <dimen name="game_button_height">160dp</dimen>
     <dimen name="rounded_corner">25dp</dimen>
     <dimen name="medium_padding">20dp</dimen>
     <dimen name="large_padding">40dp</dimen>
