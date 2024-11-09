@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import pl.kazoroo.dices.presentation.game.DicesViewModel
-import pl.kazoroo.dices.presentation.navigation.Navigation
-import pl.kazoroo.dices.presentation.sound.SoundPlayer
-import pl.kazoroo.dices.presentation.splashscreen.SplashScreenViewModel
-import pl.kazoroo.dices.service.MusicService
+import pl.kazoroo.dices.game.presentation.game.DicesViewModel
+import pl.kazoroo.dices.game.presentation.navigation.Navigation
+import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
+import pl.kazoroo.dices.game.presentation.splashscreen.SplashScreenViewModel
+import pl.kazoroo.dices.game.service.MusicService
 import pl.kazoroo.dices.ui.theme.DicesTheme
 
 class MainActivity : ComponentActivity() {
