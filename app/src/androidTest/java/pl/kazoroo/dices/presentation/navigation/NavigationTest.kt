@@ -13,7 +13,8 @@ import androidx.test.espresso.Espresso
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import pl.kazoroo.dices.presentation.game.DicesViewModel
+import pl.kazoroo.dices.game.presentation.game.DicesViewModel
+import pl.kazoroo.dices.game.presentation.navigation.Navigation
 
 class NavigationTest {
     @get:Rule
