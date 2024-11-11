@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.game.presentation.components.ButtonInfo
 import pl.kazoroo.dices.game.presentation.components.DiceButton
+import pl.kazoroo.dices.game.presentation.mainmenu.components.BettingDialog
 import pl.kazoroo.dices.game.presentation.mainmenu.components.HowToPlayDialog
 import pl.kazoroo.dices.game.presentation.navigation.Screen
 import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
@@ -48,23 +49,35 @@ fun MainMenuScreen(navController: NavController) {
     val buttonsModifier: Modifier = Modifier
         .height(dimensionResource(R.dimen.menu_button_height))
         .width(dimensionResource(R.dimen.menu_button_width))
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val imageSize = (screenWidth / 1.5f)
+    var isHelpDialogVisible by remember { mutableStateOf(false) }
+    var isBettingDialogVisible by remember { mutableStateOf(false) }
     val buttons = listOf(
         ButtonInfo(
             text = stringResource(R.string.play_with_computer),
             modifier = buttonsModifier
                 .testTag("Play with AI button")
         ) {
-            SoundPlayer.playSound(SoundType.CLICK)
-            navController.navigate(Screen.GameScreen.withArgs())
+            isBettingDialogVisible = true
         }
     )
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val imageSize = (screenWidth / 1.5f)
-    var isHelpDialogVisible by remember { mutableStateOf(false) }
 
     if(isHelpDialogVisible) {
         HowToPlayDialog(
-            onClick = { isHelpDialogVisible = false }
+            onCloseClick = { isHelpDialogVisible = false }
+        )
+    }
+
+    if(isBettingDialogVisible) {
+        BettingDialog(
+            onCloseClick = {
+                isBettingDialogVisible = false
+            },
+            onClick = {
+                SoundPlayer.playSound(SoundType.CLICK)
+                navController.navigate(Screen.GameScreen.withArgs())
+            }
         )
     }
 
