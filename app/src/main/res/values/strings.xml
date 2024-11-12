@@ -13,4 +13,7 @@
     <string name="betting">Betting</string>
     <string name="how_to_play">How to play?</string>
     <string name="place_a_bet">"Place a bet: "</string>
+    <string name="play">Play!</string>
+    <string name="please_enter_a_bet_amount">Please enter a bet amount</string>
+    <string name="text_field_must_contain_only_numbers_0_9">Text field must contain only numbers 0–9</string>
 </resources>

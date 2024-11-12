@@ -14,4 +14,7 @@
     <dimen name="dice_size">130dp</dimen>
     <dimen name="buttons_vertical_padding">50dp</dimen>
     <dimen name="table_cell_width">70dp</dimen>
+    <dimen name="dialog_text_field_width">120dp</dimen>
+    <dimen name="dialog_coin_icon_size">32dp</dimen>
+    <dimen name="dialog_height">250dp</dimen>
 </resources>
