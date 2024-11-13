@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -108,6 +109,29 @@ fun MainMenuScreen(navController: NavController) {
                 contentDescription = "Info icon",
                 tint = Color.White,
                 modifier = Modifier.size(dimensionResource(R.dimen.icon_button_size))
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(
+                    top = dimensionResource(R.dimen.small_padding),
+                    start = dimensionResource(R.dimen.small_padding)
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "1120",
+                color = Color.White
+            )
+
+            Image(
+                painter = painterResource(R.drawable.coin),
+                contentDescription = "Coin icon",
+                modifier = Modifier
+                    .size(dimensionResource(R.dimen.coin_icon_size))
+                    .padding(start = dimensionResource(R.dimen.small_padding))
             )
         }
 
