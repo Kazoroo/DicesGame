@@ -21,6 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import pl.kazoroo.dices.core.data.local.UserDataRepository
+import pl.kazoroo.dices.core.data.presentation.BettingViewModel
+import pl.kazoroo.dices.core.domain.SaveUserDataUseCase
 import pl.kazoroo.dices.game.presentation.game.DicesViewModel
 import pl.kazoroo.dices.game.presentation.navigation.Navigation
 import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
@@ -38,6 +44,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_data")
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +60,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DicesTheme {
                 val viewModel by viewModels<DicesViewModel>()
+                val bettingViewModel = BettingViewModel(SaveUserDataUseCase(UserDataRepository(dataStore)))
                 val context = LocalContext.current
                 LaunchedEffect(Unit) {
                     val intent = Intent(context, MusicService::class.java)
@@ -63,7 +71,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation(viewModel)
+                    Navigation(viewModel, bettingViewModel)
                 }
             }
         }

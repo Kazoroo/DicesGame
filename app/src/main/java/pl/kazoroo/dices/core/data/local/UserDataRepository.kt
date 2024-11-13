@@ -6,8 +6,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
 
-//TODO: private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_data")
-
 class UserDataRepository(private val dataStore: DataStore<Preferences>) {
 
     suspend fun saveNewValue(key: UserDataKey, value: String) {
