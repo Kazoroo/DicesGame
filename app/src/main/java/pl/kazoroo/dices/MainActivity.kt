@@ -26,6 +26,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import pl.kazoroo.dices.core.data.local.UserDataRepository
 import pl.kazoroo.dices.core.data.presentation.BettingViewModel
+import pl.kazoroo.dices.core.domain.ReadUserDataUseCase
 import pl.kazoroo.dices.core.domain.SaveUserDataUseCase
 import pl.kazoroo.dices.game.presentation.game.DicesViewModel
 import pl.kazoroo.dices.game.presentation.navigation.Navigation
@@ -60,7 +61,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             DicesTheme {
                 val viewModel by viewModels<DicesViewModel>()
-                val bettingViewModel = BettingViewModel(SaveUserDataUseCase(UserDataRepository(dataStore)))
+                val userDataRepository = UserDataRepository(dataStore)
+                val bettingViewModel = BettingViewModel(
+                    saveUserDataUseCase = SaveUserDataUseCase(userDataRepository),
+                    readUserDataUseCase = ReadUserDataUseCase(userDataRepository)
+                )
                 val context = LocalContext.current
                 LaunchedEffect(Unit) {
                     val intent = Intent(context, MusicService::class.java)
