@@ -30,12 +30,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
 import pl.kazoroo.dices.R
+import pl.kazoroo.dices.core.data.presentation.BettingViewModel
 import pl.kazoroo.dices.ui.theme.DarkRed
 
 @Composable
 fun BettingDialog(
     onClick: () -> Unit,
     onCloseClick: () -> Unit,
+    bettingViewModel: BettingViewModel,
 ) {
     var betAmount by remember { mutableStateOf("0") }
     var isButtonEnabled by remember { mutableStateOf(true) }
@@ -111,6 +113,7 @@ fun BettingDialog(
                         isButtonEnabled = false
                     else
                         onClick()
+                        bettingViewModel.setBetValue(betAmount)
                     },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

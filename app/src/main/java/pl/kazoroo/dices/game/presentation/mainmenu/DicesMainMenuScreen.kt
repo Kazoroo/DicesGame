@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
+import pl.kazoroo.dices.core.data.presentation.BettingViewModel
 import pl.kazoroo.dices.game.presentation.components.ButtonInfo
 import pl.kazoroo.dices.game.presentation.components.DiceButton
 import pl.kazoroo.dices.game.presentation.mainmenu.components.BettingDialog
@@ -45,7 +47,7 @@ import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
 import pl.kazoroo.dices.game.presentation.sound.SoundType
 
 @Composable
-fun MainMenuScreen(navController: NavController) {
+fun MainMenuScreen(navController: NavController, bettingViewModel: BettingViewModel) {
     val activity = (LocalContext.current as? Activity)
     val buttonsModifier: Modifier = Modifier
         .height(dimensionResource(R.dimen.menu_button_height))
@@ -78,7 +80,8 @@ fun MainMenuScreen(navController: NavController) {
             onClick = {
                 SoundPlayer.playSound(SoundType.CLICK)
                 navController.navigate(Screen.GameScreen.withArgs())
-            }
+            },
+            bettingViewModel = bettingViewModel
         )
     }
 
@@ -122,7 +125,7 @@ fun MainMenuScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "1120",
+                text = bettingViewModel.coinsAmount.collectAsState().value,
                 color = Color.White
             )
 
