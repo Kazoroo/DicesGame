@@ -80,7 +80,7 @@ fun BettingDialog(
                             painter = painterResource(R.drawable.coin),
                             contentDescription = "Coin icon",
                             modifier = Modifier
-                                .size(dimensionResource(R.dimen.dialog_coin_icon_size))
+                                .size(dimensionResource(R.dimen.coin_icon_size))
                         )
                     },
                     colors = TextFieldDefaults.colors(
