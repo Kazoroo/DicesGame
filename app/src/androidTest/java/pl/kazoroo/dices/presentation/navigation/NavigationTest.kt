@@ -13,7 +13,7 @@ import androidx.test.espresso.Espresso
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import pl.kazoroo.dices.game.presentation.game.DicesViewModel
+import pl.kazoroo.dices.game.presentation.game.GameViewModel
 import pl.kazoroo.dices.game.presentation.navigation.Navigation
 
 class NavigationTest {
@@ -32,7 +32,7 @@ class NavigationTest {
             navController.navigatorProvider.addNavigator(
                     ComposeNavigator()
             )
-            Navigation(viewModel = DicesViewModel())
+            Navigation(gameViewModel = GameViewModel())
         }
     }
 

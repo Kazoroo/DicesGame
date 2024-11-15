@@ -2,14 +2,15 @@ package pl.kazoroo.dices.presentation.game
 
 import org.junit.Before
 import org.junit.Test
+import pl.kazoroo.dices.game.presentation.game.GameViewModel
 
-class DicesViewModelTest {
+class GameViewModelTest {
 
-    private lateinit var viewModel: DicesViewModel
+    private lateinit var viewModel: GameViewModel
 
     @Before
     fun initiate() {
-        viewModel = DicesViewModel()
+        viewModel = GameViewModel()
     }
 
     @Test

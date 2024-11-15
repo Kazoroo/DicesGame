@@ -19,12 +19,12 @@ import pl.kazoroo.dices.game.presentation.navigation.Screen
 import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
 import pl.kazoroo.dices.game.presentation.sound.SoundType
 
-class DicesViewModel(
+class GameViewModel(
     private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
     private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase(),
     private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase()
 ) : ViewModel() {
-    private val winningPoints: Int = 4000
+    private val winningPoints: Int = 400
     private val _diceState = MutableStateFlow(
         DiceSetInfo(
             diceList = drawDiceUseCase(),
@@ -244,7 +244,9 @@ class DicesViewModel(
         _isDiceAnimating.value = false
     }
 
-    private suspend fun performGameEndActions(navController: NavHostController) {
+    private suspend fun performGameEndActions(
+        navController: NavHostController
+    ) {
         _isDiceVisibleAfterGameEnd.value = getUpdatedDiceVisibility().map { !it }
 
         _diceState.update { currentState ->
