@@ -6,14 +6,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import pl.kazoroo.dices.core.data.presentation.BettingViewModel
-import pl.kazoroo.dices.game.presentation.game.DicesGameScreen
-import pl.kazoroo.dices.game.presentation.game.DicesViewModel
+import pl.kazoroo.dices.game.presentation.game.GameScreen
+import pl.kazoroo.dices.game.presentation.game.GameViewModel
 import pl.kazoroo.dices.game.presentation.mainmenu.MainMenuScreen
 
 @ExperimentalMaterial3Api
 @Composable
 fun Navigation(
-    viewModel: DicesViewModel,
+    gameViewModel: GameViewModel,
     bettingViewModel: BettingViewModel
 ) {
     val navController = rememberNavController()
@@ -33,7 +33,7 @@ fun Navigation(
         composable(
             route = Screen.GameScreen.route
         ) {
-            DicesGameScreen(viewModel, navController)
+            GameScreen(gameViewModel, navController)
         }
     }
 }

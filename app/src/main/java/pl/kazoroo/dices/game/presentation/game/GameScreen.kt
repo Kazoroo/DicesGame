@@ -40,8 +40,8 @@ import pl.kazoroo.dices.game.presentation.game.components.PointsTable
 import pl.kazoroo.dices.ui.theme.DarkRed
 
 @Composable
-fun DicesGameScreen(
-    viewModel: DicesViewModel,
+fun GameScreen(
+    viewModel: GameViewModel,
     navController: NavHostController
 ) {
     val isSkucha = viewModel.skuchaState.collectAsState().value

@@ -31,6 +31,7 @@ class BettingViewModel(
             val coins = readCoinsAmount()
             val newCoinBalance = (coins.toInt() - value.toInt()).toString()
             saveUserDataUseCase.invoke(newCoinBalance)
+            readCoinsAmount()
         }
     }
 
