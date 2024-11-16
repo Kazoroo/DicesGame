@@ -16,4 +16,5 @@
     <string name="play">Play!</string>
     <string name="please_enter_a_bet_amount">Please enter a bet amount</string>
     <string name="text_field_must_contain_only_numbers_0_9">Text field must contain only numbers 0–9</string>
+    <string name="you_can_t_bet_more_than_you_have">You can\'t bet more than you have!</string>
 </resources>

@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +41,6 @@ fun BettingDialog(
     bettingViewModel: BettingViewModel,
 ) {
     var betAmount by remember { mutableStateOf("0") }
-    var isButtonEnabled by remember { mutableStateOf(true) }
 
     Dialog(
         onDismissRequest = onCloseClick
@@ -90,7 +90,6 @@ fun BettingDialog(
                         unfocusedContainerColor = Color.Transparent,
                         errorContainerColor = Color.Transparent
                     ),
-                    isError = isButtonEnabled,
                     supportingText = {
                         Text(
                             text =
@@ -98,29 +97,32 @@ fun BettingDialog(
                                 stringResource(R.string.please_enter_a_bet_amount)
                             else if(!betAmount.contains(regex = Regex("^[0-9]*\$")))
                                 stringResource(R.string.text_field_must_contain_only_numbers_0_9)
+                            else if(betAmount.toInt() > bettingViewModel.coinsAmount.collectAsState().value.toInt())
+                                stringResource(R.string.you_can_t_bet_more_than_you_have)
                             else "",
                             color = DarkRed
                         )
                     }
                 )
             }
-
             Spacer(modifier = Modifier.weight(1f))
+
+            val isButtonDisabledConditions =
+                betAmount.isEmpty() ||
+                !betAmount.contains(regex = Regex("^[0-9]*\$")) ||
+                betAmount.toInt() > bettingViewModel.coinsAmount.collectAsState().value.toInt()
 
             Button(
                 onClick = {
-                    if(betAmount.isEmpty() || !betAmount.contains(regex = Regex("^[0-9]*\$")))
-                        isButtonEnabled = false
-                    else
-                        onClick()
-                        bettingViewModel.setBetValue(betAmount)
-                    },
+                    onClick()
+                    bettingViewModel.setBetValue(betAmount)
+                },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(
                         bottom = dimensionResource(R.dimen.small_padding)
                     ),
-                enabled = !(betAmount.isEmpty() || !betAmount.contains(regex = Regex("^[0-9]*\$")))
+                enabled = !isButtonDisabledConditions
             ) {
                 Text(
                     text = stringResource(R.string.play),
