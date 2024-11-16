@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.kazoroo.dices.core.data.presentation.BettingActions
 import pl.kazoroo.dices.game.domain.model.DiceSetInfo
 import pl.kazoroo.dices.game.domain.model.PointsState
 import pl.kazoroo.dices.game.domain.usecase.CalculatePointsUseCase
@@ -22,7 +23,8 @@ import pl.kazoroo.dices.game.presentation.sound.SoundType
 class GameViewModel(
     private val drawDiceUseCase: DrawDiceUseCase = DrawDiceUseCase(),
     private val calculatePointsUseCase: CalculatePointsUseCase = CalculatePointsUseCase(),
-    private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase()
+    private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase(),
+    private val bettingActions: BettingActions
 ) : ViewModel() {
     private val winningPoints: Int = 400
     private val _diceState = MutableStateFlow(
@@ -261,6 +263,7 @@ class GameViewModel(
             SoundPlayer.playSound(SoundType.FAILURE)
         } else {
             SoundPlayer.playSound(SoundType.WIN)
+            bettingActions.addBetCoinsToTotalCoinsAmount()
         }
 
         delay(3000L)

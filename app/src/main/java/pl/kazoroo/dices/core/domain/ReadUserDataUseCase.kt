@@ -5,6 +5,6 @@ import pl.kazoroo.dices.core.data.local.UserDataRepository
 
 class ReadUserDataUseCase(private val userDataRepository: UserDataRepository) {
     suspend operator fun invoke(): String {
-        return userDataRepository.readValue(UserDataKey.COINS) ?: ""
+        return userDataRepository.readValue(UserDataKey.COINS) ?: "0"
     }
 }

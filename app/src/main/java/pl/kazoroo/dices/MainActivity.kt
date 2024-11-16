@@ -60,11 +60,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             DicesTheme {
-                val gameViewModel by viewModels<GameViewModel>()
                 val userDataRepository = UserDataRepository(dataStore)
                 val bettingViewModel = BettingViewModel(
                     saveUserDataUseCase = SaveUserDataUseCase(userDataRepository),
                     readUserDataUseCase = ReadUserDataUseCase(userDataRepository)
+                )
+                val gameViewModel = GameViewModel(
+                    bettingActions = bettingViewModel
                 )
                 val context = LocalContext.current
                 LaunchedEffect(Unit) {
