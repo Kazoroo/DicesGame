@@ -11,11 +11,11 @@ import pl.kazoroo.dices.core.domain.SaveUserDataUseCase
 class BettingViewModel(
     private val saveUserDataUseCase: SaveUserDataUseCase,
     private val readUserDataUseCase: ReadUserDataUseCase
-) : ViewModel() {
+) : ViewModel(), BettingActions {
     private val _betValue = MutableStateFlow("0")
     val betValue = _betValue.asStateFlow()
 
-    private val _coinsAmount = MutableStateFlow("")
+    private val _coinsAmount = MutableStateFlow("0")
     val coinsAmount = _coinsAmount.asStateFlow()
 
     init {
@@ -41,5 +41,14 @@ class BettingViewModel(
         _coinsAmount.value = coins
 
         return coins
+    }
+
+    override fun addBetCoinsToTotalCoinsAmount() {
+        viewModelScope.launch {
+            _coinsAmount.value = (coinsAmount.value.toInt() + betValue.value.toInt() * 2).toString()
+
+            saveUserDataUseCase.invoke(_coinsAmount.value)
+            readCoinsAmount()
+        }
     }
 }
