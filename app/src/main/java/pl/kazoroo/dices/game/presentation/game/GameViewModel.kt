@@ -26,7 +26,7 @@ class GameViewModel(
     private val checkForSkuchaUseCase: CheckForSkuchaUseCase = CheckForSkuchaUseCase(),
     private val bettingActions: BettingActions
 ) : ViewModel() {
-    private val winningPoints: Int = 400
+    private val winningPoints: Int = 4000
     private val _diceState = MutableStateFlow(
         DiceSetInfo(
             diceList = drawDiceUseCase(),
@@ -276,6 +276,13 @@ class GameViewModel(
 
         delay(1000L)
 
+        resetState()
+    }
+
+    /**
+     * Reset the value of diceState, opponentPointsState, userPointsState, isOpponentTurn and isDiceVisibleAfterGameEnd to their default values.
+     */
+    fun resetState() {
         _diceState.update { currentState ->
             currentState.copy(
                 diceList = drawDiceUseCase(),

@@ -17,4 +17,6 @@
     <string name="please_enter_a_bet_amount">Please enter a bet amount</string>
     <string name="text_field_must_contain_only_numbers_0_9">Text field must contain only numbers 0–9</string>
     <string name="you_can_t_bet_more_than_you_have">You can\'t bet more than you have!</string>
+    <string name="do_you_really_want_to_leave_a_match">Do you really want to leave a match? Your bet won\'t be returned!</string>
+    <string name="leaving_a_match">Leaving a match</string>
 </resources>
