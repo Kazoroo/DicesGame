@@ -1,5 +1,6 @@
 package pl.kazoroo.dices.game.presentation.game
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.game.domain.model.TableData
 import pl.kazoroo.dices.game.presentation.components.ButtonInfo
+import pl.kazoroo.dices.game.presentation.game.components.ExitDialog
 import pl.kazoroo.dices.game.presentation.game.components.GameButtons
 import pl.kazoroo.dices.game.presentation.game.components.InteractiveDiceLayout
 import pl.kazoroo.dices.game.presentation.game.components.PointsTable
@@ -66,11 +68,30 @@ fun GameScreen(
         ),
     )
     val scope = rememberCoroutineScope()
+    val showExitDialog = remember { mutableStateOf(false) }
+
+    BackHandler {
+        showExitDialog.value = true
+    }
 
     LaunchedEffect(isOpponentTurn) {
         if(!isOpponentTurn) {
             viewModel.checkForSkucha(navController)
         }
+    }
+
+    if(showExitDialog.value) {
+        ExitDialog(
+            onDismissClick = { showExitDialog.value = false },
+            onQuitClick = {
+                showExitDialog.value = false
+                scope.launch {
+                    delay(200L) //Wait for navigation
+                    viewModel.resetState()
+                }
+                navController.navigateUp()
+            }
+        )
     }
 
     Box(
