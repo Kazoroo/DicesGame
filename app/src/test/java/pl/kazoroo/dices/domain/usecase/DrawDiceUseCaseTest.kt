@@ -1,6 +1,7 @@
 package pl.kazoroo.dices.domain.usecase
 
 import org.junit.Test
+import pl.kazoroo.dices.game.domain.usecase.DrawDiceUseCase
 
 class DrawDiceUseCaseTest {
 

@@ -13,8 +13,11 @@ import androidx.test.espresso.Espresso
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+<<<<<<< HEAD
 import pl.kazoroo.dices.game.presentation.game.GameViewModel
 import pl.kazoroo.dices.game.presentation.navigation.Navigation
+=======
+>>>>>>> coinsAndBets
 
 class NavigationTest {
     @get:Rule
@@ -32,7 +35,10 @@ class NavigationTest {
             navController.navigatorProvider.addNavigator(
                     ComposeNavigator()
             )
+<<<<<<< HEAD
             Navigation(gameViewModel = GameViewModel())
+=======
+>>>>>>> coinsAndBets
         }
     }
 

@@ -2,15 +2,33 @@ package pl.kazoroo.dices.presentation.game
 
 import org.junit.Before
 import org.junit.Test
+<<<<<<< HEAD
 import pl.kazoroo.dices.game.presentation.game.GameViewModel
 
 class GameViewModelTest {
 
+=======
+import pl.kazoroo.dices.core.data.presentation.BettingActions
+import pl.kazoroo.dices.game.presentation.game.GameViewModel
+
+class FakeBettingViewModel: BettingActions {
+    override fun addBetCoinsToTotalCoinsAmount() {
+
+    }
+}
+
+class GameViewModelTest {
+
+>>>>>>> coinsAndBets
     private lateinit var viewModel: GameViewModel
 
     @Before
     fun initiate() {
+<<<<<<< HEAD
         viewModel = GameViewModel()
+=======
+        viewModel = GameViewModel(bettingActions = FakeBettingViewModel())
+>>>>>>> coinsAndBets
     }
 
     @Test
