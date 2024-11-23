@@ -28,7 +28,6 @@ import pl.kazoroo.dices.core.data.local.UserDataRepository
 import pl.kazoroo.dices.core.data.presentation.BettingViewModel
 import pl.kazoroo.dices.core.domain.ReadUserDataUseCase
 import pl.kazoroo.dices.core.domain.SaveUserDataUseCase
-import pl.kazoroo.dices.game.presentation.game.GameViewModel
 import pl.kazoroo.dices.game.presentation.navigation.Navigation
 import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
 import pl.kazoroo.dices.game.presentation.splashscreen.SplashScreenViewModel
@@ -65,9 +64,6 @@ class MainActivity : ComponentActivity() {
                     saveUserDataUseCase = SaveUserDataUseCase(userDataRepository),
                     readUserDataUseCase = ReadUserDataUseCase(userDataRepository)
                 )
-                val gameViewModel = GameViewModel(
-                    bettingActions = bettingViewModel
-                )
                 val context = LocalContext.current
                 LaunchedEffect(Unit) {
                     val intent = Intent(context, MusicService::class.java)
@@ -78,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation(gameViewModel, bettingViewModel)
+                    Navigation(bettingViewModel)
                 }
             }
         }
