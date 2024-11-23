@@ -33,6 +33,7 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.kazoroo.dices.R
+import pl.kazoroo.dices.core.data.presentation.BettingActions
 import pl.kazoroo.dices.game.domain.model.TableData
 import pl.kazoroo.dices.game.presentation.components.ButtonInfo
 import pl.kazoroo.dices.game.presentation.game.components.ExitDialog
@@ -43,9 +44,15 @@ import pl.kazoroo.dices.ui.theme.DarkRed
 
 @Composable
 fun GameScreen(
-    viewModel: GameViewModel,
+    bettingActions: BettingActions,
     navController: NavHostController
 ) {
+    val viewModel =  remember {
+        GameViewModel(
+            bettingActions = bettingActions
+        )
+    }
+
     val isSkucha = viewModel.skuchaState.collectAsState().value
     val isGameEnd = viewModel.isGameEnd.collectAsState().value
     val isOpponentTurn = viewModel.isOpponentTurn.collectAsState().value
@@ -85,10 +92,6 @@ fun GameScreen(
             onDismissClick = { showExitDialog.value = false },
             onQuitClick = {
                 showExitDialog.value = false
-                scope.launch {
-                    delay(200L) //Wait for navigation
-                    viewModel.resetState()
-                }
                 navController.navigateUp()
             }
         )
