@@ -2,7 +2,14 @@ package pl.kazoroo.dices.presentation.game
 
 import org.junit.Before
 import org.junit.Test
+import pl.kazoroo.dices.core.data.presentation.BettingActions
 import pl.kazoroo.dices.game.presentation.game.GameViewModel
+
+class FakeBettingViewModel: BettingActions {
+    override fun addBetCoinsToTotalCoinsAmount() {
+
+    }
+}
 
 class GameViewModelTest {
 
@@ -10,7 +17,7 @@ class GameViewModelTest {
 
     @Before
     fun initiate() {
-        viewModel = GameViewModel()
+        viewModel = GameViewModel(bettingActions = FakeBettingViewModel())
     }
 
     @Test
