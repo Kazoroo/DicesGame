@@ -92,4 +92,7 @@ dependencies {
 
     //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
+
+    //AdMod
+    implementation("com.google.android.gms:play-services-ads:23.5.0")
 }
