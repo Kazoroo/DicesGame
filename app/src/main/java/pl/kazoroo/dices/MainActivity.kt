@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.os.PowerManager
-import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
@@ -25,11 +24,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import pl.kazoroo.dices.core.data.local.UserDataRepository
 import pl.kazoroo.dices.core.data.presentation.BettingViewModel
 import pl.kazoroo.dices.core.domain.ReadUserDataUseCase
@@ -38,10 +32,10 @@ import pl.kazoroo.dices.game.presentation.navigation.Navigation
 import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
 import pl.kazoroo.dices.game.presentation.splashscreen.SplashScreenViewModel
 import pl.kazoroo.dices.game.service.MusicService
+import pl.kazoroo.dices.shop.domain.AdManager
 import pl.kazoroo.dices.ui.theme.DicesTheme
 
 class MainActivity : ComponentActivity() {
-    private var rewardedAd: RewardedAd? = null
     private lateinit var powerManager: PowerManager
     private val screenStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -57,9 +51,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupAdMob()
+        AdManager.setupAdMob(context = this)
 
-        SoundPlayer.initialize(this)
+        SoundPlayer.initialize(context = this)
         powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         SoundPlayer.setAppOnFocusState(powerManager.isInteractive)
         registerReceiver(screenStateReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
@@ -87,26 +81,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    private fun setupAdMob() {
-        MobileAds.initialize(this)
-        val adRequest = AdRequest.Builder().build()
-        RewardedAd.load(
-            this,
-            "ca-app-pub-3940256099942544/5224354917",
-            adRequest, object : RewardedAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("Main Activity", adError.toString())
-                    rewardedAd = null
-                }
-
-                override fun onAdLoaded(ad: RewardedAd) {
-                    Log.d("Main Activity", "Ad was loaded.")
-                    rewardedAd = ad
-                }
-            }
-        )
     }
 
     override fun onDestroy() {

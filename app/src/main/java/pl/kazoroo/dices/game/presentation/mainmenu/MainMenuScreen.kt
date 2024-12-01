@@ -52,6 +52,7 @@ fun MainMenuScreen(navController: NavController, bettingViewModel: BettingViewMo
     val buttonsModifier: Modifier = Modifier
         .height(dimensionResource(R.dimen.menu_button_height))
         .width(dimensionResource(R.dimen.menu_button_width))
+        .padding(bottom = dimensionResource(R.dimen.small_padding))
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val imageSize = (screenWidth / 1.5f)
     var isHelpDialogVisible by remember { mutableStateOf(false) }
@@ -63,6 +64,14 @@ fun MainMenuScreen(navController: NavController, bettingViewModel: BettingViewMo
                 .testTag("Play with AI button")
         ) {
             isBettingDialogVisible = true
+        },
+
+        ButtonInfo(
+            text = stringResource(R.string.shop),
+            modifier = buttonsModifier
+                .testTag("Shop")
+        ) {
+            navController.navigate(Screen.ShopScreen.route)
         }
     )
 

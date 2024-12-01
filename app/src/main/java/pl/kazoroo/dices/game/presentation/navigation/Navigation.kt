@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import pl.kazoroo.dices.core.data.presentation.BettingViewModel
 import pl.kazoroo.dices.game.presentation.game.GameScreen
 import pl.kazoroo.dices.game.presentation.mainmenu.MainMenuScreen
+import pl.kazoroo.dices.shop.presentation.ShopScreen
 
 @ExperimentalMaterial3Api
 @Composable
@@ -35,6 +36,11 @@ fun Navigation(
                 bettingActions = bettingViewModel,
                 navController = navController
             )
+        }
+        composable(
+            route = Screen.ShopScreen.route
+        ) {
+            ShopScreen()
         }
     }
 }

@@ -19,4 +19,5 @@
     <string name="you_can_t_bet_more_than_you_have">You can\'t bet more than you have!</string>
     <string name="do_you_really_want_to_leave_a_match">Do you really want to leave a match? Your bet won\'t be returned!</string>
     <string name="leaving_a_match">Leaving a match</string>
+    <string name="shop">Shop</string>
 </resources>
