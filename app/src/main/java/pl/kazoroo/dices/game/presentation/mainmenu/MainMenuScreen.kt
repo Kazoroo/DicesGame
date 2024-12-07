@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -37,7 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pl.kazoroo.dices.R
-import pl.kazoroo.dices.core.data.presentation.BettingViewModel
+import pl.kazoroo.dices.core.presentation.CoinsViewModel
+import pl.kazoroo.dices.core.presentation.components.CoinAmountIndicator
 import pl.kazoroo.dices.game.presentation.components.ButtonInfo
 import pl.kazoroo.dices.game.presentation.components.DiceButton
 import pl.kazoroo.dices.game.presentation.mainmenu.components.BettingDialog
@@ -47,7 +47,7 @@ import pl.kazoroo.dices.game.presentation.sound.SoundPlayer
 import pl.kazoroo.dices.game.presentation.sound.SoundType
 
 @Composable
-fun MainMenuScreen(navController: NavController, bettingViewModel: BettingViewModel) {
+fun MainMenuScreen(navController: NavController, coinsViewModel: CoinsViewModel) {
     val activity = (LocalContext.current as? Activity)
     val buttonsModifier: Modifier = Modifier
         .height(dimensionResource(R.dimen.menu_button_height))
@@ -90,7 +90,7 @@ fun MainMenuScreen(navController: NavController, bettingViewModel: BettingViewMo
                 SoundPlayer.playSound(SoundType.CLICK)
                 navController.navigate(Screen.GameScreen.withArgs())
             },
-            bettingViewModel = bettingViewModel
+            coinsViewModel = coinsViewModel
         )
     }
 
@@ -124,28 +124,10 @@ fun MainMenuScreen(navController: NavController, bettingViewModel: BettingViewMo
             )
         }
 
-        Row(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(
-                    top = dimensionResource(R.dimen.small_padding),
-                    start = dimensionResource(R.dimen.small_padding)
-                ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = bettingViewModel.coinsAmount.collectAsState().value,
-                color = Color.White
-            )
-
-            Image(
-                painter = painterResource(R.drawable.coin),
-                contentDescription = "Coin icon",
-                modifier = Modifier
-                    .size(dimensionResource(R.dimen.coin_icon_size))
-                    .padding(start = dimensionResource(R.dimen.small_padding))
-            )
-        }
+        CoinAmountIndicator(
+            coinsAmount = coinsViewModel.coinsAmount.collectAsState().value,
+            modifier = Modifier.align(Alignment.TopStart)
+        )
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

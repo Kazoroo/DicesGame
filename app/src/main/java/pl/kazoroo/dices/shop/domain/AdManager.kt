@@ -34,7 +34,7 @@ object AdManager {
         )
     }
 
-    fun showAd(context: Context): String {
+    fun showAd(context: Context) {
         var reward = ""
 
         rewardedAd?.let { ad ->
@@ -43,12 +43,10 @@ object AdManager {
                 val rewardType = rewardItem.type
 
                 reward = rewardType.plus(rewardAmount)
+                Log.d(TAG, "Reward - $reward")
             }
         } ?: run {
             Log.d(TAG, "The rewarded ad wasn't ready yet.")
         }
-
-        Log.d(TAG, "Reward - $reward")
-        return reward
     }
 }

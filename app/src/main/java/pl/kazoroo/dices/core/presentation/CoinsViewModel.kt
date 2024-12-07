@@ -1,14 +1,15 @@
-package pl.kazoroo.dices.core.data.presentation
+package pl.kazoroo.dices.core.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pl.kazoroo.dices.core.data.presentation.BettingActions
 import pl.kazoroo.dices.core.domain.ReadUserDataUseCase
 import pl.kazoroo.dices.core.domain.SaveUserDataUseCase
 
-class BettingViewModel(
+class CoinsViewModel(
     private val saveUserDataUseCase: SaveUserDataUseCase,
     private val readUserDataUseCase: ReadUserDataUseCase
 ) : ViewModel(), BettingActions {
