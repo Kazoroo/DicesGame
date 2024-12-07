@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import pl.kazoroo.dices.core.data.presentation.BettingViewModel
+import pl.kazoroo.dices.core.presentation.CoinsViewModel
 import pl.kazoroo.dices.game.presentation.game.GameScreen
 import pl.kazoroo.dices.game.presentation.mainmenu.MainMenuScreen
 import pl.kazoroo.dices.shop.presentation.ShopScreen
@@ -13,7 +13,7 @@ import pl.kazoroo.dices.shop.presentation.ShopScreen
 @ExperimentalMaterial3Api
 @Composable
 fun Navigation(
-    bettingViewModel: BettingViewModel
+    coinsViewModel: CoinsViewModel
 ) {
     val navController = rememberNavController()
 
@@ -26,21 +26,23 @@ fun Navigation(
         ) {
             MainMenuScreen(
                 navController = navController,
-                bettingViewModel = bettingViewModel
+                coinsViewModel = coinsViewModel
             )
         }
         composable(
             route = Screen.GameScreen.route
         ) {
             GameScreen(
-                bettingActions = bettingViewModel,
+                bettingActions = coinsViewModel,
                 navController = navController
             )
         }
         composable(
             route = Screen.ShopScreen.route
         ) {
-            ShopScreen()
+            ShopScreen(
+                coinsViewModel = coinsViewModel
+            )
         }
     }
 }

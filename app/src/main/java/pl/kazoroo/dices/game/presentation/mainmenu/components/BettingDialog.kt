@@ -31,14 +31,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
 import pl.kazoroo.dices.R
-import pl.kazoroo.dices.core.data.presentation.BettingViewModel
+import pl.kazoroo.dices.core.presentation.CoinsViewModel
 import pl.kazoroo.dices.ui.theme.DarkRed
 
 @Composable
 fun BettingDialog(
     onClick: () -> Unit,
     onCloseClick: () -> Unit,
-    bettingViewModel: BettingViewModel,
+    coinsViewModel: CoinsViewModel,
 ) {
     var betAmount by remember { mutableStateOf("0") }
 
@@ -97,7 +97,7 @@ fun BettingDialog(
                                 stringResource(R.string.please_enter_a_bet_amount)
                             else if(!betAmount.contains(regex = Regex("^[0-9]*\$")))
                                 stringResource(R.string.text_field_must_contain_only_numbers_0_9)
-                            else if(betAmount.toInt() > bettingViewModel.coinsAmount.collectAsState().value.toInt())
+                            else if(betAmount.toInt() > coinsViewModel.coinsAmount.collectAsState().value.toInt())
                                 stringResource(R.string.you_can_t_bet_more_than_you_have)
                             else "",
                             color = DarkRed
@@ -110,12 +110,12 @@ fun BettingDialog(
             val isButtonDisabledConditions =
                 betAmount.isEmpty() ||
                 !betAmount.contains(regex = Regex("^[0-9]*\$")) ||
-                betAmount.toInt() > bettingViewModel.coinsAmount.collectAsState().value.toInt()
+                betAmount.toInt() > coinsViewModel.coinsAmount.collectAsState().value.toInt()
 
             Button(
                 onClick = {
                     onClick()
-                    bettingViewModel.setBetValue(betAmount)
+                    coinsViewModel.setBetValue(betAmount)
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
