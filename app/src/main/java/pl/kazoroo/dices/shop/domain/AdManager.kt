@@ -12,7 +12,7 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 object AdManager {
     private var rewardedAd: RewardedAd? = null
-    val TAG = "AdManager"
+    const val TAG = "AdManager"
 
     fun loadRewardedAd(context: Context) {
         val adRequest = AdManagerAdRequest.Builder().build()
