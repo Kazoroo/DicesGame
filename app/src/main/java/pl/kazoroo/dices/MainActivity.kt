@@ -24,6 +24,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.google.android.gms.ads.MobileAds
 import pl.kazoroo.dices.core.data.local.UserDataRepository
 import pl.kazoroo.dices.core.domain.ReadUserDataUseCase
 import pl.kazoroo.dices.core.domain.SaveUserDataUseCase
@@ -50,8 +51,8 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        AdManager.setupAdMob(context = this)
+        MobileAds.initialize(this)
+        AdManager.loadRewardedAd(context = this)
 
         SoundPlayer.initialize(context = this)
         powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
