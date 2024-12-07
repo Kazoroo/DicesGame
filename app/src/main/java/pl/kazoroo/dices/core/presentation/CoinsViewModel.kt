@@ -25,6 +25,17 @@ class CoinsViewModel(
         }
     }
 
+    fun grantRewardCoins(rewardAmount: String) {
+        viewModelScope.launch {
+            val coins = readCoinsAmount()
+            val newCoinBalance = (coins.toInt() + rewardAmount.toInt()).toString()
+
+            saveUserDataUseCase.invoke(newCoinBalance)
+            readCoinsAmount()
+            _coinsAmount.value = newCoinBalance
+        }
+    }
+
     fun setBetValue(value: String) {
         _betValue.value = value
 
