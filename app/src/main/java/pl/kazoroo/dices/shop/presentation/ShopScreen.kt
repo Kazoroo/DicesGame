@@ -14,15 +14,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import pl.kazoroo.dices.R
 import pl.kazoroo.dices.core.presentation.CoinsViewModel
 import pl.kazoroo.dices.core.presentation.components.CoinAmountIndicator
 import pl.kazoroo.dices.game.presentation.components.ButtonInfo
 import pl.kazoroo.dices.game.presentation.components.DiceButton
-import pl.kazoroo.dices.shop.domain.AdManager
 
 @Composable
-fun ShopScreen(coinsViewModel: CoinsViewModel) {
+fun ShopScreen(
+    coinsViewModel: CoinsViewModel,
+    adViewModel: AdViewModel = viewModel()
+) {
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -43,9 +47,14 @@ fun ShopScreen(coinsViewModel: CoinsViewModel) {
 
             DiceButton(
                 buttonInfo = ButtonInfo(
-                    text = "Get +100 coins",
+                    text = stringResource(R.string.get_100_coins),
                     onClick = {
-                        AdManager.showAd(context)
+                        adViewModel.showRewardedAd(
+                            context = context,
+                            onReward = {
+                                coinsViewModel.grantRewardCoins(it)
+                            }
+                        )
                     }
                 ),
                 modifier = Modifier
