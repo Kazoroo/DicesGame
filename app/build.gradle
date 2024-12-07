@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.compose'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -93,6 +94,8 @@ dependencies {
     //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
-    //AdMod
-    implementation("com.google.android.gms:play-services-ads:23.5.0")
+    //Firebase and related
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
 }
