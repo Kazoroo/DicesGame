@@ -1,7 +1,6 @@
 package pl.kazoroo.dices.presentation.navigation
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -13,11 +12,6 @@ import androidx.test.espresso.Espresso
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-<<<<<<< HEAD
-import pl.kazoroo.dices.game.presentation.game.GameViewModel
-import pl.kazoroo.dices.game.presentation.navigation.Navigation
-=======
->>>>>>> coinsAndBets
 
 class NavigationTest {
     @get:Rule
@@ -26,7 +20,6 @@ class NavigationTest {
     lateinit var navController: TestNavHostController
     private var activity: ComponentActivity? = null
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Before
     fun setup() {
         composeTestRule.setContent {
@@ -35,10 +28,7 @@ class NavigationTest {
             navController.navigatorProvider.addNavigator(
                     ComposeNavigator()
             )
-<<<<<<< HEAD
-            Navigation(gameViewModel = GameViewModel())
-=======
->>>>>>> coinsAndBets
+            //Navigation(coinsViewModel = CoinsViewModel())
         }
     }
 
