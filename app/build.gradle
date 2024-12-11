@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'pl.kazoroo.dices'
+    namespace 'pl.kazoroo.tavernFarkle'
     compileSdk 35
 
     testOptions {
@@ -16,7 +16,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "pl.kazoroo.dices"
+        applicationId "pl.kazoroo.tavernFarkle"
         minSdk 29
         targetSdk 35
         versionCode 8

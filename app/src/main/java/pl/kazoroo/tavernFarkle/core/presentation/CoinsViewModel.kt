@@ -1,0 +1,66 @@
+package pl.kazoroo.tavernFarkle.core.presentation
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import pl.kazoroo.tavernFarkle.core.data.presentation.BettingActions
+import pl.kazoroo.tavernFarkle.core.domain.ReadUserDataUseCase
+import pl.kazoroo.tavernFarkle.core.domain.SaveUserDataUseCase
+
+class CoinsViewModel(
+    private val saveUserDataUseCase: SaveUserDataUseCase,
+    private val readUserDataUseCase: ReadUserDataUseCase
+) : ViewModel(), BettingActions {
+    private val _betValue = MutableStateFlow("0")
+    val betValue = _betValue.asStateFlow()
+
+    private val _coinsAmount = MutableStateFlow("0")
+    val coinsAmount = _coinsAmount.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            _coinsAmount.value = readCoinsAmount()
+        }
+    }
+
+    fun grantRewardCoins(rewardAmount: String) {
+        viewModelScope.launch {
+            val coins = readCoinsAmount()
+            val newCoinBalance = (coins.toInt() + rewardAmount.toInt()).toString()
+
+            saveUserDataUseCase.invoke(newCoinBalance)
+            readCoinsAmount()
+            _coinsAmount.value = newCoinBalance
+        }
+    }
+
+    fun setBetValue(value: String) {
+        _betValue.value = value
+
+        viewModelScope.launch {
+            val coins = readCoinsAmount()
+            val newCoinBalance = (coins.toInt() - value.toInt()).toString()
+            saveUserDataUseCase.invoke(newCoinBalance)
+            readCoinsAmount()
+        }
+    }
+
+    private suspend fun readCoinsAmount(): String {
+        val coins = readUserDataUseCase.invoke()
+
+        _coinsAmount.value = coins
+
+        return coins
+    }
+
+    override fun addBetCoinsToTotalCoinsAmount() {
+        viewModelScope.launch {
+            _coinsAmount.value = (coinsAmount.value.toInt() + betValue.value.toInt() * 2).toString()
+
+            saveUserDataUseCase.invoke(_coinsAmount.value)
+            readCoinsAmount()
+        }
+    }
+}

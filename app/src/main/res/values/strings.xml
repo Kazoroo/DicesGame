@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Dices</string>
+    <string name="app_name" translatable="false">Tavern Farkle</string>
     <string name="pass">Pass</string>
     <string name="score_and_roll_again">Score and roll again</string>
     <string name="total">Total</string>
