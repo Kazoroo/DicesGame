@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -107,15 +105,6 @@ fun GameScreen(
             contentDescription = "Wooden background texture",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
-        )
-
-        Image(
-            painter = painterResource(id = R.drawable.old_paper_texture),
-            contentDescription = "paper table background texture",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .height(dimensionResource(id = R.dimen.desks_size))
-                .fillMaxWidth()
         )
 
         Column(

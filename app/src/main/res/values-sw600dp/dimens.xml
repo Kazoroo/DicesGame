@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <dimen name="menu_button_width">280dp</dimen>
-    <dimen name="menu_button_height">70dp</dimen>
-    <dimen name="icon_button_size">50dp</dimen>
-    <dimen name="desks_size">220dp</dimen>
+    <dimen name="menu_button_width">340dp</dimen>
+    <dimen name="menu_button_height">120dp</dimen>
+    <dimen name="icon_button_size">70dp</dimen>
+    <dimen name="desks_size">270dp</dimen>
     <dimen name="xlarge_padding">220dp</dimen>
-    <dimen name="game_button_height">160dp</dimen>
+    <dimen name="game_button_height">220dp</dimen>
     <dimen name="rounded_corner">25dp</dimen>
-    <dimen name="medium_padding">20dp</dimen>
+    <dimen name="medium_padding">40dp</dimen>
     <dimen name="large_padding">40dp</dimen>
-    <dimen name="small_padding">10dp</dimen>
-    <dimen name="dice_size">130dp</dimen>
+    <dimen name="small_padding">20dp</dimen>
+    <dimen name="dice_size">110dp</dimen>
     <dimen name="buttons_vertical_padding">50dp</dimen>
     <dimen name="table_cell_width">70dp</dimen>
     <dimen name="dialog_text_field_width">120dp</dimen>
     <dimen name="coin_icon_size">36dp</dimen>
     <dimen name="dialog_height">250dp</dimen>
+
 
     <dimen name="normal_font_size">20sp</dimen>
 </resources>
