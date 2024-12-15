@@ -112,7 +112,7 @@ fun MainMenuScreen(navController: NavController, coinsViewModel: CoinsViewModel)
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(
-                    top = dimensionResource(R.dimen.small_padding),
+                    top = dimensionResource(R.dimen.large_padding),
                     end = dimensionResource(R.dimen.small_padding)
                 )
                 .size(dimensionResource(R.dimen.icon_button_size))
@@ -133,7 +133,7 @@ fun MainMenuScreen(navController: NavController, coinsViewModel: CoinsViewModel)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = Modifier.testTag("Main menu screen")
+            modifier = Modifier.testTag("Main menu screen").padding(top = dimensionResource(R.dimen.small_padding))
         ) {
             Image(
                 painter = painterResource(id = R.drawable.dice_1),

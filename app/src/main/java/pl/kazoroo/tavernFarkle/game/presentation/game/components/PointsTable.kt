@@ -88,7 +88,7 @@ fun PointsTable(
                 }
             },
             cellPadding = PaddingValues(horizontal = dimensionResource(id = R.dimen.medium_padding), vertical = dimensionResource(id = R.dimen.small_padding)),
-            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.medium_padding))
+            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.large_padding))
         ) {
             data.forEach { record ->
                 row {
