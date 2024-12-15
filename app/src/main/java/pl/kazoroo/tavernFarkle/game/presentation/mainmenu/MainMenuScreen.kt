@@ -55,7 +55,7 @@ fun MainMenuScreen(navController: NavController, coinsViewModel: CoinsViewModel)
         .width(dimensionResource(R.dimen.menu_button_width))
         .padding(bottom = dimensionResource(R.dimen.small_padding))
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val imageSize = (screenWidth / 1.5f)
+    val imageSize = (screenWidth / 1.6f)
     var isHelpDialogVisible by remember { mutableStateOf(false) }
     var isBettingDialogVisible by remember { mutableStateOf(false) }
     val buttons = listOf(

@@ -4,7 +4,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
-
 @Composable
 fun DicesTheme(
     content: @Composable () -> Unit,
@@ -17,7 +16,7 @@ fun DicesTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = provideTypography(),
         content = content
     )
 }

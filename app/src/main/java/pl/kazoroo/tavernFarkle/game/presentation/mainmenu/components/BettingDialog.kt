@@ -4,12 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -47,7 +46,7 @@ fun BettingDialog(
     ) {
         Column(
             modifier = Modifier
-                .height(dimensionResource(R.dimen.dialog_height))
+                .wrapContentHeight()
                 .background(
                     color = Color.White,
                     shape = RoundedCornerShape(dimensionResource(R.dimen.medium_padding))
@@ -60,14 +59,14 @@ fun BettingDialog(
             }
 
             Row(
-                verticalAlignment = Alignment.Top,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 Text(
                     text = stringResource(R.string.place_a_bet),
                     modifier = Modifier
-                        .padding(start = dimensionResource(R.dimen.small_padding), top = dimensionResource(R.dimen.medium_padding))
+                        .padding(start = dimensionResource(R.dimen.small_padding))
                 )
 
                 TextField(
@@ -105,7 +104,6 @@ fun BettingDialog(
                     }
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
 
             val isButtonDisabledConditions =
                 betAmount.isEmpty() ||
@@ -120,7 +118,8 @@ fun BettingDialog(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(
-                        bottom = dimensionResource(R.dimen.small_padding)
+                        bottom = dimensionResource(R.dimen.small_padding),
+                        top = dimensionResource(R.dimen.medium_padding)
                     ),
                 enabled = !isButtonDisabledConditions
             ) {
