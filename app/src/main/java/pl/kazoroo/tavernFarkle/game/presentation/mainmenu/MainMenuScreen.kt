@@ -102,7 +102,7 @@ fun MainMenuScreen(navController: NavController, coinsViewModel: CoinsViewModel)
     ) {
         Image(
             painter = painterResource(id = R.drawable.wooden_background_texture),
-            contentDescription = "Wooden background texture",
+            contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
