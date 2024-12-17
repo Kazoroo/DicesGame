@@ -50,6 +50,7 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        showSplashScreen()
         super.onCreate(savedInstanceState)
         MobileAds.initialize(this)
         AdManager.loadRewardedAd(context = this)
@@ -59,7 +60,6 @@ class MainActivity : ComponentActivity() {
         SoundPlayer.setAppOnFocusState(powerManager.isInteractive)
         registerReceiver(screenStateReceiver, IntentFilter(Intent.ACTION_SCREEN_ON))
         registerReceiver(screenStateReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
-        showSplashScreen()
 
         setContent {
             DicesTheme {
