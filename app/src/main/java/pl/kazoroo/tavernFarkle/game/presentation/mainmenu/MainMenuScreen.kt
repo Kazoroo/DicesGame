@@ -15,8 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,7 +31,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pl.kazoroo.tavernFarkle.R
@@ -41,6 +38,7 @@ import pl.kazoroo.tavernFarkle.core.presentation.CoinsViewModel
 import pl.kazoroo.tavernFarkle.core.presentation.components.CoinAmountIndicator
 import pl.kazoroo.tavernFarkle.game.presentation.components.ButtonInfo
 import pl.kazoroo.tavernFarkle.game.presentation.components.DiceButton
+import pl.kazoroo.tavernFarkle.game.presentation.mainmenu.components.AppTitleText
 import pl.kazoroo.tavernFarkle.game.presentation.mainmenu.components.BettingDialog
 import pl.kazoroo.tavernFarkle.game.presentation.mainmenu.components.HowToPlayDialog
 import pl.kazoroo.tavernFarkle.game.presentation.navigation.Screen
@@ -140,13 +138,7 @@ fun MainMenuScreen(navController: NavController, coinsViewModel: CoinsViewModel)
                 contentDescription = "Dice",
                 modifier = Modifier.size(imageSize)
             )
-
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.titleLarge,
-                color = Color.Yellow,
-                textAlign = TextAlign.Center
-            )
+            AppTitleText()
 
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.large_padding)))
 
