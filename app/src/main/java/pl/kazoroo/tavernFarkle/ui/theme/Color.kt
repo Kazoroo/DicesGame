@@ -2,7 +2,7 @@ package pl.kazoroo.tavernFarkle.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple700 = Color(0xFFAA073E)
+val Purple700 = Color(0xFFEA0909)
 val Teal200 = Color(0xFFc0da3f)
 
 val DarkGoldenBrown = Color(0xFFA17E44)

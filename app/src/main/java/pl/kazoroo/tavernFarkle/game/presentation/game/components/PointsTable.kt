@@ -18,6 +18,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
@@ -96,21 +98,27 @@ fun PointsTable(
                         Text(
                             text = record.pointsType,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.width(dimensionResource(R.dimen.table_cell_width))
+                            modifier = Modifier
+                                .width(dimensionResource(R.dimen.table_cell_width))
+                                .semantics { contentDescription = "points type ${record.pointsType}" }
                         )
                     }
                     cell(contentAlignment = Alignment.Center) {
                         Text(
                             text = record.yourPoints,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.width(dimensionResource(R.dimen.table_cell_width))
+                            modifier = Modifier
+                                .width(dimensionResource(R.dimen.table_cell_width))
+                                .semantics { contentDescription = "Number of your points ${record.yourPoints}" }
                         )
                     }
                     cell(contentAlignment = Alignment.Center) {
                         Text(
                             text = record.opponentPoints,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.width(dimensionResource(R.dimen.table_cell_width))
+                            modifier = Modifier
+                                .width(dimensionResource(R.dimen.table_cell_width))
+                                .semantics { contentDescription = "Number of your opponent points ${record.opponentPoints}" }
                         )
                     }
                 }

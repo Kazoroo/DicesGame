@@ -84,7 +84,7 @@ fun InteractiveDiceLayout(
                         ) {
                             Image(
                                 painter = painterResource(id = diceState.diceList[index].image),
-                                contentDescription = "Dice",
+                                contentDescription = "Dice $index",
                                 modifier = Modifier
                                     .padding(2.dp)
                                     .size(imageSize)
